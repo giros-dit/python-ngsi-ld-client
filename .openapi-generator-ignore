@@ -1,0 +1,7 @@
+# OpenAPI Generator Ignore
+
+## Ignore CI/CD supporting files
+.gitlab-ci.yml
+.travis.yml
+get-pip.py
+git_push.sh
