@@ -1,5 +1,5 @@
 docker run --rm  -u `id -u`:`id -g` \
-    -v ${PWD}:/local openapitools/openapi-generator-cli:v6.0.0 generate \
+    -v ${PWD}:/local openapitools/openapi-generator-cli:latest generate \
     -i /local/full_api.json \
     -g python-experimental \
     -o /local/ --global-property skipFormModel=false \

@@ -267,6 +267,7 @@ class AppendEntityAttrs(api_client.Api):
         """
         self._verify_typed_dict_inputs(RequestQueryParams, query_params)
         self._verify_typed_dict_inputs(RequestPathParams, path_params)
+        used_path = _path
 
         _path_params = {}
         for parameter in (
@@ -278,15 +279,21 @@ class AppendEntityAttrs(api_client.Api):
             serialized_data = parameter.serialize(parameter_data)
             _path_params.update(serialized_data)
 
-        _query_params = []
+        for k, v in _path_params.items():
+            used_path = used_path.replace('{%s}' % k, v)
+
+        prefix_separator_iterator = None
         for parameter in (
             request_query_options,
         ):
             parameter_data = query_params.get(parameter.name, unset)
             if parameter_data is unset:
                 continue
-            serialized_data = parameter.serialize(parameter_data)
-            _query_params.extend(serialized_data)
+            if prefix_separator_iterator is None:
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
+            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
+            for serialized_value in serialized_data.values():
+                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -306,10 +313,8 @@ class AppendEntityAttrs(api_client.Api):
         elif 'body' in serialized_data:
             _body = serialized_data['body']
         response = self.api_client.call_api(
-            resource_path=_path,
+            resource_path=used_path,
             method=_method,
-            path_params=_path_params,
-            query_params=tuple(_query_params),
             headers=_headers,
             fields=_fields,
             body=_body,

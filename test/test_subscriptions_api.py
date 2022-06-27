@@ -11,50 +11,136 @@
 """
 
 import unittest
+import warnings
+from asyncio.log import logger
 
 import ngsi_ld_client
 from ngsi_ld_client.api.subscriptions_api import SubscriptionsApi  # noqa: E501
+from ngsi_ld_client.api_client import ApiClient
 
 
 class TestSubscriptionsApi(unittest.TestCase):
     """SubscriptionsApi unit test stubs"""
 
     def setUp(self):
-        self.api = SubscriptionsApi()  # noqa: E501
+        # https://blog.actorsfit.com/a?ID=01650-9b7dddc3-ecdc-4c94-8532-8d68581c79bd
+        warnings.simplefilter('ignore', ResourceWarning)
+
+        configuration = ngsi_ld_client.Configuration(
+            host = "http://localhost:9090/ngsi-ld/v1"
+        )
+        api_client = ApiClient(configuration)
+        api_client.set_default_header(
+            header_name="Link",
+            header_value='<https://fiware.github.io/data-models/full-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+        )
+        api_client.set_default_header(
+            header_name="Accept",
+            header_value="application/json"
+        )
+        self.api = SubscriptionsApi(api_client)  # noqa: E501
+
 
     def tearDown(self):
         pass
 
-    def test_create_subscription(self):
+    def test_1_create_subscription(self):
         """Test case for create_subscription
 
         """
-        pass
+        payload = {
+            "id": "urn:ngsi-ld:Subscription:785071301",
+            "type": "Subscription",
+            "entities": [
+                {
+                "type": "Vehicle"
+                }
+            ],
+            "watchedAttributes": [
+                "speed"
+            ],
+            "notification": {
+                "endpoint": {
+                "uri": "http://consumer:8080/notify",
+                "accept": "application/json"
+                }
+            }
+        }
 
-    def test_remove_subscription(self):
-        """Test case for remove_subscription
+        try:
+            res = self.api.create_subscription(
+                body=payload
+            )
+        except Exception as e:
+            logger.exception(e)
 
-        """
-        pass
+        assert res.response.status == 201
 
-    def test_retrieve_subscription_by_id(self):
+    def test_2_retrieve_subscription_by_id(self):
         """Test case for retrieve_subscription_by_id
 
         """
-        pass
+        try:
+            res = self.api.retrieve_subscription_by_id(
+                path_params={
+                    "subscriptionId": "urn:ngsi-ld:Subscription:785071301"
+                }
+            )
+        except Exception as e:
+            logger.exception(e)
 
-    def test_retrieve_subscriptions(self):
+        assert res.response.status == 200
+
+    def test_3_retrieve_subscriptions(self):
         """Test case for retrieve_subscriptions
 
         """
-        pass
+        try:
+            res = self.api.retrieve_subscriptions(
+                skip_deserialization=True
+        )
+        except Exception as e:
+            logger.exception(e)
 
-    def test_update_subscription(self):
+        assert res.response.status == 200
+
+    def test_4_update_subscription(self):
         """Test case for update_subscription
 
         """
-        pass
+        payload = {
+            "notification": {
+                "endpoint": {
+                    "uri": "http://consumer-two:8080/notify",
+                }
+            }
+        }
+        try:
+            res = self.api.update_subscription(
+                body=payload,
+                path_params={
+                    "subscriptionId": "urn:ngsi-ld:Subscription:785071301"
+                }
+            )
+        except Exception as e:
+            logger.exception(e)
 
+        assert res.response.status == 204
+
+    def test_5_remove_subscription(self):
+        """Test case for remove_subscription
+
+        """
+        try:
+            res = self.api.remove_subscription(
+                path_params={
+                    "subscriptionId": "urn:ngsi-ld:Subscription:785071301"
+                }
+            )
+        except Exception as e:
+            logger.exception(e)
+
+        assert res.response.status == 204
 
 if __name__ == '__main__':
     unittest.main()
