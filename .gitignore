@@ -66,4 +66,4 @@ target/
 .ipynb_checkpoints
 
 # GitHub workflows
-.github
+.github/
