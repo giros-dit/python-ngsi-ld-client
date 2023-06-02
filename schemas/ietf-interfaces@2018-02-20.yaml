@@ -1,0 +1,478 @@
+openapi: "3.0.3"
+info:
+  title: ietf-intefaces@2018-02-20.yang
+  description: | 
+    OpenAPI schema for the ietf-intefaces@2018-02-20.yang YANG module 
+    supported by a model-based network device.
+  version: 1.0.0
+components:
+  schemas:
+    Interface:
+      description: |
+        NGSI-LD Entity Type that represents an interface of a model-based network device.
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Entity.Input'
+        - type: object
+          properties:
+            type:
+              description: NGSI-LD Entity identifier. It has to be Interface.
+              type: string
+              enum:
+                - Interface
+              default: Interface
+            name:
+              $ref: '#/components/schemas/Name'
+            description:
+              $ref: '#/components/schemas/Description'
+            enabled:
+              $ref: '#/components/schemas/Enabled'
+            linkUpDownTrapEnabled:
+              $ref: '#/components/schemas/LinkUpDownTrapEnable'
+            adminStatus:
+              $ref: '#/components/schemas/AdminStatus'
+            operStatus:
+              $ref: '#/components/schemas/OperStatus'
+            lastChange:
+              $ref: '#/components/schemas/LastChange'
+            ifIndex:
+              $ref: '#/components/schemas/IfIndex'
+            physAddress:
+              $ref: '#/components/schemas/PhysAddress'
+            speed:
+              $ref: '#/components/schemas/Speed'
+            higherLayerIf:
+              $ref: '#/components/schemas/HigherLayerIf'
+            lowerLayerIf:
+              $ref: '#/components/schemas/LowerLayerIf'
+        - required:
+            - type
+            - name
+            - adminStatus
+            - operStatus
+            - index
+    Statistics:
+      description: |
+        NGSI-LD Entity Type that represents a collection of interface-related statistics 
+        of a model-based network device
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Entity.Input'
+        - properties:
+            type:
+              description: NGSI-LD Entity identifier. It has to be Statistics.
+              type: string
+              enum:
+                - Statistics
+              default: Statistics
+            isPartOf:
+              $ref: "#/components/schemas/IsPartOf"
+            discontinuityTime:
+              $ref: "#/components/schemas/DiscontinuityTime"
+            inOctets:
+              $ref: "#/components/schemas/InOctets"
+            inUnicastPkts:
+              $ref: "#/components/schemas/InUnicastPkts"
+            inBroadcastPkts:
+              $ref: "#/components/schemas/InBroadcastPkts"
+            inMulticastPkts:
+              $ref: "#/components/schemas/InMulticastPkts"
+            inDiscards:
+              $ref: "#/components/schemas/InDiscards"
+            inErrors:
+              $ref: "#/components/schemas/InErrors"
+            inUnknownProtos:
+              $ref: "#/components/schemas/InUnknownProtos"
+            outOctets:
+              $ref: "#/components/schemas/OutOctets"
+            outUnicastPkts:
+              $ref: "#/components/schemas/OutUnicastPkts"
+            outBroadcastPkts:
+              $ref: "#/components/schemas/OutBroadcastPkts"
+            outMulticastPkts:
+              $ref: "#/components/schemas/OutMulticastPkts"
+            outDiscards:
+              $ref: "#/components/schemas/OutDiscards"
+            outErrors:
+              $ref: "#/components/schemas/OutErrors"
+          required:
+            - type
+            - isPartOf
+            - discontinuityTime
+    Name:
+      description: NGSI-LD Property Type. The name of the interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: string
+          required:
+            - value
+    Description:
+      description: NGSI-LD Property Type. Description of the interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: string
+          required:
+            - value
+    Enabled:
+      description: NGSI-LD Property Type. The configured, desired state of the interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: boolean
+          required:
+            - value
+    LinkUpDownTrapEnable:
+      description: NGSI-LD Property Type. Controls whether linkUp/linkDown SNMP notifications should be generated for this interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              $ref: '#/components/schemas/LinkUpDownTrapEnableOptions'
+          required:
+            - value
+    LinkUpDownTrapEnableOptions:
+      description: Options for linkUp/linkDown SNMP notifications.
+      type: string
+      enum:
+        - enabled
+        - disabled
+    AdminStatus:
+      description: NGSI-LD Property Type. The desired state of the interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              $ref: '#/components/schemas/AdminStatusOptions'
+          required:
+            - value
+    AdminStatusOptions:
+      description: Options for linkUp/linkDown SNMP notifications.
+      type: string
+      enum:
+        - up
+        - down
+        - testing
+    OperStatus:
+      description: NGSI-LD Property Type. The current operational state of the interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              $ref: '#/components/schemas/AdminStatusOptions'
+          required:
+            - value
+    OperStatusOptions:
+      description: Options for the operational state of the interface.
+      type: string
+      enum:
+        - up
+        - down
+        - testing
+        - unknown
+        - dormant
+        - not-present
+        - lower-layer-down
+    LastChange:
+      description:  NGSI-LD Property Type. The time the interface entered its current operational state.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: string
+              format: date-time
+          required:
+            - value
+    IfIndex:
+      description:  NGSI-LD Property Type. The ifIndex value for the ifEntry represented by this interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+    PhysAddress:
+      description: NGSI-LD Property Type. The interface's address at its protocol sub-layer.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: string
+              pattern: '([0-9a-fA-F]{2}(:[0-9a-fA-F]{2})*)?'
+          required:
+            - value
+    Speed:
+      description: NGSI-LD Property Type. The ifIndex value for the ifEntry represented by this interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+    HigherLayerIf:
+      description: NGSI-LD Relationship Type. A list of references to interfaces layered on top of this interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
+        - properties:
+            object:
+              type: string
+          required:
+            - object    
+    LowerLayerIf:
+      description: NGSI-LD Relationship Type. A list of references to interfaces layered underneath of this interface.
+      type: object
+      additionalProperties: false
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
+        - properties:
+            object:
+              type: string
+          required:
+            - object
+    IsPartOf:
+      description: |
+        NGSI-LD Relationship Type. A hierarchical relationship to denote the statistics
+        of an interface.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
+        - properties:
+            object:
+              type: string
+          required:
+            - object
+      additionalProperties: false
+    DiscontinuityTime:
+      description: |
+        NGSI-LD Property Type. The time on the most recent occasion at which any one or
+        more of this interface's counters suffered a discontinuity.  If no such
+        discontinuities have occurred since the last re-initialization of the
+        local management subsystem, then this node contains the time the local
+        management subsystem re-initialized itself.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: string
+              format: date-time
+          required:
+            - value
+      additionalProperties: false
+    InOctets:
+      description: |
+        NGSI-LD Property Type. The total number of octets received on the interface,
+        including framing characters.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    InUnicastPkts:
+      description: |
+        NGSI-LD Property Type. The number of packets, delivered by this sub-layer to a higher
+        (sub-)layer, that were not addressed to a multicast or broadcast address
+        at this sub-layer.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    InBroadcastPkts:
+      description: | 
+        NGSI-LD Property Type. The number of packets, delivered by this sub-layer to a higher
+        (sub-)layer, that were addressed to a broadcast address at this sub-layer
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    InMulticastPkts:
+      description: | 
+        NGSI-LD Property Type. The number of packets, delivered by this sub-layer to a higher
+        (sub-)layer, that were addressed to a multicast address at this sub-layer.
+        For a MAC-layer protocol, this includes both Group and Functional
+        addresses.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    InDiscards:
+      description: |
+        NGSI-LD Property Type. The number of inbound packets that were chosen to be discarded even
+        though no errors had been detected to prevent their being deliverable to a
+        higher-layer protocol.  One possible reason for discarding such a packet
+        could be to free up buffer space.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    InErrors:
+      description: |
+        NGSI-LD Property Type. For packet-oriented interfaces, the number of inbound packets that
+        contained errors preventing them from being deliverable to a higher-layer
+        protocol.  For character- oriented or fixed-length interfaces, the number
+        of inbound transmission units that contained errors preventing them from
+        being deliverable to a higher-layer protocol.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    InUnknownProtos:
+      description: |
+        NGSI-LD Property Type. For packet-oriented interfaces, the number of packets received via
+        the interface that were discarded because of an unknown or unsupported
+        protocol.  For character-oriented or fixed-length interfaces that support
+        protocol multiplexing, the number of transmission units received via the
+        interface that were discarded because of an unknown or unsupported
+        protocol. For any interface that does not support protocol multiplexing,
+        this counter is not present.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    OutOctets:
+      description: | 
+        NGSI-LD Property Type. The total number of octets transmitted out of the
+        interface, including framing characters.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    OutUnicastPkts:
+      description: |
+        NGSI-LD Property Type. The total number of packets that higher-level protocols requested
+        be transmitted and that were not addressed to a multicast or broadcast
+        address at this sub-layer, including those that were discarded or not
+        sent.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    OutBroadcastPkts:
+      description: |
+        NGSI-LD Property Type. The total number of packets that higher-level protocols requested
+        be transmitted and that were addressed to a broadcast address at this
+        sub-layer, including those that were discarded or not sent.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    OutMulticastPkts:
+      description: |
+        NGSI-LD Property Type. The total number of packets that higher-level protocols requested
+        be transmitted and that were addressed to a multicast address at this
+        sub-layer, including those that were discarded or not sent.  For a
+        MAC-layer protocol, this includes both Group and Functional addresses.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    OutDiscards:
+      description: |
+        NGSI-LD Property Type. The number of outbound packets that were chosen to be discarded
+        even though no errors had been detected to prevent their being
+        transmitted.  One possible reason for discarding such a packet could be to
+        free up buffer space.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
+    OutErrors:
+      description: |
+        NGSI-LD Property Type. For packet-oriented interfaces, the number of outbound packets that
+        could not be transmitted because of errors. For character-oriented or
+        fixed-length interfaces, the number of outbound transmission units that
+        could not be transmitted because of errors.
+      type: object
+      allOf:
+        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - properties:
+            value:
+              type: integer
+          required:
+            - value
+      additionalProperties: false
