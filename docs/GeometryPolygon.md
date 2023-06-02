@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** |  | [optional] 
-**coordinates** | [**GeometryPolygon**](GeometryPolygon.md) |  | [optional] 
+**coordinates** | [**List[GeometryLinearRing]**](GeometryLinearRing.md) | An array of linear rings.  | [optional] 
 
 ## Example
 

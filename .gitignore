@@ -64,3 +64,6 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# GitHub workflows
+.github
