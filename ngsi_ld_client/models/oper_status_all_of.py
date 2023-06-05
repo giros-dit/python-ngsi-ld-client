@@ -21,9 +21,9 @@ import json
 
 from pydantic import BaseModel, Field, StrictStr, validator
 
-class LinkUpDownTrapEnableAllOf(BaseModel):
+class OperStatusAllOf(BaseModel):
     """
-    LinkUpDownTrapEnableAllOf
+    OperStatusAllOf
     """
     value: StrictStr = Field(...)
     __properties = ["value"]
@@ -31,8 +31,8 @@ class LinkUpDownTrapEnableAllOf(BaseModel):
     @validator('value')
     def value_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in ('enabled', 'disabled'):
-            raise ValueError("must be one of enum values ('enabled', 'disabled')")
+        if value not in ('up', 'down', 'testing', 'unknown', 'dormant', 'not-present', 'lower-layer-down'):
+            raise ValueError("must be one of enum values ('up', 'down', 'testing', 'unknown', 'dormant', 'not-present', 'lower-layer-down')")
         return value
 
     class Config:
@@ -49,8 +49,8 @@ class LinkUpDownTrapEnableAllOf(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> LinkUpDownTrapEnableAllOf:
-        """Create an instance of LinkUpDownTrapEnableAllOf from a JSON string"""
+    def from_json(cls, json_str: str) -> OperStatusAllOf:
+        """Create an instance of OperStatusAllOf from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self):
@@ -62,15 +62,15 @@ class LinkUpDownTrapEnableAllOf(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> LinkUpDownTrapEnableAllOf:
-        """Create an instance of LinkUpDownTrapEnableAllOf from a dict"""
+    def from_dict(cls, obj: dict) -> OperStatusAllOf:
+        """Create an instance of OperStatusAllOf from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return LinkUpDownTrapEnableAllOf.parse_obj(obj)
+            return OperStatusAllOf.parse_obj(obj)
 
-        _obj = LinkUpDownTrapEnableAllOf.parse_obj({
+        _obj = OperStatusAllOf.parse_obj({
             "value": obj.get("value")
         })
         return _obj

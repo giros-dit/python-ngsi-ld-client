@@ -6,7 +6,7 @@ NGSI-LD Property Type. The desired state of the interface.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Node type.  | 
-**value** | [**AdminStatusOptions**](AdminStatusOptions.md) |  | 
+**value** | **str** |  | 
 **observed_at** | **datetime** | Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time.  | [optional] 
 **unit_code** | **str** | Property Value&#39;s unit code.  | [optional] 
 **dataset_id** | **str** | It allows identifying a set or group of property values.  | [optional] 

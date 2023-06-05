@@ -16,7 +16,6 @@
 # import models into model package
 from ngsi_ld_client.models.admin_status import AdminStatus
 from ngsi_ld_client.models.admin_status_all_of import AdminStatusAllOf
-from ngsi_ld_client.models.admin_status_options import AdminStatusOptions
 from ngsi_ld_client.models.append_attrs_temporal_request import AppendAttrsTemporalRequest
 from ngsi_ld_client.models.attribute import Attribute
 from ngsi_ld_client.models.attribute_list import AttributeList
@@ -103,7 +102,6 @@ from ngsi_ld_client.models.ld_context import LdContext
 from ngsi_ld_client.models.ld_context_one_of_inner import LdContextOneOfInner
 from ngsi_ld_client.models.link_up_down_trap_enable import LinkUpDownTrapEnable
 from ngsi_ld_client.models.link_up_down_trap_enable_all_of import LinkUpDownTrapEnableAllOf
-from ngsi_ld_client.models.link_up_down_trap_enable_options import LinkUpDownTrapEnableOptions
 from ngsi_ld_client.models.list_contexts200_response import ListContexts200Response
 from ngsi_ld_client.models.list_contexts200_response1 import ListContexts200Response1
 from ngsi_ld_client.models.list_contexts200_response1_one_of import ListContexts200Response1OneOf
@@ -115,7 +113,7 @@ from ngsi_ld_client.models.notification import Notification
 from ngsi_ld_client.models.notification_data import NotificationData
 from ngsi_ld_client.models.notification_params import NotificationParams
 from ngsi_ld_client.models.oper_status import OperStatus
-from ngsi_ld_client.models.oper_status_options import OperStatusOptions
+from ngsi_ld_client.models.oper_status_all_of import OperStatusAllOf
 from ngsi_ld_client.models.options_no_overwrite import OptionsNoOverwrite
 from ngsi_ld_client.models.options_representation import OptionsRepresentation
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs

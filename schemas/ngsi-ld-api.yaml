@@ -5098,7 +5098,7 @@ components:
             - name
             - adminStatus
             - operStatus
-            - index
+            - ifIndex
     Statistics:
       description: |
         NGSI-LD Entity Type that represents a collection of interface-related statistics 
@@ -5187,15 +5187,12 @@ components:
         - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
-              $ref: '#/components/schemas/LinkUpDownTrapEnableOptions'
+              type: string
+              enum:
+                - enabled
+                - disabled
           required:
             - value
-    LinkUpDownTrapEnableOptions:
-      description: Options for linkUp/linkDown SNMP notifications.
-      type: string
-      enum:
-        - enabled
-        - disabled
     AdminStatus:
       description: NGSI-LD Property Type. The desired state of the interface.
       type: object
@@ -5204,16 +5201,13 @@ components:
         - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
-              $ref: '#/components/schemas/AdminStatusOptions'
+              type: string
+              enum:
+                - up
+                - down
+                - testing
           required:
             - value
-    AdminStatusOptions:
-      description: Options for linkUp/linkDown SNMP notifications.
-      type: string
-      enum:
-        - up
-        - down
-        - testing
     OperStatus:
       description: NGSI-LD Property Type. The current operational state of the interface.
       type: object
@@ -5222,20 +5216,17 @@ components:
         - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
-              $ref: '#/components/schemas/AdminStatusOptions'
+              type: string
+              enum:
+                - up
+                - down
+                - testing
+                - unknown
+                - dormant
+                - not-present
+                - lower-layer-down
           required:
             - value
-    OperStatusOptions:
-      description: Options for the operational state of the interface.
-      type: string
-      enum:
-        - up
-        - down
-        - testing
-        - unknown
-        - dormant
-        - not-present
-        - lower-layer-down
     LastChange:
       description:  NGSI-LD Property Type. The time the interface entered its current operational state.
       type: object

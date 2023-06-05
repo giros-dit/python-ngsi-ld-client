@@ -11,7 +11,7 @@ components:
       description: |
         NGSI-LD Entity Type that represents an interface of a model-based network device.
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Entity.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Entity.Input'
         - type: object
           properties:
             type:
@@ -55,7 +55,7 @@ components:
         NGSI-LD Entity Type that represents a collection of interface-related statistics 
         of a model-based network device
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Entity.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Entity.Input'
         - properties:
             type:
               description: NGSI-LD Entity identifier. It has to be Statistics.
@@ -102,7 +102,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: string
@@ -113,7 +113,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: string
@@ -124,7 +124,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: boolean
@@ -135,7 +135,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               $ref: '#/components/schemas/LinkUpDownTrapEnableOptions'
@@ -152,7 +152,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               $ref: '#/components/schemas/AdminStatusOptions'
@@ -170,7 +170,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               $ref: '#/components/schemas/AdminStatusOptions'
@@ -192,7 +192,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: string
@@ -204,7 +204,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -215,7 +215,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: string
@@ -227,7 +227,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -238,7 +238,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
         - properties:
             object:
               type: string
@@ -249,7 +249,7 @@ components:
       type: object
       additionalProperties: false
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
         - properties:
             object:
               type: string
@@ -261,7 +261,7 @@ components:
         of an interface.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Relationship.Input'
         - properties:
             object:
               type: string
@@ -277,7 +277,7 @@ components:
         management subsystem re-initialized itself.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: string
@@ -291,7 +291,7 @@ components:
         including framing characters.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -305,7 +305,7 @@ components:
         at this sub-layer.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -318,7 +318,7 @@ components:
         (sub-)layer, that were addressed to a broadcast address at this sub-layer
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -333,7 +333,7 @@ components:
         addresses.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -348,7 +348,7 @@ components:
         could be to free up buffer space.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -364,7 +364,7 @@ components:
         being deliverable to a higher-layer protocol.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -382,7 +382,7 @@ components:
         this counter is not present.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -395,7 +395,7 @@ components:
         interface, including framing characters.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -410,7 +410,7 @@ components:
         sent.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -424,7 +424,7 @@ components:
         sub-layer, including those that were discarded or not sent.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -439,7 +439,7 @@ components:
         MAC-layer protocol, this includes both Group and Functional addresses.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -454,7 +454,7 @@ components:
         free up buffer space.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer
@@ -469,7 +469,7 @@ components:
         could not be transmitted because of errors.
       type: object
       allOf:
-        - $ref: 'ngsi-ld-api.yaml#/components/schemas/Property.Input'
+        - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Property.Input'
         - properties:
             value:
               type: integer

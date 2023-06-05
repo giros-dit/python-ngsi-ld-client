@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 **admin_status** | [**AdminStatus**](AdminStatus.md) |  | 
 **oper_status** | [**OperStatus**](OperStatus.md) |  | 
 **last_change** | [**LastChange**](LastChange.md) |  | [optional] 
-**if_index** | [**IfIndex**](IfIndex.md) |  | [optional] 
+**if_index** | [**IfIndex**](IfIndex.md) |  | 
 **phys_address** | [**PhysAddress**](PhysAddress.md) |  | [optional] 
 **speed** | [**Speed**](Speed.md) |  | [optional] 
 **higher_layer_if** | [**HigherLayerIf**](HigherLayerIf.md) |  | [optional] 

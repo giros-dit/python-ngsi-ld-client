@@ -20,14 +20,13 @@ import json
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
-from ngsi_ld_client.models.admin_status_options import AdminStatusOptions
 
 class OperStatus(BaseModel):
     """
     NGSI-LD Property Type. The current operational state of the interface.
     """
     type: StrictStr = Field(..., description="Node type. ")
-    value: AdminStatusOptions = Field(...)
+    value: StrictStr = Field(...)
     observed_at: Optional[datetime] = Field(None, alias="observedAt", description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ")
     unit_code: Optional[StrictStr] = Field(None, alias="unitCode", description="Property Value's unit code. ")
     dataset_id: Optional[StrictStr] = Field(None, alias="datasetId", description="It allows identifying a set or group of property values. ")
@@ -38,6 +37,13 @@ class OperStatus(BaseModel):
         """Validates the enum"""
         if value not in ('Property'):
             raise ValueError("must be one of enum values ('Property')")
+        return value
+
+    @validator('value')
+    def value_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in ('up', 'down', 'testing', 'unknown', 'dormant', 'not-present', 'lower-layer-down'):
+            raise ValueError("must be one of enum values ('up', 'down', 'testing', 'unknown', 'dormant', 'not-present', 'lower-layer-down')")
         return value
 
     class Config:

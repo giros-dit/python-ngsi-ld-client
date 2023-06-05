@@ -52,7 +52,7 @@ class Interface(BaseModel):
     admin_status: AdminStatus = Field(..., alias="adminStatus")
     oper_status: OperStatus = Field(..., alias="operStatus")
     last_change: Optional[LastChange] = Field(None, alias="lastChange")
-    if_index: Optional[IfIndex] = Field(None, alias="ifIndex")
+    if_index: IfIndex = Field(..., alias="ifIndex")
     phys_address: Optional[PhysAddress] = Field(None, alias="physAddress")
     speed: Optional[Speed] = None
     higher_layer_if: Optional[HigherLayerIf] = Field(None, alias="higherLayerIf")

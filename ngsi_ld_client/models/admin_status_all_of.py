@@ -19,15 +19,21 @@ import json
 
 
 
-from pydantic import BaseModel, Field
-from ngsi_ld_client.models.admin_status_options import AdminStatusOptions
+from pydantic import BaseModel, Field, StrictStr, validator
 
 class AdminStatusAllOf(BaseModel):
     """
     AdminStatusAllOf
     """
-    value: AdminStatusOptions = Field(...)
+    value: StrictStr = Field(...)
     __properties = ["value"]
+
+    @validator('value')
+    def value_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in ('up', 'down', 'testing'):
+            raise ValueError("must be one of enum values ('up', 'down', 'testing')")
+        return value
 
     class Config:
         """Pydantic configuration"""

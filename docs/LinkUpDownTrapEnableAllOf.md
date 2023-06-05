@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**value** | [**LinkUpDownTrapEnableOptions**](LinkUpDownTrapEnableOptions.md) |  | 
+**value** | **str** |  | 
 
 ## Example
 

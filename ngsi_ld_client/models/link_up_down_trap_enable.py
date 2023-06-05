@@ -20,14 +20,13 @@ import json
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
-from ngsi_ld_client.models.link_up_down_trap_enable_options import LinkUpDownTrapEnableOptions
 
 class LinkUpDownTrapEnable(BaseModel):
     """
     NGSI-LD Property Type. Controls whether linkUp/linkDown SNMP notifications should be generated for this interface.
     """
     type: StrictStr = Field(..., description="Node type. ")
-    value: LinkUpDownTrapEnableOptions = Field(...)
+    value: StrictStr = Field(...)
     observed_at: Optional[datetime] = Field(None, alias="observedAt", description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ")
     unit_code: Optional[StrictStr] = Field(None, alias="unitCode", description="Property Value's unit code. ")
     dataset_id: Optional[StrictStr] = Field(None, alias="datasetId", description="It allows identifying a set or group of property values. ")
@@ -38,6 +37,13 @@ class LinkUpDownTrapEnable(BaseModel):
         """Validates the enum"""
         if value not in ('Property'):
             raise ValueError("must be one of enum values ('Property')")
+        return value
+
+    @validator('value')
+    def value_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in ('enabled', 'disabled'):
+            raise ValueError("must be one of enum values ('enabled', 'disabled')")
         return value
 
     class Config:
