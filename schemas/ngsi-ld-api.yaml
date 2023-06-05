@@ -5075,7 +5075,7 @@ components:
               $ref: '#/components/schemas/Description'
             enabled:
               $ref: '#/components/schemas/Enabled'
-            linkUpDownTrapEnabled:
+            linkUpDownTrapEnable:
               $ref: '#/components/schemas/LinkUpDownTrapEnable'
             adminStatus:
               $ref: '#/components/schemas/AdminStatus'

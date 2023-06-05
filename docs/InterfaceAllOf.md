@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **name** | [**Name**](Name.md) |  | [optional] 
 **description** | [**Description**](Description.md) |  | [optional] 
 **enabled** | [**Enabled**](Enabled.md) |  | [optional] 
-**link_up_down_trap_enabled** | [**LinkUpDownTrapEnable**](LinkUpDownTrapEnable.md) |  | [optional] 
+**link_up_down_trap_enable** | [**LinkUpDownTrapEnable**](LinkUpDownTrapEnable.md) |  | [optional] 
 **admin_status** | [**AdminStatus**](AdminStatus.md) |  | [optional] 
 **oper_status** | [**OperStatus**](OperStatus.md) |  | [optional] 
 **last_change** | [**LastChange**](LastChange.md) |  | [optional] 

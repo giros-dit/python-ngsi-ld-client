@@ -41,7 +41,7 @@ class InterfaceAllOf(BaseModel):
     name: Optional[Name] = None
     description: Optional[Description] = None
     enabled: Optional[Enabled] = None
-    link_up_down_trap_enabled: Optional[LinkUpDownTrapEnable] = Field(None, alias="linkUpDownTrapEnabled")
+    link_up_down_trap_enable: Optional[LinkUpDownTrapEnable] = Field(None, alias="linkUpDownTrapEnable")
     admin_status: Optional[AdminStatus] = Field(None, alias="adminStatus")
     oper_status: Optional[OperStatus] = Field(None, alias="operStatus")
     last_change: Optional[LastChange] = Field(None, alias="lastChange")
@@ -50,7 +50,7 @@ class InterfaceAllOf(BaseModel):
     speed: Optional[Speed] = None
     higher_layer_if: Optional[HigherLayerIf] = Field(None, alias="higherLayerIf")
     lower_layer_if: Optional[LowerLayerIf] = Field(None, alias="lowerLayerIf")
-    __properties = ["type", "name", "description", "enabled", "linkUpDownTrapEnabled", "adminStatus", "operStatus", "lastChange", "ifIndex", "physAddress", "speed", "higherLayerIf", "lowerLayerIf"]
+    __properties = ["type", "name", "description", "enabled", "linkUpDownTrapEnable", "adminStatus", "operStatus", "lastChange", "ifIndex", "physAddress", "speed", "higherLayerIf", "lowerLayerIf"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -95,9 +95,9 @@ class InterfaceAllOf(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of enabled
         if self.enabled:
             _dict['enabled'] = self.enabled.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of link_up_down_trap_enabled
-        if self.link_up_down_trap_enabled:
-            _dict['linkUpDownTrapEnabled'] = self.link_up_down_trap_enabled.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of link_up_down_trap_enable
+        if self.link_up_down_trap_enable:
+            _dict['linkUpDownTrapEnable'] = self.link_up_down_trap_enable.to_dict()
         # override the default output from pydantic by calling `to_dict()` of admin_status
         if self.admin_status:
             _dict['adminStatus'] = self.admin_status.to_dict()
@@ -138,7 +138,7 @@ class InterfaceAllOf(BaseModel):
             "name": Name.from_dict(obj.get("name")) if obj.get("name") is not None else None,
             "description": Description.from_dict(obj.get("description")) if obj.get("description") is not None else None,
             "enabled": Enabled.from_dict(obj.get("enabled")) if obj.get("enabled") is not None else None,
-            "link_up_down_trap_enabled": LinkUpDownTrapEnable.from_dict(obj.get("linkUpDownTrapEnabled")) if obj.get("linkUpDownTrapEnabled") is not None else None,
+            "link_up_down_trap_enable": LinkUpDownTrapEnable.from_dict(obj.get("linkUpDownTrapEnable")) if obj.get("linkUpDownTrapEnable") is not None else None,
             "admin_status": AdminStatus.from_dict(obj.get("adminStatus")) if obj.get("adminStatus") is not None else None,
             "oper_status": OperStatus.from_dict(obj.get("operStatus")) if obj.get("operStatus") is not None else None,
             "last_change": LastChange.from_dict(obj.get("lastChange")) if obj.get("lastChange") is not None else None,

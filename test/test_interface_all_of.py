@@ -42,7 +42,7 @@ class TestInterfaceAllOf(unittest.TestCase):
                 name = ngsi_ld_client.models.name.Name(), 
                 description = ngsi_ld_client.models.description.Description(), 
                 enabled = ngsi_ld_client.models.enabled.Enabled(), 
-                link_up_down_trap_enabled = ngsi_ld_client.models.link_up_down_trap_enable.LinkUpDownTrapEnable(), 
+                link_up_down_trap_enable = ngsi_ld_client.models.link_up_down_trap_enable.LinkUpDownTrapEnable(), 
                 admin_status = ngsi_ld_client.models.admin_status.AdminStatus(), 
                 oper_status = ngsi_ld_client.models.oper_status.OperStatus(), 
                 last_change = ngsi_ld_client.models.last_change.LastChange(), 
