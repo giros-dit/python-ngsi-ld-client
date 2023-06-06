@@ -16,12 +16,12 @@ from __future__ import annotations
 import pprint
 import re  # noqa: F401
 import json
-
+from ngsi_ld_client.models.relationship_input import RelationshipInput
 
 
 from pydantic import BaseModel, Field, StrictStr
 
-class HigherLayerIfAllOf(BaseModel):
+class HigherLayerIfAllOf(RelationshipInput):
     """
     HigherLayerIfAllOf
     """

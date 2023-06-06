@@ -32,8 +32,9 @@ from ngsi_ld_client.models.name import Name
 from ngsi_ld_client.models.oper_status import OperStatus
 from ngsi_ld_client.models.phys_address import PhysAddress
 from ngsi_ld_client.models.speed import Speed
+from ngsi_ld_client.models.entity_input import EntityInput
 
-class InterfaceAllOf(BaseModel):
+class InterfaceAllOf(EntityInput):
     """
     InterfaceAllOf
     """

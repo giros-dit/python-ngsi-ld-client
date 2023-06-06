@@ -17,11 +17,11 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from ngsi_ld_client.models.property_input import PropertyInput
 
 from pydantic import BaseModel, Field, StrictInt
 
-class IfIndexAllOf(BaseModel):
+class IfIndexAllOf(PropertyInput):
     """
     IfIndexAllOf
     """

@@ -21,7 +21,9 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictInt, StrictStr, validator
 
-class Speed(BaseModel):
+from ngsi_ld_client.models.property_input import PropertyInput
+
+class Speed(PropertyInput):
     """
     NGSI-LD Property Type. The ifIndex value for the ifEntry represented by this interface.
     """

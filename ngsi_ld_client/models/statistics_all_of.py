@@ -40,9 +40,9 @@ class StatisticsAllOf(BaseModel):
     """
     StatisticsAllOf
     """
-    type: StrictStr = Field(..., description="NGSI-LD Entity identifier. It has to be Statistics.")
-    is_part_of: IsPartOf = Field(..., alias="isPartOf")
-    discontinuity_time: DiscontinuityTime = Field(..., alias="discontinuityTime")
+    type: Optional[StrictStr] = Field('Statistics', description="NGSI-LD Entity identifier. It has to be Statistics.")
+    is_part_of: Optional[IsPartOf] = Field(None, alias="isPartOf")
+    discontinuity_time: Optional[DiscontinuityTime] = Field(None, alias="discontinuityTime")
     in_octets: Optional[InOctets] = Field(None, alias="inOctets")
     in_unicast_pkts: Optional[InUnicastPkts] = Field(None, alias="inUnicastPkts")
     in_broadcast_pkts: Optional[InBroadcastPkts] = Field(None, alias="inBroadcastPkts")
@@ -61,6 +61,9 @@ class StatisticsAllOf(BaseModel):
     @validator('type')
     def type_validate_enum(cls, value):
         """Validates the enum"""
+        if value is None:
+            return value
+
         if value not in ('Statistics'):
             raise ValueError("must be one of enum values ('Statistics')")
         return value

@@ -4,9 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | NGSI-LD Entity identifier. It has to be Statistics. | [default to 'Statistics']
-**is_part_of** | [**IsPartOf**](IsPartOf.md) |  | 
-**discontinuity_time** | [**DiscontinuityTime**](DiscontinuityTime.md) |  | 
+**type** | **str** | NGSI-LD Entity identifier. It has to be Statistics. | [optional] [default to 'Statistics']
+**is_part_of** | [**IsPartOf**](IsPartOf.md) |  | [optional] 
+**discontinuity_time** | [**DiscontinuityTime**](DiscontinuityTime.md) |  | [optional] 
 **in_octets** | [**InOctets**](InOctets.md) |  | [optional] 
 **in_unicast_pkts** | [**InUnicastPkts**](InUnicastPkts.md) |  | [optional] 
 **in_broadcast_pkts** | [**InBroadcastPkts**](InBroadcastPkts.md) |  | [optional] 

@@ -57,9 +57,6 @@ class TestStatisticsAllOf(unittest.TestCase):
             )
         else :
             return StatisticsAllOf(
-                type = 'Statistics',
-                is_part_of = ngsi_ld_client.models.is_part_of.IsPartOf(),
-                discontinuity_time = ngsi_ld_client.models.discontinuity_time.DiscontinuityTime(),
         )
         """
 
