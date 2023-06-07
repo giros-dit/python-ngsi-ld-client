@@ -19,11 +19,12 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictStr, validator
+from pydantic import BaseModel, Field, StrictStr
 from ngsi_ld_client.models.admin_status import AdminStatus
 from ngsi_ld_client.models.description import Description
 from ngsi_ld_client.models.enabled import Enabled
 from ngsi_ld_client.models.entity_common_scope import EntityCommonScope
+from ngsi_ld_client.models.entity_common_type import EntityCommonType
 from ngsi_ld_client.models.geo_property_input import GeoPropertyInput
 from ngsi_ld_client.models.higher_layer_if import HigherLayerIf
 from ngsi_ld_client.models.if_index import IfIndex
@@ -34,14 +35,13 @@ from ngsi_ld_client.models.name import Name
 from ngsi_ld_client.models.oper_status import OperStatus
 from ngsi_ld_client.models.phys_address import PhysAddress
 from ngsi_ld_client.models.speed import Speed
-from ngsi_ld_client.models.entity_input import EntityInput
 
-class Interface(EntityInput):
+class Interface(BaseModel):
     """
     NGSI-LD Entity Type that represents an interface of a model-based network device. 
     """
     id: StrictStr = Field(..., description="Entity id. ")
-    type: StrictStr = Field(..., description="NGSI-LD Entity identifier. It has to be Interface.")
+    type: EntityCommonType = Field(...)
     scope: Optional[EntityCommonScope] = None
     location: Optional[GeoPropertyInput] = None
     observation_space: Optional[GeoPropertyInput] = Field(None, alias="observationSpace")
@@ -59,13 +59,6 @@ class Interface(EntityInput):
     higher_layer_if: Optional[HigherLayerIf] = Field(None, alias="higherLayerIf")
     lower_layer_if: Optional[LowerLayerIf] = Field(None, alias="lowerLayerIf")
     __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "name", "description", "enabled", "linkUpDownTrapEnable", "adminStatus", "operStatus", "lastChange", "ifIndex", "physAddress", "speed", "higherLayerIf", "lowerLayerIf"]
-
-    @validator('type')
-    def type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in ('Interface'):
-            raise ValueError("must be one of enum values ('Interface')")
-        return value
 
     class Config:
         """Pydantic configuration"""
@@ -91,6 +84,9 @@ class Interface(EntityInput):
                           exclude={
                           },
                           exclude_none=True)
+        # override the default output from pydantic by calling `to_dict()` of type
+        if self.type:
+            _dict['type'] = self.type.to_dict()
         # override the default output from pydantic by calling `to_dict()` of scope
         if self.scope:
             _dict['scope'] = self.scope.to_dict()
@@ -152,7 +148,7 @@ class Interface(EntityInput):
 
         _obj = Interface.parse_obj({
             "id": obj.get("id"),
-            "type": obj.get("type") if obj.get("type") is not None else 'Interface',
+            "type": EntityCommonType.from_dict(obj.get("type")) if obj.get("type") is not None else None,
             "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
             "location": GeoPropertyInput.from_dict(obj.get("location")) if obj.get("location") is not None else None,
             "observation_space": GeoPropertyInput.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,

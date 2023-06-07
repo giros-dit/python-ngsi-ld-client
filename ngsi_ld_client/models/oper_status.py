@@ -21,9 +21,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 
-from ngsi_ld_client.models.property_input import PropertyInput
-
-class OperStatus(PropertyInput):
+class OperStatus(BaseModel):
     """
     NGSI-LD Property Type. The current operational state of the interface.
     """

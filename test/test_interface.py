@@ -39,7 +39,7 @@ class TestInterface(unittest.TestCase):
         if include_optional :
             return Interface(
                 id = '', 
-                type = 'Interface', 
+                type = None, 
                 scope = None, 
                 location = None, 
                 observation_space = None, 
@@ -60,7 +60,7 @@ class TestInterface(unittest.TestCase):
         else :
             return Interface(
                 id = '',
-                type = 'Interface',
+                type = None,
                 name = ngsi_ld_client.models.name.Name(),
                 admin_status = ngsi_ld_client.models.admin_status.AdminStatus(),
                 oper_status = ngsi_ld_client.models.oper_status.OperStatus(),

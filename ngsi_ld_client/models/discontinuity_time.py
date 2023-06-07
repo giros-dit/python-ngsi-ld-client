@@ -21,9 +21,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 
-from ngsi_ld_client.models.property_input import PropertyInput
-
-class DiscontinuityTime(PropertyInput):
+class DiscontinuityTime(BaseModel):
     """
     NGSI-LD Property Type. The time on the most recent occasion at which any one or more of this interface's counters suffered a discontinuity.  If no such discontinuities have occurred since the last re-initialization of the local management subsystem, then this node contains the time the local management subsystem re-initialized itself. 
     """

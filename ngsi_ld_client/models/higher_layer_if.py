@@ -20,9 +20,8 @@ import json
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
-from ngsi_ld_client.models.relationship_input import RelationshipInput
 
-class HigherLayerIf(RelationshipInput):
+class HigherLayerIf(BaseModel):
     """
     NGSI-LD Relationship Type. A list of references to interfaces layered on top of this interface.
     """

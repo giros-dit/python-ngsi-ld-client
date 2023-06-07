@@ -21,9 +21,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 
-from ngsi_ld_client.models.relationship_input import RelationshipInput
-
-class IsPartOf(RelationshipInput):
+class IsPartOf(BaseModel):
     """
     NGSI-LD Relationship Type. A hierarchical relationship to denote the statistics of an interface. 
     """

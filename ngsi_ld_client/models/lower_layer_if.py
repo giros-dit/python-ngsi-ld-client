@@ -21,9 +21,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 
-from ngsi_ld_client.models.relationship_input import RelationshipInput
-
-class LowerLayerIf(RelationshipInput):
+class LowerLayerIf(BaseModel):
     """
     NGSI-LD Relationship Type. A list of references to interfaces layered underneath of this interface.
     """

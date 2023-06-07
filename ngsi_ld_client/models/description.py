@@ -21,9 +21,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 
-from ngsi_ld_client.models.property_input import PropertyInput
-
-class Description(PropertyInput):
+class Description(BaseModel):
     """
     NGSI-LD Property Type. Description of the interface.
     """
