@@ -39,7 +39,6 @@ from ngsi_ld_client.models.enabled_all_of import EnabledAllOf
 from ngsi_ld_client.models.endpoint import Endpoint
 from ngsi_ld_client.models.entity_common import EntityCommon
 from ngsi_ld_client.models.entity_common_scope import EntityCommonScope
-from ngsi_ld_client.models.entity_common_type import EntityCommonType
 from ngsi_ld_client.models.entity_fragment_input import EntityFragmentInput
 from ngsi_ld_client.models.entity_fragment_input_all_of import EntityFragmentInputAllOf
 from ngsi_ld_client.models.entity_info import EntityInfo

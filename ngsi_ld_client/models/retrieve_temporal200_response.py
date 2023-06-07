@@ -21,7 +21,6 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr
 from ngsi_ld_client.models.entity_common_scope import EntityCommonScope
-from ngsi_ld_client.models.entity_common_type import EntityCommonType
 from ngsi_ld_client.models.geo_property_output import GeoPropertyOutput
 from ngsi_ld_client.models.ld_context import LdContext
 
@@ -31,7 +30,7 @@ class RetrieveTemporal200Response(BaseModel):
     """
     context: LdContext = Field(..., alias="@context")
     id: StrictStr = Field(..., description="Entity id. ")
-    type: EntityCommonType = Field(...)
+    type: StrictStr = Field(..., description="Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed. ")
     scope: Optional[EntityCommonScope] = None
     location: Optional[GeoPropertyOutput] = None
     observation_space: Optional[GeoPropertyOutput] = Field(None, alias="observationSpace")
@@ -68,9 +67,6 @@ class RetrieveTemporal200Response(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of type
-        if self.type:
-            _dict['type'] = self.type.to_dict()
         # override the default output from pydantic by calling `to_dict()` of scope
         if self.scope:
             _dict['scope'] = self.scope.to_dict()
@@ -97,7 +93,7 @@ class RetrieveTemporal200Response(BaseModel):
         _obj = RetrieveTemporal200Response.parse_obj({
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None,
             "id": obj.get("id"),
-            "type": EntityCommonType.from_dict(obj.get("type")) if obj.get("type") is not None else None,
+            "type": obj.get("type"),
             "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
             "location": GeoPropertyOutput.from_dict(obj.get("location")) if obj.get("location") is not None else None,
             "observation_space": GeoPropertyOutput.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,

@@ -24,7 +24,6 @@ from ngsi_ld_client.models.admin_status import AdminStatus
 from ngsi_ld_client.models.description import Description
 from ngsi_ld_client.models.enabled import Enabled
 from ngsi_ld_client.models.entity_common_scope import EntityCommonScope
-from ngsi_ld_client.models.entity_common_type import EntityCommonType
 from ngsi_ld_client.models.geo_property_input import GeoPropertyInput
 from ngsi_ld_client.models.higher_layer_if import HigherLayerIf
 from ngsi_ld_client.models.if_index import IfIndex
@@ -41,7 +40,7 @@ class Interface(BaseModel):
     NGSI-LD Entity Type that represents an interface of a model-based network device. 
     """
     id: StrictStr = Field(..., description="Entity id. ")
-    type: EntityCommonType = Field(...)
+    type: StrictStr = Field(..., description="Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed. ")
     scope: Optional[EntityCommonScope] = None
     location: Optional[GeoPropertyInput] = None
     observation_space: Optional[GeoPropertyInput] = Field(None, alias="observationSpace")
@@ -84,9 +83,6 @@ class Interface(BaseModel):
                           exclude={
                           },
                           exclude_none=True)
-        # override the default output from pydantic by calling `to_dict()` of type
-        if self.type:
-            _dict['type'] = self.type.to_dict()
         # override the default output from pydantic by calling `to_dict()` of scope
         if self.scope:
             _dict['scope'] = self.scope.to_dict()
@@ -148,7 +144,7 @@ class Interface(BaseModel):
 
         _obj = Interface.parse_obj({
             "id": obj.get("id"),
-            "type": EntityCommonType.from_dict(obj.get("type")) if obj.get("type") is not None else None,
+            "type": obj.get("type"),
             "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
             "location": GeoPropertyInput.from_dict(obj.get("location")) if obj.get("location") is not None else None,
             "observation_space": GeoPropertyInput.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,

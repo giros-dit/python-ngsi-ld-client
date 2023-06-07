@@ -175,7 +175,6 @@ Class | Method | HTTP request | Description
  - [Endpoint](docs/Endpoint.md)
  - [EntityCommon](docs/EntityCommon.md)
  - [EntityCommonScope](docs/EntityCommonScope.md)
- - [EntityCommonType](docs/EntityCommonType.md)
  - [EntityFragmentInput](docs/EntityFragmentInput.md)
  - [EntityFragmentInputAllOf](docs/EntityFragmentInputAllOf.md)
  - [EntityInfo](docs/EntityInfo.md)

@@ -39,7 +39,7 @@ class TestEntityOutput(unittest.TestCase):
         if include_optional :
             return EntityOutput(
                 id = '', 
-                type = None, 
+                type = '', 
                 scope = None, 
                 location = None, 
                 observation_space = None, 

@@ -6,7 +6,7 @@ NGSI-LD Entity Type that represents an interface of a model-based network device
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity id.  | 
-**type** | [**EntityCommonType**](EntityCommonType.md) |  | 
+**type** | **str** | Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed.  | 
 **scope** | [**EntityCommonScope**](EntityCommonScope.md) |  | [optional] 
 **location** | [**GeoPropertyInput**](GeoPropertyInput.md) |  | [optional] 
 **observation_space** | [**GeoPropertyInput**](GeoPropertyInput.md) |  | [optional] 
