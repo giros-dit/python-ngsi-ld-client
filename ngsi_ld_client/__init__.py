@@ -196,6 +196,14 @@ from ngsi_ld_client.models.retrieve_type_info200_response import RetrieveTypeInf
 from ngsi_ld_client.models.retrieve_types200_response import RetrieveTypes200Response
 from ngsi_ld_client.models.retrieve_types200_response1 import RetrieveTypes200Response1
 from ngsi_ld_client.models.retrieve_types200_response1_one_of import RetrieveTypes200Response1OneOf
+from ngsi_ld_client.models.sensor import Sensor
+from ngsi_ld_client.models.sensor_all_of import SensorAllOf
+from ngsi_ld_client.models.sensor_all_of_description import SensorAllOfDescription
+from ngsi_ld_client.models.sensor_all_of_humidity import SensorAllOfHumidity
+from ngsi_ld_client.models.sensor_all_of_name import SensorAllOfName
+from ngsi_ld_client.models.sensor_all_of_name_all_of import SensorAllOfNameAllOf
+from ngsi_ld_client.models.sensor_all_of_temperature import SensorAllOfTemperature
+from ngsi_ld_client.models.sensor_all_of_temperature_all_of import SensorAllOfTemperatureAllOf
 from ngsi_ld_client.models.speed import Speed
 from ngsi_ld_client.models.statistics import Statistics
 from ngsi_ld_client.models.statistics_all_of import StatisticsAllOf
