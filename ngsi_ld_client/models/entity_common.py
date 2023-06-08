@@ -21,13 +21,14 @@ import json
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr
 from ngsi_ld_client.models.entity_common_scope import EntityCommonScope
+from ngsi_ld_client.models.entity_common_type import EntityCommonType
 
 class EntityCommon(BaseModel):
     """
     Fragment of NGSI-LD Entity (see 5.4). 
     """
     id: Optional[StrictStr] = Field(None, description="Entity id. ")
-    type: Optional[StrictStr] = Field(None, description="Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed. ")
+    type: Optional[EntityCommonType] = None
     scope: Optional[EntityCommonScope] = None
     __properties = ["id", "type", "scope"]
 
@@ -55,6 +56,9 @@ class EntityCommon(BaseModel):
                           exclude={
                           },
                           exclude_none=True)
+        # override the default output from pydantic by calling `to_dict()` of type
+        if self.type:
+            _dict['type'] = self.type.to_dict()
         # override the default output from pydantic by calling `to_dict()` of scope
         if self.scope:
             _dict['scope'] = self.scope.to_dict()
@@ -71,7 +75,7 @@ class EntityCommon(BaseModel):
 
         _obj = EntityCommon.parse_obj({
             "id": obj.get("id"),
-            "type": obj.get("type"),
+            "type": EntityCommonType.from_dict(obj.get("type")) if obj.get("type") is not None else None,
             "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None
         })
         return _obj

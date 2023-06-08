@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**type** | **str** | NGSI-LD Entity identifier. It has to be Sensor. | [optional] [default to 'Sensor']
 **name** | [**SensorAllOfName**](SensorAllOfName.md) |  | [optional] 
 **description** | [**SensorAllOfDescription**](SensorAllOfDescription.md) |  | [optional] 
 **temperature** | [**SensorAllOfTemperature**](SensorAllOfTemperature.md) |  | [optional] 

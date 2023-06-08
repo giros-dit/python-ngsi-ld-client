@@ -38,6 +38,7 @@ class TestInterfaceAllOf(unittest.TestCase):
         model = ngsi_ld_client.models.interface_all_of.InterfaceAllOf()  # noqa: E501
         if include_optional :
             return InterfaceAllOf(
+                type = 'Interface', 
                 name = None, 
                 description = ngsi_ld_client.models.description.Description(), 
                 enabled = None, 

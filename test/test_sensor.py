@@ -39,7 +39,7 @@ class TestSensor(unittest.TestCase):
         if include_optional :
             return Sensor(
                 id = '', 
-                type = '', 
+                type = 'Sensor', 
                 scope = None, 
                 location = None, 
                 observation_space = None, 
@@ -52,7 +52,7 @@ class TestSensor(unittest.TestCase):
         else :
             return Sensor(
                 id = '',
-                type = '',
+                type = 'Sensor',
                 name = None,
                 description = None,
                 temperature = None,

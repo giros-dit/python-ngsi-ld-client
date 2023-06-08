@@ -39,7 +39,7 @@ class TestInterface(unittest.TestCase):
         if include_optional :
             return Interface(
                 id = '', 
-                type = '', 
+                type = 'Interface', 
                 scope = None, 
                 location = None, 
                 observation_space = None, 
@@ -60,8 +60,7 @@ class TestInterface(unittest.TestCase):
         else :
             return Interface(
                 id = '',
-                type = '',
-                name = None,
+                type = 'Interface',
                 admin_status = None,
                 oper_status = None,
                 if_index = None,

@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, StrictStr, validator
 from ngsi_ld_client.models.sensor_all_of_description import SensorAllOfDescription
 from ngsi_ld_client.models.sensor_all_of_humidity import SensorAllOfHumidity
 from ngsi_ld_client.models.sensor_all_of_name import SensorAllOfName
@@ -29,11 +29,22 @@ class SensorAllOf(BaseModel):
     """
     SensorAllOf
     """
+    type: Optional[StrictStr] = Field('Sensor', description="NGSI-LD Entity identifier. It has to be Sensor.")
     name: Optional[SensorAllOfName] = None
     description: Optional[SensorAllOfDescription] = None
     temperature: Optional[SensorAllOfTemperature] = None
     humidity: Optional[SensorAllOfHumidity] = None
-    __properties = ["name", "description", "temperature", "humidity"]
+    __properties = ["type", "name", "description", "temperature", "humidity"]
+
+    @validator('type')
+    def type_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in ('Sensor'):
+            raise ValueError("must be one of enum values ('Sensor')")
+        return value
 
     class Config:
         """Pydantic configuration"""
@@ -83,6 +94,7 @@ class SensorAllOf(BaseModel):
             return SensorAllOf.parse_obj(obj)
 
         _obj = SensorAllOf.parse_obj({
+            "type": obj.get("type") if obj.get("type") is not None else 'Sensor',
             "name": SensorAllOfName.from_dict(obj.get("name")) if obj.get("name") is not None else None,
             "description": SensorAllOfDescription.from_dict(obj.get("description")) if obj.get("description") is not None else None,
             "temperature": SensorAllOfTemperature.from_dict(obj.get("temperature")) if obj.get("temperature") is not None else None,

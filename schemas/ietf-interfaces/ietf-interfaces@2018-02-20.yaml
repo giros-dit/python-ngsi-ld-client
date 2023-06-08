@@ -56,7 +56,8 @@ components:
         of a model-based network device
       allOf:
         - $ref: '../ngsi-ld-api/ngsi-ld-api.yaml#/components/schemas/Entity.Input'
-        - properties:
+        - type: object
+          properties:
             type:
               description: NGSI-LD Entity identifier. It has to be Statistics.
               type: string

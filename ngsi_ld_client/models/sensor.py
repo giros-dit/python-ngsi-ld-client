@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, Field, StrictStr, validator
 from ngsi_ld_client.models.entity_common_scope import EntityCommonScope
 from ngsi_ld_client.models.geo_property_input import GeoPropertyInput
 from ngsi_ld_client.models.sensor_all_of_description import SensorAllOfDescription
@@ -32,7 +32,7 @@ class Sensor(BaseModel):
     NGSI-LD Entity Type that represents an IoT sensor. 
     """
     id: StrictStr = Field(..., description="Entity id. ")
-    type: StrictStr = Field(..., description="Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed. ")
+    type: StrictStr = Field(..., description="NGSI-LD Entity identifier. It has to be Sensor.")
     scope: Optional[EntityCommonScope] = None
     location: Optional[GeoPropertyInput] = None
     observation_space: Optional[GeoPropertyInput] = Field(None, alias="observationSpace")
@@ -42,6 +42,13 @@ class Sensor(BaseModel):
     temperature: SensorAllOfTemperature = Field(...)
     humidity: SensorAllOfHumidity = Field(...)
     __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "name", "description", "temperature", "humidity"]
+
+    @validator('type')
+    def type_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in ('Sensor'):
+            raise ValueError("must be one of enum values ('Sensor')")
+        return value
 
     class Config:
         """Pydantic configuration"""
@@ -104,7 +111,7 @@ class Sensor(BaseModel):
 
         _obj = Sensor.parse_obj({
             "id": obj.get("id"),
-            "type": obj.get("type"),
+            "type": obj.get("type") if obj.get("type") is not None else 'Sensor',
             "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
             "location": GeoPropertyInput.from_dict(obj.get("location")) if obj.get("location") is not None else None,
             "observation_space": GeoPropertyInput.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,

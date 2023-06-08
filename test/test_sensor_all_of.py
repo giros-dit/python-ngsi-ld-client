@@ -38,6 +38,7 @@ class TestSensorAllOf(unittest.TestCase):
         model = ngsi_ld_client.models.sensor_all_of.SensorAllOf()  # noqa: E501
         if include_optional :
             return SensorAllOf(
+                type = 'Sensor', 
                 name = None, 
                 description = None, 
                 temperature = None, 

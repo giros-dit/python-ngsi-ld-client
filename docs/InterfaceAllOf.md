@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**type** | **str** | NGSI-LD Entity identifier. It has to be Interface. | [optional] [default to 'Interface']
 **name** | [**Name**](Name.md) |  | [optional] 
 **description** | [**Description**](Description.md) |  | [optional] 
 **enabled** | [**Enabled**](Enabled.md) |  | [optional] 

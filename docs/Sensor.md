@@ -6,7 +6,7 @@ NGSI-LD Entity Type that represents an IoT sensor.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity id.  | 
-**type** | **str** | Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed.  | 
+**type** | **str** | NGSI-LD Entity identifier. It has to be Sensor. | [default to 'Sensor']
 **scope** | [**EntityCommonScope**](EntityCommonScope.md) |  | [optional] 
 **location** | [**GeoPropertyInput**](GeoPropertyInput.md) |  | [optional] 
 **observation_space** | [**GeoPropertyInput**](GeoPropertyInput.md) |  | [optional] 

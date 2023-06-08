@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StrictStr, validator
 from ngsi_ld_client.models.admin_status import AdminStatus
 from ngsi_ld_client.models.description import Description
 from ngsi_ld_client.models.enabled import Enabled
@@ -37,6 +37,7 @@ class InterfaceAllOf(BaseModel):
     """
     InterfaceAllOf
     """
+    type: Optional[StrictStr] = Field('Interface', description="NGSI-LD Entity identifier. It has to be Interface.")
     name: Optional[Name] = None
     description: Optional[Description] = None
     enabled: Optional[Enabled] = None
@@ -49,7 +50,17 @@ class InterfaceAllOf(BaseModel):
     speed: Optional[Speed] = None
     higher_layer_if: Optional[HigherLayerIf] = Field(None, alias="higherLayerIf")
     lower_layer_if: Optional[LowerLayerIf] = Field(None, alias="lowerLayerIf")
-    __properties = ["name", "description", "enabled", "linkUpDownTrapEnable", "adminStatus", "operStatus", "lastChange", "ifIndex", "physAddress", "speed", "higherLayerIf", "lowerLayerIf"]
+    __properties = ["type", "name", "description", "enabled", "linkUpDownTrapEnable", "adminStatus", "operStatus", "lastChange", "ifIndex", "physAddress", "speed", "higherLayerIf", "lowerLayerIf"]
+
+    @validator('type')
+    def type_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in ('Interface'):
+            raise ValueError("must be one of enum values ('Interface')")
+        return value
 
     class Config:
         """Pydantic configuration"""
@@ -123,6 +134,7 @@ class InterfaceAllOf(BaseModel):
             return InterfaceAllOf.parse_obj(obj)
 
         _obj = InterfaceAllOf.parse_obj({
+            "type": obj.get("type") if obj.get("type") is not None else 'Interface',
             "name": Name.from_dict(obj.get("name")) if obj.get("name") is not None else None,
             "description": Description.from_dict(obj.get("description")) if obj.get("description") is not None else None,
             "enabled": Enabled.from_dict(obj.get("enabled")) if obj.get("enabled") is not None else None,

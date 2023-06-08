@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, Field, StrictStr, validator
 from ngsi_ld_client.models.admin_status import AdminStatus
 from ngsi_ld_client.models.description import Description
 from ngsi_ld_client.models.enabled import Enabled
@@ -40,12 +40,12 @@ class Interface(BaseModel):
     NGSI-LD Entity Type that represents an interface of a model-based network device. 
     """
     id: StrictStr = Field(..., description="Entity id. ")
-    type: StrictStr = Field(..., description="Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed. ")
+    type: StrictStr = Field(..., description="NGSI-LD Entity identifier. It has to be Interface.")
     scope: Optional[EntityCommonScope] = None
     location: Optional[GeoPropertyInput] = None
     observation_space: Optional[GeoPropertyInput] = Field(None, alias="observationSpace")
     operation_space: Optional[GeoPropertyInput] = Field(None, alias="operationSpace")
-    name: Name = Field(...)
+    name: Optional[Name] = None
     description: Optional[Description] = None
     enabled: Optional[Enabled] = None
     link_up_down_trap_enable: Optional[LinkUpDownTrapEnable] = Field(None, alias="linkUpDownTrapEnable")
@@ -58,6 +58,13 @@ class Interface(BaseModel):
     higher_layer_if: Optional[HigherLayerIf] = Field(None, alias="higherLayerIf")
     lower_layer_if: Optional[LowerLayerIf] = Field(None, alias="lowerLayerIf")
     __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "name", "description", "enabled", "linkUpDownTrapEnable", "adminStatus", "operStatus", "lastChange", "ifIndex", "physAddress", "speed", "higherLayerIf", "lowerLayerIf"]
+
+    @validator('type')
+    def type_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in ('Interface'):
+            raise ValueError("must be one of enum values ('Interface')")
+        return value
 
     class Config:
         """Pydantic configuration"""
@@ -144,7 +151,7 @@ class Interface(BaseModel):
 
         _obj = Interface.parse_obj({
             "id": obj.get("id"),
-            "type": obj.get("type"),
+            "type": obj.get("type") if obj.get("type") is not None else 'Interface',
             "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
             "location": GeoPropertyInput.from_dict(obj.get("location")) if obj.get("location") is not None else None,
             "observation_space": GeoPropertyInput.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
