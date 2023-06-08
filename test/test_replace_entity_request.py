@@ -39,7 +39,7 @@ class TestReplaceEntityRequest(unittest.TestCase):
         if include_optional :
             return ReplaceEntityRequest(
                 id = '', 
-                type = None, 
+                type = '', 
                 scope = None, 
                 location = None, 
                 observation_space = None, 
