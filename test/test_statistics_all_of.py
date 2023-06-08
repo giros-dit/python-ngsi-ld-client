@@ -39,21 +39,21 @@ class TestStatisticsAllOf(unittest.TestCase):
         if include_optional :
             return StatisticsAllOf(
                 type = 'Statistics', 
-                is_part_of = ngsi_ld_client.models.is_part_of.IsPartOf(), 
-                discontinuity_time = ngsi_ld_client.models.discontinuity_time.DiscontinuityTime(), 
-                in_octets = ngsi_ld_client.models.in_octets.InOctets(), 
-                in_unicast_pkts = ngsi_ld_client.models.in_unicast_pkts.InUnicastPkts(), 
-                in_broadcast_pkts = ngsi_ld_client.models.in_broadcast_pkts.InBroadcastPkts(), 
-                in_multicast_pkts = ngsi_ld_client.models.in_multicast_pkts.InMulticastPkts(), 
-                in_discards = ngsi_ld_client.models.in_discards.InDiscards(), 
-                in_errors = ngsi_ld_client.models.in_errors.InErrors(), 
-                in_unknown_protos = ngsi_ld_client.models.in_unknown_protos.InUnknownProtos(), 
-                out_octets = ngsi_ld_client.models.out_octets.OutOctets(), 
-                out_unicast_pkts = ngsi_ld_client.models.out_unicast_pkts.OutUnicastPkts(), 
-                out_broadcast_pkts = ngsi_ld_client.models.out_broadcast_pkts.OutBroadcastPkts(), 
-                out_multicast_pkts = ngsi_ld_client.models.out_multicast_pkts.OutMulticastPkts(), 
-                out_discards = ngsi_ld_client.models.out_discards.OutDiscards(), 
-                out_errors = ngsi_ld_client.models.out_errors.OutErrors()
+                is_part_of = None, 
+                discontinuity_time = None, 
+                in_octets = None, 
+                in_unicast_pkts = None, 
+                in_broadcast_pkts = None, 
+                in_multicast_pkts = None, 
+                in_discards = None, 
+                in_errors = None, 
+                in_unknown_protos = None, 
+                out_octets = None, 
+                out_unicast_pkts = None, 
+                out_broadcast_pkts = None, 
+                out_multicast_pkts = None, 
+                out_discards = None, 
+                out_errors = None
             )
         else :
             return StatisticsAllOf(
