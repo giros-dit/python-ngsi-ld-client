@@ -56,6 +56,7 @@ class StatisticsAllOf(BaseModel):
     out_multicast_pkts: Optional[OutMulticastPkts] = Field(None, alias="outMulticastPkts")
     out_discards: Optional[OutDiscards] = Field(None, alias="outDiscards")
     out_errors: Optional[OutErrors] = Field(None, alias="outErrors")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "isPartOf", "discontinuityTime", "inOctets", "inUnicastPkts", "inBroadcastPkts", "inMulticastPkts", "inDiscards", "inErrors", "inUnknownProtos", "outOctets", "outUnicastPkts", "outBroadcastPkts", "outMulticastPkts", "outDiscards", "outErrors"]
 
     @validator('type')
@@ -90,6 +91,7 @@ class StatisticsAllOf(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of is_part_of
@@ -137,6 +139,11 @@ class StatisticsAllOf(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of out_errors
         if self.out_errors:
             _dict['outErrors'] = self.out_errors.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -166,5 +173,10 @@ class StatisticsAllOf(BaseModel):
             "out_discards": OutDiscards.from_dict(obj.get("outDiscards")) if obj.get("outDiscards") is not None else None,
             "out_errors": OutErrors.from_dict(obj.get("outErrors")) if obj.get("outErrors") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

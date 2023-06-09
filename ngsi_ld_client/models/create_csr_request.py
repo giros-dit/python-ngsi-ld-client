@@ -52,6 +52,7 @@ class CreateCSRRequest(BaseModel):
     refresh_rate: Optional[StrictStr] = Field(None, alias="refreshRate", description="An indication of the likely period of time to elapse between updates at this registered endpoint. Brokers may optionally use this information to help implement caching. ")
     management: Optional[RegistrationManagementInfo] = None
     context: LdContext = Field(..., alias="@context")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "registrationName", "description", "information", "tenant", "observationInterval", "managementInterval", "location", "observationSpace", "operationSpace", "expiresAt", "endpoint", "contextSourceInfo", "scope", "mode", "operations", "refreshRate", "management", "@context"]
 
     @validator('type')
@@ -93,6 +94,7 @@ class CreateCSRRequest(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in information (list)
@@ -133,6 +135,11 @@ class CreateCSRRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -166,5 +173,10 @@ class CreateCSRRequest(BaseModel):
             "management": RegistrationManagementInfo.from_dict(obj.get("management")) if obj.get("management") is not None else None,
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

@@ -28,6 +28,7 @@ class AttributeList(BaseModel):
     id: StrictStr = Field(..., description="Unique identifier for the attribute list. ")
     type: StrictStr = Field(..., description="JSON-LD @type. ")
     attribute_list: conlist(StrictStr) = Field(..., alias="attributeList", description="List containing the attribute names. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "attributeList"]
 
     @validator('type')
@@ -59,8 +60,14 @@ class AttributeList(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -77,5 +84,10 @@ class AttributeList(BaseModel):
             "type": obj.get("type"),
             "attribute_list": obj.get("attributeList")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

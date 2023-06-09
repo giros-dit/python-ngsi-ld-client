@@ -26,6 +26,7 @@ class PropertyNotificationOutputAllOf(BaseModel):
     PropertyNotificationOutputAllOf
     """
     previous_value: Optional[Any] = Field(None, alias="previousValue", description="Any JSON value as defined by IETF RFC 8259.")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["previousValue"]
 
     class Config:
@@ -50,8 +51,14 @@ class PropertyNotificationOutputAllOf(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if previous_value (nullable) is None
         # and __fields_set__ contains the field
         if self.previous_value is None and "previous_value" in self.__fields_set__:
@@ -71,5 +78,10 @@ class PropertyNotificationOutputAllOf(BaseModel):
         _obj = PropertyNotificationOutputAllOf.parse_obj({
             "previous_value": obj.get("previousValue")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

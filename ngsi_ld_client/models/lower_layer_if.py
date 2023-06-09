@@ -73,6 +73,11 @@ class LowerLayerIf(BaseModel):
         if not isinstance(obj, dict):
             return LowerLayerIf.parse_obj(obj)
 
+        # raise errors for additional fields in the input
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                raise ValueError("Error due to additional fields (not defined in LowerLayerIf) in the input: " + obj)
+
         _obj = LowerLayerIf.parse_obj({
             "type": obj.get("type"),
             "object": obj.get("object"),

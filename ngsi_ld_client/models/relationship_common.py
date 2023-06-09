@@ -29,6 +29,7 @@ class RelationshipCommon(BaseModel):
     object: Optional[StrictStr] = Field(None, description="Relationship's target object. ")
     observed_at: Optional[datetime] = Field(None, alias="observedAt", description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ")
     dataset_id: Optional[StrictStr] = Field(None, alias="datasetId", description="It allows identifying a set or group of target relationship objects. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "object", "observedAt", "datasetId"]
 
     @validator('type')
@@ -63,8 +64,14 @@ class RelationshipCommon(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -82,5 +89,10 @@ class RelationshipCommon(BaseModel):
             "observed_at": obj.get("observedAt"),
             "dataset_id": obj.get("datasetId")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

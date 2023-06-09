@@ -35,6 +35,7 @@ class ReplaceAttrsRequest1(BaseModel):
     object: Optional[StrictStr] = Field(None, description="Relationship's target object. ")
     language_map: Optional[Dict[str, Any]] = Field(None, alias="languageMap", description="String Property Values defined in multiple natural languages. ")
     context: LdContext = Field(..., alias="@context")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "value", "observedAt", "unitCode", "datasetId", "object", "languageMap", "@context"]
 
     @validator('type')
@@ -69,6 +70,7 @@ class ReplaceAttrsRequest1(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of value
@@ -77,6 +79,11 @@ class ReplaceAttrsRequest1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -98,5 +105,10 @@ class ReplaceAttrsRequest1(BaseModel):
             "language_map": obj.get("languageMap"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

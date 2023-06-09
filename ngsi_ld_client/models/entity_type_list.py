@@ -28,6 +28,7 @@ class EntityTypeList(BaseModel):
     id: StrictStr = Field(..., description="Unique identifier for the entity type list. ")
     type: StrictStr = Field(..., description="JSON-LD @type. ")
     type_list: conlist(StrictStr) = Field(..., alias="typeList", description="List containing the entity type names. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "typeList"]
 
     @validator('type')
@@ -59,8 +60,14 @@ class EntityTypeList(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -77,5 +84,10 @@ class EntityTypeList(BaseModel):
             "type": obj.get("type"),
             "type_list": obj.get("typeList")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

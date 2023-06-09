@@ -33,6 +33,7 @@ class CsourceRegistrationOutputAllOf(BaseModel):
     times_failed: Optional[Union[confloat(ge=0, strict=True), conint(ge=0, strict=True)]] = Field(None, alias="timesFailed", description="Number of times that the registration triggered a distributed operation request that failed.")
     last_success: Optional[datetime] = Field(None, alias="lastSuccess", description="Timestamp corresponding to the instant when the last successfully distributed operation was sent. Created on first successful operation. ")
     last_failure: Optional[datetime] = Field(None, alias="lastFailure", description="Timestamp corresponding to the instant when the last distributed operation resulting in a failure (for instance, in the HTTP binding, an HTTP response code other than 2xx) was returned. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["createdAt", "modifiedAt", "deletedAt", "status", "timesSent", "timesFailed", "lastSuccess", "lastFailure"]
 
     @validator('status')
@@ -67,8 +68,14 @@ class CsourceRegistrationOutputAllOf(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -90,5 +97,10 @@ class CsourceRegistrationOutputAllOf(BaseModel):
             "last_success": obj.get("lastSuccess"),
             "last_failure": obj.get("lastFailure")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

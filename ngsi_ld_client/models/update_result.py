@@ -28,6 +28,7 @@ class UpdateResult(BaseModel):
     """
     updated: conlist(StrictStr) = Field(..., description="List of Attributes (represented by their Name) that were appended or updated. ")
     not_updated: conlist(NotUpdatedDetails) = Field(..., alias="notUpdated", description="List which contains the Attributes (represented by their Name) that were not updated, together with the reason for not being updated. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["updated", "notUpdated"]
 
     class Config:
@@ -52,6 +53,7 @@ class UpdateResult(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in not_updated (list)
@@ -61,6 +63,11 @@ class UpdateResult(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['notUpdated'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -76,5 +83,10 @@ class UpdateResult(BaseModel):
             "updated": obj.get("updated"),
             "not_updated": [NotUpdatedDetails.from_dict(_item) for _item in obj.get("notUpdated")] if obj.get("notUpdated") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

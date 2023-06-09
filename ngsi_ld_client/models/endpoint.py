@@ -32,6 +32,7 @@ class Endpoint(BaseModel):
     cooldown: Optional[Union[StrictFloat, StrictInt]] = Field(None, description="Once a failure has occurred, minimum period of time in milliseconds which shall elapse before attempting to make a subsequent notification to the same endpoint after failure. If requests are received before the cooldown period has expired, no notification is sent. ")
     receiver_info: Optional[conlist(KeyValuePair)] = Field(None, alias="receiverInfo", description="Generic {key, value} array to convey optional information to the receiver. ")
     notifier_info: Optional[conlist(KeyValuePair)] = Field(None, alias="notifierInfo", description="Generic {key, value} array to set up the communication channel. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["uri", "accept", "timeout", "cooldown", "receiverInfo", "notifierInfo"]
 
     @validator('accept')
@@ -66,6 +67,7 @@ class Endpoint(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in receiver_info (list)
@@ -82,6 +84,11 @@ class Endpoint(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['notifierInfo'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -101,5 +108,10 @@ class Endpoint(BaseModel):
             "receiver_info": [KeyValuePair.from_dict(_item) for _item in obj.get("receiverInfo")] if obj.get("receiverInfo") is not None else None,
             "notifier_info": [KeyValuePair.from_dict(_item) for _item in obj.get("notifierInfo")] if obj.get("notifierInfo") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

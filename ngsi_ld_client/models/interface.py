@@ -57,6 +57,7 @@ class Interface(BaseModel):
     speed: Optional[Speed] = None
     higher_layer_if: Optional[HigherLayerIf] = Field(None, alias="higherLayerIf")
     lower_layer_if: Optional[LowerLayerIf] = Field(None, alias="lowerLayerIf")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "name", "description", "enabled", "linkUpDownTrapEnable", "adminStatus", "operStatus", "lastChange", "ifIndex", "physAddress", "speed", "higherLayerIf", "lowerLayerIf"]
 
     @validator('type')
@@ -88,6 +89,7 @@ class Interface(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of scope
@@ -138,6 +140,11 @@ class Interface(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of lower_layer_if
         if self.lower_layer_if:
             _dict['lowerLayerIf'] = self.lower_layer_if.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -169,5 +176,10 @@ class Interface(BaseModel):
             "higher_layer_if": HigherLayerIf.from_dict(obj.get("higherLayerIf")) if obj.get("higherLayerIf") is not None else None,
             "lower_layer_if": LowerLayerIf.from_dict(obj.get("lowerLayerIf")) if obj.get("lowerLayerIf") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

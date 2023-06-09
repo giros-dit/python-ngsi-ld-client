@@ -29,6 +29,7 @@ class EntityInfo(BaseModel):
     id: Optional[StrictStr] = Field(None, description="Entity identifier. ")
     id_pattern: Optional[StrictStr] = Field(None, alias="idPattern", description="A regular expression which denotes a pattern that shall be matched by the provided or subscribed Entities. ")
     type: EntityInfoType = Field(...)
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "idPattern", "type"]
 
     class Config:
@@ -53,11 +54,17 @@ class EntityInfo(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of type
         if self.type:
             _dict['type'] = self.type.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -74,5 +81,10 @@ class EntityInfo(BaseModel):
             "id_pattern": obj.get("idPattern"),
             "type": EntityInfoType.from_dict(obj.get("type")) if obj.get("type") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

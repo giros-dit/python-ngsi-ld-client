@@ -27,6 +27,7 @@ class SubscriptionFragmentOnChangeAllOf(BaseModel):
     """
     watched_attributes: Optional[conlist(StrictStr, min_items=1)] = Field(None, alias="watchedAttributes", description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ")
     throttling: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, description="Minimal period of time in seconds which shall elapse between two consecutive notifications. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["watchedAttributes", "throttling"]
 
     class Config:
@@ -51,8 +52,14 @@ class SubscriptionFragmentOnChangeAllOf(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -68,5 +75,10 @@ class SubscriptionFragmentOnChangeAllOf(BaseModel):
             "watched_attributes": obj.get("watchedAttributes"),
             "throttling": obj.get("throttling")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

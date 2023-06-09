@@ -29,6 +29,7 @@ class RegistrationManagementInfo(BaseModel):
     cache_duration: Optional[StrictStr] = Field(None, alias="cacheDuration", description="Minimal period of time which shall elapse between two consecutive context information consumption operations (as defined in clause 5.7) related to the same context data will occur. If the cacheDuration latency period has not been reached, a cached value for the entity or its attributes shall be returned where available. ")
     timeout: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, description="Maximum period of time in milliseconds which may elapse before a forwarded request is assumed to have failed. ")
     cooldown: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, description="Minimum period of time in milliseconds which shall elapse before attempting to make a subsequent forwarded request to the same endpoint after failure. If requests are received before the cooldown period has expired, a timeout error response for the registration is automatically returned. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["localOnly", "cacheDuration", "timeout", "cooldown"]
 
     class Config:
@@ -53,8 +54,14 @@ class RegistrationManagementInfo(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -72,5 +79,10 @@ class RegistrationManagementInfo(BaseModel):
             "timeout": obj.get("timeout"),
             "cooldown": obj.get("cooldown")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

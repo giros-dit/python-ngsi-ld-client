@@ -74,6 +74,11 @@ class OutDiscards(BaseModel):
         if not isinstance(obj, dict):
             return OutDiscards.parse_obj(obj)
 
+        # raise errors for additional fields in the input
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                raise ValueError("Error due to additional fields (not defined in OutDiscards) in the input: " + obj)
+
         _obj = OutDiscards.parse_obj({
             "type": obj.get("type"),
             "value": obj.get("value"),

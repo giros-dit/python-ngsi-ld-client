@@ -73,6 +73,11 @@ class HigherLayerIf(BaseModel):
         if not isinstance(obj, dict):
             return HigherLayerIf.parse_obj(obj)
 
+        # raise errors for additional fields in the input
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                raise ValueError("Error due to additional fields (not defined in HigherLayerIf) in the input: " + obj)
+
         _obj = HigherLayerIf.parse_obj({
             "type": obj.get("type"),
             "object": obj.get("object"),

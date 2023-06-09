@@ -37,6 +37,7 @@ class QueryTemporal(BaseModel):
     temporal_q: TemporalQuery = Field(..., alias="temporalQ")
     scope_q: Optional[StrictStr] = Field(None, alias="scopeQ", description="Scope query.")
     lang: Optional[StrictStr] = Field(None, description="Language filter to be applied to the query (clause 4.15).")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "entities", "attrs", "q", "geoQ", "csf", "temporalQ", "scopeQ", "lang"]
 
     @validator('type')
@@ -68,6 +69,7 @@ class QueryTemporal(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -83,6 +85,11 @@ class QueryTemporal(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of temporal_q
         if self.temporal_q:
             _dict['temporalQ'] = self.temporal_q.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -105,5 +112,10 @@ class QueryTemporal(BaseModel):
             "scope_q": obj.get("scopeQ"),
             "lang": obj.get("lang")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

@@ -49,6 +49,7 @@ class UpdateSubscriptionRequest(BaseModel):
     watched_attributes: Optional[conlist(StrictStr, min_items=1)] = Field(None, alias="watchedAttributes", description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ")
     throttling: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, description="Minimal period of time in seconds which shall elapse between two consecutive notifications. ")
     context: LdContext = Field(..., alias="@context")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "timeInterval", "watchedAttributes", "throttling", "@context"]
 
     @validator('type')
@@ -94,6 +95,7 @@ class UpdateSubscriptionRequest(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -115,6 +117,11 @@ class UpdateSubscriptionRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -147,5 +154,10 @@ class UpdateSubscriptionRequest(BaseModel):
             "throttling": obj.get("throttling"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

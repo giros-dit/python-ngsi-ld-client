@@ -26,6 +26,7 @@ class SubscriptionFragmentPeriodicAllOf(BaseModel):
     SubscriptionFragmentPeriodicAllOf
     """
     time_interval: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, alias="timeInterval", description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["timeInterval"]
 
     class Config:
@@ -50,8 +51,14 @@ class SubscriptionFragmentPeriodicAllOf(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -66,5 +73,10 @@ class SubscriptionFragmentPeriodicAllOf(BaseModel):
         _obj = SubscriptionFragmentPeriodicAllOf.parse_obj({
             "time_interval": obj.get("timeInterval")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

@@ -27,6 +27,7 @@ class TimeInterval(BaseModel):
     """
     start_at: datetime = Field(..., alias="startAt", description="Describes the start of the time interval. ")
     end_at: Optional[datetime] = Field(None, alias="endAt", description="Describes the end of the time interval. If not present the interval is open. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["startAt", "endAt"]
 
     class Config:
@@ -51,8 +52,14 @@ class TimeInterval(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -68,5 +75,10 @@ class TimeInterval(BaseModel):
             "start_at": obj.get("startAt"),
             "end_at": obj.get("endAt")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

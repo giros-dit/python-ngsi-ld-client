@@ -46,6 +46,7 @@ class SubscriptionOnChange(BaseModel):
     lang: Optional[StrictStr] = Field(None, description="Language filter to be applied to the query (clause 4.15). ")
     watched_attributes: Optional[conlist(StrictStr, min_items=1)] = Field(None, alias="watchedAttributes", description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ")
     throttling: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, description="Minimal period of time in seconds which shall elapse between two consecutive notifications. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "watchedAttributes", "throttling"]
 
     @validator('type')
@@ -88,6 +89,7 @@ class SubscriptionOnChange(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -106,6 +108,11 @@ class SubscriptionOnChange(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of temporal_q
         if self.temporal_q:
             _dict['temporalQ'] = self.temporal_q.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -136,5 +143,10 @@ class SubscriptionOnChange(BaseModel):
             "watched_attributes": obj.get("watchedAttributes"),
             "throttling": obj.get("throttling")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

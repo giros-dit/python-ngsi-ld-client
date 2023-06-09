@@ -74,6 +74,11 @@ class DiscontinuityTime(BaseModel):
         if not isinstance(obj, dict):
             return DiscontinuityTime.parse_obj(obj)
 
+        # raise errors for additional fields in the input
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                raise ValueError("Error due to additional fields (not defined in DiscontinuityTime) in the input: " + obj)
+
         _obj = DiscontinuityTime.parse_obj({
             "type": obj.get("type"),
             "value": obj.get("value"),

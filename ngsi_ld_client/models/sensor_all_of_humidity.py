@@ -74,6 +74,11 @@ class SensorAllOfHumidity(BaseModel):
         if not isinstance(obj, dict):
             return SensorAllOfHumidity.parse_obj(obj)
 
+        # raise errors for additional fields in the input
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                raise ValueError("Error due to additional fields (not defined in SensorAllOfHumidity) in the input: " + obj)
+
         _obj = SensorAllOfHumidity.parse_obj({
             "type": obj.get("type"),
             "value": obj.get("value"),

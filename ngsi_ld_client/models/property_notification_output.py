@@ -35,6 +35,7 @@ class PropertyNotificationOutput(BaseModel):
     deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
     instance_id: Optional[StrictStr] = Field(None, alias="instanceId", description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ")
     previous_value: Optional[Any] = Field(None, alias="previousValue", description="Any JSON value as defined by IETF RFC 8259.")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue"]
 
     @validator('type')
@@ -66,8 +67,14 @@ class PropertyNotificationOutput(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if value (nullable) is None
         # and __fields_set__ contains the field
         if self.value is None and "value" in self.__fields_set__:
@@ -101,5 +108,10 @@ class PropertyNotificationOutput(BaseModel):
             "instance_id": obj.get("instanceId"),
             "previous_value": obj.get("previousValue")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

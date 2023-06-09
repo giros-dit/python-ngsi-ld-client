@@ -31,6 +31,7 @@ class EntityTypeInfo(BaseModel):
     type_name: StrictStr = Field(..., alias="typeName", description="Name of the entity type, short name if contained in @context. ")
     entity_count: Union[StrictFloat, StrictInt] = Field(..., alias="entityCount", description="Number of entity instances of this entity type. ")
     attribute_details: conlist(Attribute) = Field(..., alias="attributeDetails", description="List of attributes that entity instances with the specified entity type can have. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "typeName", "entityCount", "attributeDetails"]
 
     @validator('type')
@@ -62,6 +63,7 @@ class EntityTypeInfo(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in attribute_details (list)
@@ -71,6 +73,11 @@ class EntityTypeInfo(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['attributeDetails'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -89,5 +96,10 @@ class EntityTypeInfo(BaseModel):
             "entity_count": obj.get("entityCount"),
             "attribute_details": [Attribute.from_dict(_item) for _item in obj.get("attributeDetails")] if obj.get("attributeDetails") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

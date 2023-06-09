@@ -74,6 +74,11 @@ class Description(BaseModel):
         if not isinstance(obj, dict):
             return Description.parse_obj(obj)
 
+        # raise errors for additional fields in the input
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                raise ValueError("Error due to additional fields (not defined in Description) in the input: " + obj)
+
         _obj = Description.parse_obj({
             "type": obj.get("type"),
             "value": obj.get("value"),

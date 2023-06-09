@@ -29,6 +29,7 @@ class EntityCommon(BaseModel):
     id: Optional[StrictStr] = Field(None, description="Entity id. ")
     type: Optional[StrictStr] = Field(None, description="Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed. ")
     scope: Optional[EntityCommonScope] = None
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "scope"]
 
     class Config:
@@ -53,11 +54,17 @@ class EntityCommon(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of scope
         if self.scope:
             _dict['scope'] = self.scope.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -74,5 +81,10 @@ class EntityCommon(BaseModel):
             "type": obj.get("type"),
             "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

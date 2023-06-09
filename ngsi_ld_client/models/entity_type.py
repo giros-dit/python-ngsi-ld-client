@@ -29,6 +29,7 @@ class EntityType(BaseModel):
     type: StrictStr = Field(..., description="JSON-LD @type. ")
     type_name: StrictStr = Field(..., alias="typeName", description="Name of the entity type, short name if contained in @context. ")
     attribute_names: conlist(StrictStr) = Field(..., alias="attributeNames", description="List containing the names of attributes that instances of the entity type can have. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "typeName", "attributeNames"]
 
     @validator('type')
@@ -60,8 +61,14 @@ class EntityType(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -79,5 +86,10 @@ class EntityType(BaseModel):
             "type_name": obj.get("typeName"),
             "attribute_names": obj.get("attributeNames")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 

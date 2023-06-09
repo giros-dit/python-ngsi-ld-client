@@ -30,6 +30,7 @@ class PropertyInput(BaseModel):
     observed_at: Optional[datetime] = Field(None, alias="observedAt", description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ")
     unit_code: Optional[StrictStr] = Field(None, alias="unitCode", description="Property Value's unit code. ")
     dataset_id: Optional[StrictStr] = Field(None, alias="datasetId", description="It allows identifying a set or group of property values. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "value", "observedAt", "unitCode", "datasetId"]
 
     @validator('type')
@@ -61,8 +62,14 @@ class PropertyInput(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if value (nullable) is None
         # and __fields_set__ contains the field
         if self.value is None and "value" in self.__fields_set__:
@@ -86,5 +93,10 @@ class PropertyInput(BaseModel):
             "unit_code": obj.get("unitCode"),
             "dataset_id": obj.get("datasetId")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
