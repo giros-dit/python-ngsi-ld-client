@@ -17,11 +17,11 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 from ngsi_ld_client.models.entity_common_scope import EntityCommonScope
-from ngsi_ld_client.models.geo_property_input import GeoPropertyInput
+from ngsi_ld_client.models.geo_property_output import GeoPropertyOutput
 from ngsi_ld_client.models.sensor_all_of_description import SensorAllOfDescription
 from ngsi_ld_client.models.sensor_all_of_humidity import SensorAllOfHumidity
 from ngsi_ld_client.models.sensor_all_of_name import SensorAllOfName
@@ -34,15 +34,18 @@ class Sensor(BaseModel):
     id: StrictStr = Field(..., description="Entity id. ")
     type: StrictStr = Field(..., description="NGSI-LD Entity identifier. It has to be Sensor.")
     scope: Optional[EntityCommonScope] = None
-    location: Optional[GeoPropertyInput] = None
-    observation_space: Optional[GeoPropertyInput] = Field(None, alias="observationSpace")
-    operation_space: Optional[GeoPropertyInput] = Field(None, alias="operationSpace")
+    location: Optional[GeoPropertyOutput] = None
+    observation_space: Optional[GeoPropertyOutput] = Field(None, alias="observationSpace")
+    operation_space: Optional[GeoPropertyOutput] = Field(None, alias="operationSpace")
+    created_at: Optional[datetime] = Field(None, alias="createdAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ")
+    modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
+    deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
     name: SensorAllOfName = Field(...)
     description: SensorAllOfDescription = Field(...)
     temperature: SensorAllOfTemperature = Field(...)
     humidity: SensorAllOfHumidity = Field(...)
     additional_properties: Dict[str, Any] = {}
-    __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "name", "description", "temperature", "humidity"]
+    __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "createdAt", "modifiedAt", "deletedAt", "name", "description", "temperature", "humidity"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -120,9 +123,12 @@ class Sensor(BaseModel):
             "id": obj.get("id"),
             "type": obj.get("type") if obj.get("type") is not None else 'Sensor',
             "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
-            "location": GeoPropertyInput.from_dict(obj.get("location")) if obj.get("location") is not None else None,
-            "observation_space": GeoPropertyInput.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
-            "operation_space": GeoPropertyInput.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
+            "location": GeoPropertyOutput.from_dict(obj.get("location")) if obj.get("location") is not None else None,
+            "observation_space": GeoPropertyOutput.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
+            "operation_space": GeoPropertyOutput.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
+            "created_at": obj.get("createdAt"),
+            "modified_at": obj.get("modifiedAt"),
+            "deleted_at": obj.get("deletedAt"),
             "name": SensorAllOfName.from_dict(obj.get("name")) if obj.get("name") is not None else None,
             "description": SensorAllOfDescription.from_dict(obj.get("description")) if obj.get("description") is not None else None,
             "temperature": SensorAllOfTemperature.from_dict(obj.get("temperature")) if obj.get("temperature") is not None else None,
