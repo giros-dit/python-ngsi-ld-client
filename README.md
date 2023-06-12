@@ -292,6 +292,6 @@ Endpoints do not require authorization.
 
 ## Author
 
-
+[https://www.etsi.org/committee/cim](https://www.etsi.org/committee/cim)
 
 
