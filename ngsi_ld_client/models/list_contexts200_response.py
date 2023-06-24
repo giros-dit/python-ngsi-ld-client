@@ -18,21 +18,23 @@ import json
 import pprint
 import re  # noqa: F401
 
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 from pydantic import BaseModel, Field, StrictStr, ValidationError, conlist, validator
+from ngsi_ld_client.models.list_contexts200_response_one_of_inner import ListContexts200ResponseOneOfInner
+from ngsi_ld_client.models.list_contexts200_response_one_of_inner1 import ListContexts200ResponseOneOfInner1
 from typing import Any, List
 from pydantic import StrictStr, Field
 
-LISTCONTEXTS200RESPONSE_ONE_OF_SCHEMAS = ["List[object]", "List[str]"]
+LISTCONTEXTS200RESPONSE_ONE_OF_SCHEMAS = ["List[ListContexts200ResponseOneOfInner1]", "List[ListContexts200ResponseOneOfInner]"]
 
 class ListContexts200Response(BaseModel):
     """
     ListContexts200Response
     """
-    # data type: List[str]
-    oneof_schema_1_validator: Optional[conlist(StrictStr)] = None
-    # data type: List[object]
-    oneof_schema_2_validator: Optional[conlist(Dict[str, Any])] = None
+    # data type: List[ListContexts200ResponseOneOfInner]
+    oneof_schema_1_validator: Optional[conlist(ListContexts200ResponseOneOfInner)] = None
+    # data type: List[ListContexts200ResponseOneOfInner1]
+    oneof_schema_2_validator: Optional[conlist(ListContexts200ResponseOneOfInner1)] = None
     actual_instance: Any
     one_of_schemas: List[str] = Field(LISTCONTEXTS200RESPONSE_ONE_OF_SCHEMAS, const=True)
 
@@ -54,13 +56,13 @@ class ListContexts200Response(BaseModel):
         instance = ListContexts200Response.construct()
         error_messages = []
         match = 0
-        # validate data type: List[str]
+        # validate data type: List[ListContexts200ResponseOneOfInner]
         try:
             instance.oneof_schema_1_validator = v
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # validate data type: List[object]
+        # validate data type: List[ListContexts200ResponseOneOfInner1]
         try:
             instance.oneof_schema_2_validator = v
             match += 1
@@ -68,10 +70,10 @@ class ListContexts200Response(BaseModel):
             error_messages.append(str(e))
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in ListContexts200Response with oneOf schemas: List[object], List[str]. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in ListContexts200Response with oneOf schemas: List[ListContexts200ResponseOneOfInner1], List[ListContexts200ResponseOneOfInner]. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in ListContexts200Response with oneOf schemas: List[object], List[str]. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in ListContexts200Response with oneOf schemas: List[ListContexts200ResponseOneOfInner1], List[ListContexts200ResponseOneOfInner]. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -86,7 +88,7 @@ class ListContexts200Response(BaseModel):
         error_messages = []
         match = 0
 
-        # deserialize data into List[str]
+        # deserialize data into List[ListContexts200ResponseOneOfInner]
         try:
             # validation
             instance.oneof_schema_1_validator = json.loads(json_str)
@@ -95,7 +97,7 @@ class ListContexts200Response(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[object]
+        # deserialize data into List[ListContexts200ResponseOneOfInner1]
         try:
             # validation
             instance.oneof_schema_2_validator = json.loads(json_str)
@@ -107,10 +109,10 @@ class ListContexts200Response(BaseModel):
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into ListContexts200Response with oneOf schemas: List[object], List[str]. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into ListContexts200Response with oneOf schemas: List[ListContexts200ResponseOneOfInner1], List[ListContexts200ResponseOneOfInner]. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into ListContexts200Response with oneOf schemas: List[object], List[str]. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into ListContexts200Response with oneOf schemas: List[ListContexts200ResponseOneOfInner1], List[ListContexts200ResponseOneOfInner]. Details: " + ", ".join(error_messages))
         else:
             return instance
 

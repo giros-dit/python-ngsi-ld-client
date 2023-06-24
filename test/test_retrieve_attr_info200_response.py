@@ -38,7 +38,6 @@ class TestRetrieveAttrInfo200Response(unittest.TestCase):
         model = ngsi_ld_client.models.retrieve_attr_info200_response.RetrieveAttrInfo200Response()  # noqa: E501
         if include_optional :
             return RetrieveAttrInfo200Response(
-                context = None, 
                 id = '', 
                 type = 'Attribute', 
                 attribute_name = '', 
@@ -48,14 +47,15 @@ class TestRetrieveAttrInfo200Response(unittest.TestCase):
                     ], 
                 type_names = [
                     ''
-                    ]
+                    ], 
+                context = None
             )
         else :
             return RetrieveAttrInfo200Response(
-                context = None,
                 id = '',
                 type = 'Attribute',
                 attribute_name = '',
+                context = None,
         )
         """
 

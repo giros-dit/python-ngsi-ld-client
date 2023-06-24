@@ -31,21 +31,21 @@ class TestTemporalContextInformationConsumptionApi(unittest.TestCase):
     def test_query_temporal(self):
         """Test case for query_temporal
 
-        Query temporal evolution of Entities.  # noqa: E501
+        Query temporal evolution of Entities   # noqa: E501
         """
         pass
 
     def test_retrieve_temporal(self):
         """Test case for retrieve_temporal
 
-        Temporal Representation of Entity retrieval by id  # noqa: E501
+        Temporal Representation of Entity retrieval by id   # noqa: E501
         """
         pass
 
     def test_temporal_query_batch(self):
         """Test case for temporal_query_batch
 
-        Temporal Representation of Entity Query based on POST  # noqa: E501
+        Temporal Representation of Entity Query based on POST   # noqa: E501
         """
         pass
 

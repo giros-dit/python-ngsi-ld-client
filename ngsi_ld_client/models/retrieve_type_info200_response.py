@@ -27,14 +27,14 @@ class RetrieveTypeInfo200Response(BaseModel):
     """
     RetrieveTypeInfo200Response
     """
-    context: LdContext = Field(..., alias="@context")
     id: StrictStr = Field(..., description="Fully Qualified Name (FQN) of the entity type being described. ")
     type: StrictStr = Field(..., description="JSON-LD @type. ")
     type_name: StrictStr = Field(..., alias="typeName", description="Name of the entity type, short name if contained in @context. ")
     entity_count: Union[StrictFloat, StrictInt] = Field(..., alias="entityCount", description="Number of entity instances of this entity type. ")
     attribute_details: conlist(Attribute) = Field(..., alias="attributeDetails", description="List of attributes that entity instances with the specified entity type can have. ")
+    context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["@context", "id", "type", "typeName", "entityCount", "attributeDetails"]
+    __properties = ["id", "type", "typeName", "entityCount", "attributeDetails", "@context"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -68,9 +68,6 @@ class RetrieveTypeInfo200Response(BaseModel):
                             "additional_properties"
                           },
                           exclude_none=True)
-        # override the default output from pydantic by calling `to_dict()` of context
-        if self.context:
-            _dict['@context'] = self.context.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in attribute_details (list)
         _items = []
         if self.attribute_details:
@@ -78,6 +75,9 @@ class RetrieveTypeInfo200Response(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['attributeDetails'] = _items
+        # override the default output from pydantic by calling `to_dict()` of context
+        if self.context:
+            _dict['@context'] = self.context.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -95,12 +95,12 @@ class RetrieveTypeInfo200Response(BaseModel):
             return RetrieveTypeInfo200Response.parse_obj(obj)
 
         _obj = RetrieveTypeInfo200Response.parse_obj({
-            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None,
             "id": obj.get("id"),
             "type": obj.get("type"),
             "type_name": obj.get("typeName"),
             "entity_count": obj.get("entityCount"),
-            "attribute_details": [Attribute.from_dict(_item) for _item in obj.get("attributeDetails")] if obj.get("attributeDetails") is not None else None
+            "attribute_details": [Attribute.from_dict(_item) for _item in obj.get("attributeDetails")] if obj.get("attributeDetails") is not None else None,
+            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

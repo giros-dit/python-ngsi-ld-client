@@ -23,8 +23,8 @@ from pydantic import Field, StrictBool, StrictStr
 
 from typing import Optional
 
-from ngsi_ld_client.models.entity_temporal_fragment_input import EntityTemporalFragmentInput
-from ngsi_ld_client.models.entity_temporal_input import EntityTemporalInput
+from ngsi_ld_client.models.append_attrs_temporal_request import AppendAttrsTemporalRequest
+from ngsi_ld_client.models.query_temporal200_response_inner import QueryTemporal200ResponseInner
 
 from ngsi_ld_client.api_client import ApiClient
 from ngsi_ld_client.api_response import ApiResponse
@@ -47,20 +47,20 @@ class TemporalContextInformationProvisionApi(object):
         self.api_client = api_client
 
     @validate_arguments
-    def append_attrs_temporal(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], entity_temporal_fragment_input : EntityTemporalFragmentInput, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
+    def append_attrs_temporal(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], append_attrs_temporal_request : AppendAttrsTemporalRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
         """Temporal Representation of Entity Attribute instance addition   # noqa: E501
 
         5.6.12 Append Entity Attributes.  This operation allows modifying a Temporal Representation of an Entity by adding new Attribute instances.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.append_attrs_temporal(entity_id, entity_temporal_fragment_input, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.append_attrs_temporal(entity_id, append_attrs_temporal_request, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
-        :param entity_temporal_fragment_input: (required)
-        :type entity_temporal_fragment_input: EntityTemporalFragmentInput
+        :param append_attrs_temporal_request: (required)
+        :type append_attrs_temporal_request: AppendAttrsTemporalRequest
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -81,23 +81,23 @@ class TemporalContextInformationProvisionApi(object):
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
             raise ValueError("Error! Please call the append_attrs_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.append_attrs_temporal_with_http_info(entity_id, entity_temporal_fragment_input, local, link, ngsild_tenant, **kwargs)  # noqa: E501
+        return self.append_attrs_temporal_with_http_info(entity_id, append_attrs_temporal_request, local, link, ngsild_tenant, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def append_attrs_temporal_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], entity_temporal_fragment_input : EntityTemporalFragmentInput, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def append_attrs_temporal_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], append_attrs_temporal_request : AppendAttrsTemporalRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Temporal Representation of Entity Attribute instance addition   # noqa: E501
 
         5.6.12 Append Entity Attributes.  This operation allows modifying a Temporal Representation of an Entity by adding new Attribute instances.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.append_attrs_temporal_with_http_info(entity_id, entity_temporal_fragment_input, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.append_attrs_temporal_with_http_info(entity_id, append_attrs_temporal_request, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
-        :param entity_temporal_fragment_input: (required)
-        :type entity_temporal_fragment_input: EntityTemporalFragmentInput
+        :param append_attrs_temporal_request: (required)
+        :type append_attrs_temporal_request: AppendAttrsTemporalRequest
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -133,7 +133,7 @@ class TemporalContextInformationProvisionApi(object):
 
         _all_params = [
             'entity_id',
-            'entity_temporal_fragment_input',
+            'append_attrs_temporal_request',
             'local',
             'link',
             'ngsild_tenant'
@@ -186,8 +186,8 @@ class TemporalContextInformationProvisionApi(object):
         _files = {}
         # process the body parameter
         _body_params = None
-        if _params['entity_temporal_fragment_input'] is not None:
-            _body_params = _params['entity_temporal_fragment_input']
+        if _params['append_attrs_temporal_request'] is not None:
+            _body_params = _params['append_attrs_temporal_request']
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
@@ -196,7 +196,7 @@ class TemporalContextInformationProvisionApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json', 'application/json+ld']))
+                ['application/json+ld', 'application/json']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 
@@ -224,7 +224,7 @@ class TemporalContextInformationProvisionApi(object):
 
     @validate_arguments
     def delete_attr_instance_temporal(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], instance_id : Annotated[StrictStr, Field(..., description="Id (URI) identifying a particular Attribute instance.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
-        """Attribute Instance deletion by instance id.   # noqa: E501
+        """Attribute Instance deletion by instance id   # noqa: E501
 
         5.6.15 Delete Attribute Instance from Temporal Representation of an Entity.  This operation allows deleting one Attribute instance (Property or Relationship), identified by its instanceId, of a Temporal Representation of an Entity. The Attribute itself and all its child elements shall be deleted. This operation enables the removal of individual Attribute instances that could have been previously added to the Temporal Representation of an Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -263,7 +263,7 @@ class TemporalContextInformationProvisionApi(object):
 
     @validate_arguments
     def delete_attr_instance_temporal_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], instance_id : Annotated[StrictStr, Field(..., description="Id (URI) identifying a particular Attribute instance.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
-        """Attribute Instance deletion by instance id.   # noqa: E501
+        """Attribute Instance deletion by instance id   # noqa: E501
 
         5.6.15 Delete Attribute Instance from Temporal Representation of an Entity.  This operation allows deleting one Attribute instance (Property or Relationship), identified by its instanceId, of a Temporal Representation of an Entity. The Attribute itself and all its child elements shall be deleted. This operation enables the removal of individual Attribute instances that could have been previously added to the Temporal Representation of an Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -401,7 +401,7 @@ class TemporalContextInformationProvisionApi(object):
 
     @validate_arguments
     def delete_attrs_temporal(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], delete_all : Annotated[Optional[StrictBool], Field(description="If true, all attribute instances are deleted. Otherwise (default) only the Attribute instance specified by the datasetId is deleted. In case neither the deleteAll flag nor a datasetId is present, the default Attribute instance is deleted. ")] = None, dataset_id : Annotated[Optional[StrictStr], Field(description="Specifies the datasetId of the dataset to be deleted. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
-        """Attribute from Temporal Representation of Entity deletion.   # noqa: E501
+        """Attribute from Temporal Representation of Entity deletion   # noqa: E501
 
         5.6.13 Delete Attributes from Temporal Representation of an Entity.  This operation allows deleting an NGSI-LD Entity's Attribute (Property or Relationship). The Attribute itself and all its children shall be deleted.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -442,7 +442,7 @@ class TemporalContextInformationProvisionApi(object):
 
     @validate_arguments
     def delete_attrs_temporal_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], delete_all : Annotated[Optional[StrictBool], Field(description="If true, all attribute instances are deleted. Otherwise (default) only the Attribute instance specified by the datasetId is deleted. In case neither the deleteAll flag nor a datasetId is present, the default Attribute instance is deleted. ")] = None, dataset_id : Annotated[Optional[StrictStr], Field(description="Specifies the datasetId of the dataset to be deleted. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
-        """Attribute from Temporal Representation of Entity deletion.   # noqa: E501
+        """Attribute from Temporal Representation of Entity deletion   # noqa: E501
 
         5.6.13 Delete Attributes from Temporal Representation of an Entity.  This operation allows deleting an NGSI-LD Entity's Attribute (Property or Relationship). The Attribute itself and all its children shall be deleted.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -586,7 +586,7 @@ class TemporalContextInformationProvisionApi(object):
 
     @validate_arguments
     def delete_temporal(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
-        """Temporal Representation of Entity deletion by id.   # noqa: E501
+        """Temporal Representation of Entity deletion by id   # noqa: E501
 
         5.6.16 Delete Temporal Representation of an Entity.  This operation allows deleting the Temporal Representation of an Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -621,7 +621,7 @@ class TemporalContextInformationProvisionApi(object):
 
     @validate_arguments
     def delete_temporal_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
-        """Temporal Representation of Entity deletion by id.   # noqa: E501
+        """Temporal Representation of Entity deletion by id   # noqa: E501
 
         5.6.16 Delete Temporal Representation of an Entity.  This operation allows deleting the Temporal Representation of an Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -746,14 +746,14 @@ class TemporalContextInformationProvisionApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def update_attrs_temporal(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], instance_id : Annotated[StrictStr, Field(..., description="Id (URI) identifying a particular Attribute instance.")], entity_temporal_fragment_input : EntityTemporalFragmentInput, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
-        """Attribute Instance update.   # noqa: E501
+    def update_attrs_temporal(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], instance_id : Annotated[StrictStr, Field(..., description="Id (URI) identifying a particular Attribute instance.")], append_attrs_temporal_request : AppendAttrsTemporalRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
+        """Attribute Instance update   # noqa: E501
 
         5.6.14 Partial Update Attribute instance in Temporal Representation of an Entity.  This operation allows modifying a specific Attribute (Property or Relationship) instance, identified by its instanceId, of a Temporal Representation of an Entity.  This operation enables the correction of wrong information that could have been previously added to the Temporal Representation of an Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.update_attrs_temporal(entity_id, attr_id, instance_id, entity_temporal_fragment_input, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.update_attrs_temporal(entity_id, attr_id, instance_id, append_attrs_temporal_request, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
@@ -762,8 +762,8 @@ class TemporalContextInformationProvisionApi(object):
         :type attr_id: str
         :param instance_id: Id (URI) identifying a particular Attribute instance. (required)
         :type instance_id: str
-        :param entity_temporal_fragment_input: (required)
-        :type entity_temporal_fragment_input: EntityTemporalFragmentInput
+        :param append_attrs_temporal_request: (required)
+        :type append_attrs_temporal_request: AppendAttrsTemporalRequest
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -784,17 +784,17 @@ class TemporalContextInformationProvisionApi(object):
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
             raise ValueError("Error! Please call the update_attrs_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.update_attrs_temporal_with_http_info(entity_id, attr_id, instance_id, entity_temporal_fragment_input, local, link, ngsild_tenant, **kwargs)  # noqa: E501
+        return self.update_attrs_temporal_with_http_info(entity_id, attr_id, instance_id, append_attrs_temporal_request, local, link, ngsild_tenant, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def update_attrs_temporal_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], instance_id : Annotated[StrictStr, Field(..., description="Id (URI) identifying a particular Attribute instance.")], entity_temporal_fragment_input : EntityTemporalFragmentInput, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
-        """Attribute Instance update.   # noqa: E501
+    def update_attrs_temporal_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], instance_id : Annotated[StrictStr, Field(..., description="Id (URI) identifying a particular Attribute instance.")], append_attrs_temporal_request : AppendAttrsTemporalRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+        """Attribute Instance update   # noqa: E501
 
         5.6.14 Partial Update Attribute instance in Temporal Representation of an Entity.  This operation allows modifying a specific Attribute (Property or Relationship) instance, identified by its instanceId, of a Temporal Representation of an Entity.  This operation enables the correction of wrong information that could have been previously added to the Temporal Representation of an Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.update_attrs_temporal_with_http_info(entity_id, attr_id, instance_id, entity_temporal_fragment_input, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.update_attrs_temporal_with_http_info(entity_id, attr_id, instance_id, append_attrs_temporal_request, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
@@ -803,8 +803,8 @@ class TemporalContextInformationProvisionApi(object):
         :type attr_id: str
         :param instance_id: Id (URI) identifying a particular Attribute instance. (required)
         :type instance_id: str
-        :param entity_temporal_fragment_input: (required)
-        :type entity_temporal_fragment_input: EntityTemporalFragmentInput
+        :param append_attrs_temporal_request: (required)
+        :type append_attrs_temporal_request: AppendAttrsTemporalRequest
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -842,7 +842,7 @@ class TemporalContextInformationProvisionApi(object):
             'entity_id',
             'attr_id',
             'instance_id',
-            'entity_temporal_fragment_input',
+            'append_attrs_temporal_request',
             'local',
             'link',
             'ngsild_tenant'
@@ -901,8 +901,8 @@ class TemporalContextInformationProvisionApi(object):
         _files = {}
         # process the body parameter
         _body_params = None
-        if _params['entity_temporal_fragment_input'] is not None:
-            _body_params = _params['entity_temporal_fragment_input']
+        if _params['append_attrs_temporal_request'] is not None:
+            _body_params = _params['append_attrs_temporal_request']
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
@@ -911,7 +911,7 @@ class TemporalContextInformationProvisionApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json', 'application/json+ld']))
+                ['application/json+ld', 'application/json']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 
@@ -938,18 +938,18 @@ class TemporalContextInformationProvisionApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def upsert_temporal(self, entity_temporal_input : EntityTemporalInput, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
-        """Temporal Representation of Entity creation.   # noqa: E501
+    def upsert_temporal(self, query_temporal200_response_inner : QueryTemporal200ResponseInner, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
+        """Temporal Representation of Entity creation   # noqa: E501
 
         5.6.11 Upsert Temporal Representation.  This operation allows creating or updating (by adding new Attribute instances) a Temporal Representation of an Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.upsert_temporal(entity_temporal_input, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.upsert_temporal(query_temporal200_response_inner, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
-        :param entity_temporal_input: (required)
-        :type entity_temporal_input: EntityTemporalInput
+        :param query_temporal200_response_inner: (required)
+        :type query_temporal200_response_inner: QueryTemporal200ResponseInner
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -970,21 +970,21 @@ class TemporalContextInformationProvisionApi(object):
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
             raise ValueError("Error! Please call the upsert_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.upsert_temporal_with_http_info(entity_temporal_input, local, link, ngsild_tenant, **kwargs)  # noqa: E501
+        return self.upsert_temporal_with_http_info(query_temporal200_response_inner, local, link, ngsild_tenant, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def upsert_temporal_with_http_info(self, entity_temporal_input : EntityTemporalInput, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
-        """Temporal Representation of Entity creation.   # noqa: E501
+    def upsert_temporal_with_http_info(self, query_temporal200_response_inner : QueryTemporal200ResponseInner, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+        """Temporal Representation of Entity creation   # noqa: E501
 
         5.6.11 Upsert Temporal Representation.  This operation allows creating or updating (by adding new Attribute instances) a Temporal Representation of an Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.upsert_temporal_with_http_info(entity_temporal_input, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.upsert_temporal_with_http_info(query_temporal200_response_inner, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
-        :param entity_temporal_input: (required)
-        :type entity_temporal_input: EntityTemporalInput
+        :param query_temporal200_response_inner: (required)
+        :type query_temporal200_response_inner: QueryTemporal200ResponseInner
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -1019,7 +1019,7 @@ class TemporalContextInformationProvisionApi(object):
         _params = locals()
 
         _all_params = [
-            'entity_temporal_input',
+            'query_temporal200_response_inner',
             'local',
             'link',
             'ngsild_tenant'
@@ -1069,8 +1069,8 @@ class TemporalContextInformationProvisionApi(object):
         _files = {}
         # process the body parameter
         _body_params = None
-        if _params['entity_temporal_input'] is not None:
-            _body_params = _params['entity_temporal_input']
+        if _params['query_temporal200_response_inner'] is not None:
+            _body_params = _params['query_temporal200_response_inner']
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
@@ -1079,7 +1079,7 @@ class TemporalContextInformationProvisionApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json', 'application/json+ld']))
+                ['application/json+ld', 'application/json']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 

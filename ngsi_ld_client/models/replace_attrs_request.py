@@ -13,153 +13,132 @@
 
 
 from __future__ import annotations
-from inspect import getfullargspec
-import json
 import pprint
 import re  # noqa: F401
+import json
 
-from typing import Any, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, validator
-from ngsi_ld_client.models.geo_property_fragment_input import GeoPropertyFragmentInput
-from ngsi_ld_client.models.language_property_fragment_input import LanguagePropertyFragmentInput
-from ngsi_ld_client.models.property_fragment_input import PropertyFragmentInput
-from ngsi_ld_client.models.relationship_fragment_input import RelationshipFragmentInput
-from typing import Any, List
-from pydantic import StrictStr, Field
-
-REPLACEATTRSREQUEST_ONE_OF_SCHEMAS = ["GeoPropertyFragmentInput", "LanguagePropertyFragmentInput", "PropertyFragmentInput", "RelationshipFragmentInput"]
+from datetime import datetime
+from typing import Any, Dict, Optional
+from pydantic import BaseModel, Field, StrictStr, validator
+from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalProperties
+from ngsi_ld_client.models.geometry import Geometry
+from ngsi_ld_client.models.ld_context import LdContext
+from ngsi_ld_client.models.property_previous_value import PropertyPreviousValue
 
 class ReplaceAttrsRequest(BaseModel):
     """
     ReplaceAttrsRequest
     """
-    # data type: PropertyFragmentInput
-    oneof_schema_1_validator: Optional[PropertyFragmentInput] = None
-    # data type: RelationshipFragmentInput
-    oneof_schema_2_validator: Optional[RelationshipFragmentInput] = None
-    # data type: GeoPropertyFragmentInput
-    oneof_schema_3_validator: Optional[GeoPropertyFragmentInput] = None
-    # data type: LanguagePropertyFragmentInput
-    oneof_schema_4_validator: Optional[LanguagePropertyFragmentInput] = None
-    actual_instance: Any
-    one_of_schemas: List[str] = Field(REPLACEATTRSREQUEST_ONE_OF_SCHEMAS, const=True)
+    type: Optional[StrictStr] = Field('LanguageProperty', description="Node type. ")
+    value: Optional[Geometry] = None
+    observed_at: Optional[datetime] = Field(None, alias="observedAt", description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ")
+    unit_code: Optional[StrictStr] = Field(None, alias="unitCode", description="Property Value's unit code. ")
+    dataset_id: Optional[StrictStr] = Field(None, alias="datasetId", description="It allows identifying a set or group of property values. ")
+    created_at: Optional[datetime] = Field(None, alias="createdAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ")
+    modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
+    deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
+    instance_id: Optional[StrictStr] = Field(None, alias="instanceId", description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ")
+    previous_value: Optional[PropertyPreviousValue] = Field(None, alias="previousValue")
+    object: Optional[StrictStr] = Field(None, description="Relationship's target object. ")
+    previous_object: Optional[StrictStr] = Field(None, alias="previousObject", description="Previous Relationship's target object. Only used in notifications. ")
+    additional_properties: Optional[EntityAdditionalProperties] = Field(None, alias="additionalProperties")
+    language_map: Optional[Dict[str, Any]] = Field(None, alias="languageMap", description="String Property Values defined in multiple natural languages. ")
+    previous_language_map: Optional[Dict[str, Any]] = Field(None, alias="previousLanguageMap", description="Previous Language Property languageMap. Only used in notifications. ")
+    context: LdContext = Field(..., alias="@context")
+    additional_properties: Dict[str, Any] = {}
+    __properties = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue", "object", "previousObject", "additionalProperties", "languageMap", "previousLanguageMap", "@context"]
+
+    @validator('type')
+    def type_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in ('LanguageProperty'):
+            raise ValueError("must be one of enum values ('LanguageProperty')")
+        return value
 
     class Config:
+        """Pydantic configuration"""
+        allow_population_by_field_name = True
         validate_assignment = True
 
-    def __init__(self, *args, **kwargs):
-        if args:
-            if len(args) > 1:
-                raise ValueError("If a position argument is used, only 1 is allowed to set `actual_instance`")
-            if kwargs:
-                raise ValueError("If a position argument is used, keyword arguments cannot be used.")
-            super().__init__(actual_instance=args[0])
-        else:
-            super().__init__(**kwargs)
+    def to_str(self) -> str:
+        """Returns the string representation of the model using alias"""
+        return pprint.pformat(self.dict(by_alias=True))
 
-    @validator('actual_instance')
-    def actual_instance_must_validate_oneof(cls, v):
-        instance = ReplaceAttrsRequest.construct()
-        error_messages = []
-        match = 0
-        # validate data type: PropertyFragmentInput
-        if not isinstance(v, PropertyFragmentInput):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `PropertyFragmentInput`")
-        else:
-            match += 1
-        # validate data type: RelationshipFragmentInput
-        if not isinstance(v, RelationshipFragmentInput):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `RelationshipFragmentInput`")
-        else:
-            match += 1
-        # validate data type: GeoPropertyFragmentInput
-        if not isinstance(v, GeoPropertyFragmentInput):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `GeoPropertyFragmentInput`")
-        else:
-            match += 1
-        # validate data type: LanguagePropertyFragmentInput
-        if not isinstance(v, LanguagePropertyFragmentInput):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `LanguagePropertyFragmentInput`")
-        else:
-            match += 1
-        if match > 1:
-            # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in ReplaceAttrsRequest with oneOf schemas: GeoPropertyFragmentInput, LanguagePropertyFragmentInput, PropertyFragmentInput, RelationshipFragmentInput. Details: " + ", ".join(error_messages))
-        elif match == 0:
-            # no match
-            raise ValueError("No match found when setting `actual_instance` in ReplaceAttrsRequest with oneOf schemas: GeoPropertyFragmentInput, LanguagePropertyFragmentInput, PropertyFragmentInput, RelationshipFragmentInput. Details: " + ", ".join(error_messages))
-        else:
-            return v
-
-    @classmethod
-    def from_dict(cls, obj: dict) -> ReplaceAttrsRequest:
-        return cls.from_json(json.dumps(obj))
+    def to_json(self) -> str:
+        """Returns the JSON representation of the model using alias"""
+        return json.dumps(self.to_dict())
 
     @classmethod
     def from_json(cls, json_str: str) -> ReplaceAttrsRequest:
-        """Returns the object represented by the json string"""
-        instance = ReplaceAttrsRequest.construct()
-        error_messages = []
-        match = 0
+        """Create an instance of ReplaceAttrsRequest from a JSON string"""
+        return cls.from_dict(json.loads(json_str))
 
-        # deserialize data into PropertyFragmentInput
-        try:
-            instance.actual_instance = PropertyFragmentInput.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # deserialize data into RelationshipFragmentInput
-        try:
-            instance.actual_instance = RelationshipFragmentInput.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # deserialize data into GeoPropertyFragmentInput
-        try:
-            instance.actual_instance = GeoPropertyFragmentInput.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # deserialize data into LanguagePropertyFragmentInput
-        try:
-            instance.actual_instance = LanguagePropertyFragmentInput.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
+    def to_dict(self):
+        """Returns the dictionary representation of the model using alias"""
+        _dict = self.dict(by_alias=True,
+                          exclude={
+                            "created_at",
+                            "modified_at",
+                            "deleted_at",
+                            "instance_id",
+                            "previous_object",
+                            "previous_language_map",
+                            "additional_properties"
+                          },
+                          exclude_none=True)
+        # override the default output from pydantic by calling `to_dict()` of value
+        if self.value:
+            _dict['value'] = self.value.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of previous_value
+        if self.previous_value:
+            _dict['previousValue'] = self.previous_value.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of additional_properties
+        if self.additional_properties:
+            _dict['additionalProperties'] = self.additional_properties.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of context
+        if self.context:
+            _dict['@context'] = self.context.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
 
-        if match > 1:
-            # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into ReplaceAttrsRequest with oneOf schemas: GeoPropertyFragmentInput, LanguagePropertyFragmentInput, PropertyFragmentInput, RelationshipFragmentInput. Details: " + ", ".join(error_messages))
-        elif match == 0:
-            # no match
-            raise ValueError("No match found when deserializing the JSON string into ReplaceAttrsRequest with oneOf schemas: GeoPropertyFragmentInput, LanguagePropertyFragmentInput, PropertyFragmentInput, RelationshipFragmentInput. Details: " + ", ".join(error_messages))
-        else:
-            return instance
+        return _dict
 
-    def to_json(self) -> str:
-        """Returns the JSON representation of the actual instance"""
-        if self.actual_instance is None:
-            return "null"
-
-        to_json = getattr(self.actual_instance, "to_json", None)
-        if callable(to_json):
-            return self.actual_instance.to_json()
-        else:
-            return json.dumps(self.actual_instance)
-
-    def to_dict(self) -> dict:
-        """Returns the dict representation of the actual instance"""
-        if self.actual_instance is None:
+    @classmethod
+    def from_dict(cls, obj: dict) -> ReplaceAttrsRequest:
+        """Create an instance of ReplaceAttrsRequest from a dict"""
+        if obj is None:
             return None
 
-        to_dict = getattr(self.actual_instance, "to_dict", None)
-        if callable(to_dict):
-            return self.actual_instance.to_dict()
-        else:
-            # primitive type
-            return self.actual_instance
+        if not isinstance(obj, dict):
+            return ReplaceAttrsRequest.parse_obj(obj)
 
-    def to_str(self) -> str:
-        """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        _obj = ReplaceAttrsRequest.parse_obj({
+            "type": obj.get("type") if obj.get("type") is not None else 'LanguageProperty',
+            "value": Geometry.from_dict(obj.get("value")) if obj.get("value") is not None else None,
+            "observed_at": obj.get("observedAt"),
+            "unit_code": obj.get("unitCode"),
+            "dataset_id": obj.get("datasetId"),
+            "created_at": obj.get("createdAt"),
+            "modified_at": obj.get("modifiedAt"),
+            "deleted_at": obj.get("deletedAt"),
+            "instance_id": obj.get("instanceId"),
+            "previous_value": PropertyPreviousValue.from_dict(obj.get("previousValue")) if obj.get("previousValue") is not None else None,
+            "object": obj.get("object"),
+            "previous_object": obj.get("previousObject"),
+            "additional_properties": EntityAdditionalProperties.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None,
+            "language_map": obj.get("languageMap"),
+            "previous_language_map": obj.get("previousLanguageMap"),
+            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
+        })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
+        return _obj
 

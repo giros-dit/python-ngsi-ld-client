@@ -4,7 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**context** | [**LdContext**](LdContext.md) |  | 
+**id** | **str** | Unique identifier for the attribute list.  | 
+**type** | **str** | JSON-LD @type.  | 
+**attribute_list** | **List[str]** | List containing the attribute names.  | 
 
 ## Example
 

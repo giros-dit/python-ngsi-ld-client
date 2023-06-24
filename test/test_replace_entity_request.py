@@ -41,9 +41,19 @@ class TestReplaceEntityRequest(unittest.TestCase):
                 id = '', 
                 type = None, 
                 scope = None, 
-                location = None, 
-                observation_space = None, 
-                operation_space = None, 
+                location = {
+                    'key' : null
+                    }, 
+                observation_space = {
+                    'key' : null
+                    }, 
+                operation_space = {
+                    'key' : null
+                    }, 
+                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                additional_properties = None, 
                 context = None
             )
         else :

@@ -23,7 +23,7 @@ from pydantic import BaseModel, Field, StrictStr
 
 class EntitySelector(BaseModel):
     """
-    5.2.33 This type selects which entity or group of entities are queried or subscribed to by Context Consumers. 
+    5.2.33 This type selects which entity or group of entities are queried or subscribed to by Context Consumers. `id` takes precedence over `idPattern`. 
     """
     id: Optional[StrictStr] = Field(None, description="Entity identifier. ")
     id_pattern: Optional[StrictStr] = Field(None, alias="idPattern", description="A regular expression which denotes a pattern that shall be matched by the provided or subscribed Entities. ")

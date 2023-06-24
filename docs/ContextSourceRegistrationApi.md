@@ -4,16 +4,16 @@ All URIs are relative to *https://localhost/ngsi-ld/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_csr**](ContextSourceRegistrationApi.md#create_csr) | **POST** /csourceRegistrations | Csource registration creation
-[**delete_csr**](ContextSourceRegistrationApi.md#delete_csr) | **DELETE** /csourceRegistrations/{registrationId} | Csource registration deletion by id
+[**create_csr**](ContextSourceRegistrationApi.md#create_csr) | **POST** /csourceRegistrations | Csource registration creation 
+[**delete_csr**](ContextSourceRegistrationApi.md#delete_csr) | **DELETE** /csourceRegistrations/{registrationId} | Csource registration deletion by id 
 [**delete_csr_subscription**](ContextSourceRegistrationApi.md#delete_csr_subscription) | **DELETE** /csourceSubscriptions/{subscriptionId} | Csource registration subscription deletion by id 
-[**update_csr**](ContextSourceRegistrationApi.md#update_csr) | **PATCH** /csourceRegistrations/{registrationId} | Csource registration update by id
+[**update_csr**](ContextSourceRegistrationApi.md#update_csr) | **PATCH** /csourceRegistrations/{registrationId} | Csource registration update by id 
 
 
 # **create_csr**
-> create_csr(csource_registration_input, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> create_csr(create_csr_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Csource registration creation
+Csource registration creation 
 
 5.9.2 Register Context Source.  This operation allows registering a context source within an NGSI-LD system. 
 
@@ -23,7 +23,7 @@ Csource registration creation
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.csource_registration_input import CsourceRegistrationInput
+from ngsi_ld_client.models.create_csr_request import CreateCSRRequest
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -38,14 +38,14 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextSourceRegistrationApi(api_client)
-    csource_registration_input = ngsi_ld_client.CsourceRegistrationInput() # CsourceRegistrationInput | 
+    create_csr_request = ngsi_ld_client.CreateCSRRequest() # CreateCSRRequest | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Csource registration creation
-        api_instance.create_csr(csource_registration_input, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        # Csource registration creation 
+        api_instance.create_csr(create_csr_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
     except Exception as e:
         print("Exception when calling ContextSourceRegistrationApi->create_csr: %s\n" % e)
 ```
@@ -55,7 +55,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **csource_registration_input** | [**CsourceRegistrationInput**](CsourceRegistrationInput.md)|  | 
+ **create_csr_request** | [**CreateCSRRequest**](CreateCSRRequest.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
@@ -70,7 +70,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json, application/json+ld
+ - **Content-Type**: application/json+ld, application/json
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
@@ -86,7 +86,7 @@ No authorization required
 # **delete_csr**
 > delete_csr(registration_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Csource registration deletion by id
+Csource registration deletion by id 
 
 5.9.4 Delete Context Source Registration.  This operation allows deleting a Context Source Registration from an NGSI-LD system. 
 
@@ -116,7 +116,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Csource registration deletion by id
+        # Csource registration deletion by id 
         api_instance.delete_csr(registration_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
     except Exception as e:
         print("Exception when calling ContextSourceRegistrationApi->delete_csr: %s\n" % e)
@@ -226,9 +226,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_csr**
-> update_csr(registration_id, request_body, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> update_csr(registration_id, update_csr_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Csource registration update by id
+Csource registration update by id 
 
 5.9.3 Update Context Source Registration.  This operation allows updating a Context Source Registration in an NGSI-LD system. 
 
@@ -238,6 +238,7 @@ Csource registration update by id
 import time
 import os
 import ngsi_ld_client
+from ngsi_ld_client.models.update_csr_request import UpdateCSRRequest
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -253,14 +254,14 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextSourceRegistrationApi(api_client)
     registration_id = 'registration_id_example' # str | Id (URI) of the context source registration.
-    request_body = None # Dict[str, object] | 
+    update_csr_request = ngsi_ld_client.UpdateCSRRequest() # UpdateCSRRequest | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Csource registration update by id
-        api_instance.update_csr(registration_id, request_body, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        # Csource registration update by id 
+        api_instance.update_csr(registration_id, update_csr_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
     except Exception as e:
         print("Exception when calling ContextSourceRegistrationApi->update_csr: %s\n" % e)
 ```
@@ -271,7 +272,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **registration_id** | **str**| Id (URI) of the context source registration. | 
- **request_body** | [**Dict[str, object]**](object.md)|  | 
+ **update_csr_request** | [**UpdateCSRRequest**](UpdateCSRRequest.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
@@ -286,7 +287,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json, application/json+ld
+ - **Content-Type**: application/json+ld, application/json
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details

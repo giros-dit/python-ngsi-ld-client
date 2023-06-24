@@ -27,7 +27,7 @@ class Endpoint(BaseModel):
     5.2.15 represents the parameters that are required in order to define an endpoint for notifications. 
     """
     uri: StrictStr = Field(..., description="URI which conveys the endpoint which will receive the notification. ")
-    accept: Optional[StrictStr] = Field('application/json', description="Intended to convey the MIME type of the notification payload body (JSON, or JSON-LD, or GeoJSON). If not present, default is \"application/json\". ")
+    accept: Optional[StrictStr] = Field(None, description="Intended to convey the MIME type of the notification payload body (JSON, or JSON-LD, or GeoJSON). If not present, default is \"application/json\". ")
     timeout: Optional[Union[StrictFloat, StrictInt]] = Field(None, description="Maximum period of time in milliseconds which may elapse before a notification is assumed to have failed. The NGSI-LD system can override this value. This only applies if the binding protocol always returns a response. ")
     cooldown: Optional[Union[StrictFloat, StrictInt]] = Field(None, description="Once a failure has occurred, minimum period of time in milliseconds which shall elapse before attempting to make a subsequent notification to the same endpoint after failure. If requests are received before the cooldown period has expired, no notification is sent. ")
     receiver_info: Optional[conlist(KeyValuePair)] = Field(None, alias="receiverInfo", description="Generic {key, value} array to convey optional information to the receiver. ")
@@ -102,7 +102,7 @@ class Endpoint(BaseModel):
 
         _obj = Endpoint.parse_obj({
             "uri": obj.get("uri"),
-            "accept": obj.get("accept") if obj.get("accept") is not None else 'application/json',
+            "accept": obj.get("accept"),
             "timeout": obj.get("timeout"),
             "cooldown": obj.get("cooldown"),
             "receiver_info": [KeyValuePair.from_dict(_item) for _item in obj.get("receiverInfo")] if obj.get("receiverInfo") is not None else None,

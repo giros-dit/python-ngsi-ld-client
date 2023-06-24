@@ -42,7 +42,6 @@ class TestCreateBatchRequest(unittest.TestCase):
             )
         else :
             return CreateBatchRequest(
-                context = None,
         )
         """
 

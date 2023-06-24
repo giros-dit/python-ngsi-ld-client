@@ -5,11 +5,11 @@ All URIs are relative to *https://localhost/ngsi-ld/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**query_csr**](ContextSourceDiscoveryApi.md#query_csr) | **GET** /csourceRegistrations | Discover Csource registrations 
-[**retrieve_csr**](ContextSourceDiscoveryApi.md#retrieve_csr) | **GET** /csourceRegistrations/{registrationId} | Csource registration retrieval by id
+[**retrieve_csr**](ContextSourceDiscoveryApi.md#retrieve_csr) | **GET** /csourceRegistrations/{registrationId} | Csource registration retrieval by id 
 
 
 # **query_csr**
-> List[CsourceRegistrationOutput] query_csr(id=id, type=type, id_pattern=id_pattern, attrs=attrs, q=q, csf=csf, geometry=geometry, georel=georel, coordinates=coordinates, geoproperty=geoproperty, timeproperty=timeproperty, timerel=timerel, time_at=time_at, end_time_at=end_time_at, geometry_property=geometry_property, lang=lang, scope_q=scope_q, options=options, limit=limit, count=count, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[QueryCSR200ResponseInner] query_csr(id=id, type=type, id_pattern=id_pattern, attrs=attrs, q=q, csf=csf, geometry=geometry, georel=georel, coordinates=coordinates, geoproperty=geoproperty, timeproperty=timeproperty, timerel=timerel, time_at=time_at, end_time_at=end_time_at, geometry_property=geometry_property, lang=lang, scope_q=scope_q, options=options, limit=limit, count=count, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Discover Csource registrations 
 
@@ -21,8 +21,8 @@ Discover Csource registrations
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.csource_registration_output import CsourceRegistrationOutput
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
+from ngsi_ld_client.models.query_csr200_response_inner import QueryCSR200ResponseInner
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -46,8 +46,8 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     geometry = 'geometry_example' # str | Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  (optional)
     georel = ngsi_ld_client.QueryEntityGeorelParameter() # QueryEntityGeorelParameter | Geo relationship as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  (optional)
     coordinates = ngsi_ld_client.QueryEntityCoordinatesParameter() # QueryEntityCoordinatesParameter | Coordinates serialized as a string as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  (optional)
-    geoproperty = 'location' # str | The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present.  (optional) (default to 'location')
-    timeproperty = 'observedAt' # str | Allowed values: \"observedAt\", \"createdAt\", \"modifiedAt\" and \"deletedAt\". If not specified, the default is \"observedAt\". (See clause 4.8)  (optional) (default to 'observedAt')
+    geoproperty = 'geoproperty_example' # str | The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present.  (optional)
+    timeproperty = 'timeproperty_example' # str | Allowed values: \"observedAt\", \"createdAt\", \"modifiedAt\" and \"deletedAt\". If not specified, the default is \"observedAt\". (See clause 4.8)  (optional)
     timerel = 'timerel_example' # str | Allowed values: \"before\", \"after\", \"between\"  (optional)
     time_at = '2013-10-20T19:20:30+01:00' # datetime | It shall be a DateTime. Cardinality shall be 1 if timerel is present. String representing the timeAt parameter as defined by clause 4.11.  (optional)
     end_time_at = '2013-10-20T19:20:30+01:00' # datetime | It shall be a DateTime. Cardinality shall be 1 if timerel is equal to \"between\". String representing the endTimeAt parameter as defined by clause 4.11.  (optional)
@@ -84,8 +84,8 @@ Name | Type | Description  | Notes
  **geometry** | **str**| Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  | [optional] 
  **georel** | [**QueryEntityGeorelParameter**](.md)| Geo relationship as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  | [optional] 
  **coordinates** | [**QueryEntityCoordinatesParameter**](.md)| Coordinates serialized as a string as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  | [optional] 
- **geoproperty** | **str**| The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present.  | [optional] [default to &#39;location&#39;]
- **timeproperty** | **str**| Allowed values: \&quot;observedAt\&quot;, \&quot;createdAt\&quot;, \&quot;modifiedAt\&quot; and \&quot;deletedAt\&quot;. If not specified, the default is \&quot;observedAt\&quot;. (See clause 4.8)  | [optional] [default to &#39;observedAt&#39;]
+ **geoproperty** | **str**| The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present.  | [optional] 
+ **timeproperty** | **str**| Allowed values: \&quot;observedAt\&quot;, \&quot;createdAt\&quot;, \&quot;modifiedAt\&quot; and \&quot;deletedAt\&quot;. If not specified, the default is \&quot;observedAt\&quot;. (See clause 4.8)  | [optional] 
  **timerel** | **str**| Allowed values: \&quot;before\&quot;, \&quot;after\&quot;, \&quot;between\&quot;  | [optional] 
  **time_at** | **datetime**| It shall be a DateTime. Cardinality shall be 1 if timerel is present. String representing the timeAt parameter as defined by clause 4.11.  | [optional] 
  **end_time_at** | **datetime**| It shall be a DateTime. Cardinality shall be 1 if timerel is equal to \&quot;between\&quot;. String representing the endTimeAt parameter as defined by clause 4.11.  | [optional] 
@@ -101,7 +101,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List[CsourceRegistrationOutput]**](CsourceRegistrationOutput.md)
+[**List[QueryCSR200ResponseInner]**](QueryCSR200ResponseInner.md)
 
 ### Authorization
 
@@ -110,7 +110,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json+ld, application/json, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -121,9 +121,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_csr**
-> CsourceRegistrationOutput retrieve_csr(registration_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> QueryCSR200ResponseInner retrieve_csr(registration_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Csource registration retrieval by id
+Csource registration retrieval by id 
 
 5.10.1 Retrieve Context Source Registration.  This operation allows retrieving a specific context source registration from an NGSI-LD system. 
 
@@ -133,7 +133,7 @@ Csource registration retrieval by id
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.csource_registration_output import CsourceRegistrationOutput
+from ngsi_ld_client.models.query_csr200_response_inner import QueryCSR200ResponseInner
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -154,7 +154,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Csource registration retrieval by id
+        # Csource registration retrieval by id 
         api_response = api_instance.retrieve_csr(registration_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextSourceDiscoveryApi->retrieve_csr:\n")
         pprint(api_response)
@@ -174,7 +174,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CsourceRegistrationOutput**](CsourceRegistrationOutput.md)
+[**QueryCSR200ResponseInner**](QueryCSR200ResponseInner.md)
 
 ### Authorization
 
@@ -183,7 +183,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json+ld, application/json, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |

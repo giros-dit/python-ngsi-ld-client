@@ -95,15 +95,26 @@ class TestUpdateSubscriptionRequest(unittest.TestCase):
                     timeproperty = 'observedAt', ), 
                 scope_q = '', 
                 lang = '', 
-                time_interval = 1, 
                 watched_attributes = [
                     ''
                     ], 
                 throttling = 1, 
+                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                status = 'active', 
+                time_interval = 1, 
                 context = None
             )
         else :
             return UpdateSubscriptionRequest(
+                entities = [
+                    ngsi_ld_client.models.entity_selector.EntitySelector(
+                        id = '', 
+                        id_pattern = '', 
+                        type = '', )
+                    ],
+                time_interval = 1,
                 context = None,
         )
         """

@@ -34,23 +34,27 @@ class UpdateSubscriptionRequest(BaseModel):
     type: Optional[StrictStr] = Field(None, description="JSON-LD @type. ")
     subscription_name: Optional[StrictStr] = Field(None, alias="subscriptionName", description="A (short) name given to this Subscription. ")
     description: Optional[StrictStr] = Field(None, description="Subscription description. ")
-    entities: Optional[conlist(EntitySelector, min_items=1)] = Field(None, description="Entities subscribed. ")
+    entities: conlist(EntitySelector, min_items=1) = Field(..., description="Entities subscribed. ")
     notification_trigger: Optional[conlist(StrictStr)] = Field(None, alias="notificationTrigger", description="The notification triggers listed indicate what kind of changes shall trigger a notification. If not present, the default is the combination attributeCreated and attributeUpdated. entityUpdated is equivalent to the combination attributeCreated, attributeUpdated and attributeDeleted. ")
     q: Optional[StrictStr] = Field(None, description="Query that shall be met by subscribed entities in order to trigger the notification. ")
     geo_q: Optional[GeoQuery] = Field(None, alias="geoQ")
     csf: Optional[StrictStr] = Field(None, description="Context source filter that shall be met by Context Source Registrations describing Context Sources to be used for Entity Subscriptions. ")
-    is_active: Optional[StrictBool] = Field(True, alias="isActive", description="Allows clients to temporarily pause the subscription by making it inactive. true indicates that the Subscription is under operation. false indicates that the subscription is paused and notifications shall not be delivered. ")
+    is_active: Optional[StrictBool] = Field(None, alias="isActive", description="Allows clients to temporarily pause the subscription by making it inactive. true indicates that the Subscription is under operation. false indicates that the subscription is paused and notifications shall not be delivered. ")
     notification: Optional[NotificationParams] = None
     expires_at: Optional[datetime] = Field(None, alias="expiresAt", description="Expiration date for the subscription. ")
     temporal_q: Optional[TemporalQuery] = Field(None, alias="temporalQ")
     scope_q: Optional[StrictStr] = Field(None, alias="scopeQ", description="Scope query. ")
     lang: Optional[StrictStr] = Field(None, description="Language filter to be applied to the query (clause 4.15). ")
-    time_interval: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, alias="timeInterval", description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ")
     watched_attributes: Optional[conlist(StrictStr, min_items=1)] = Field(None, alias="watchedAttributes", description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ")
     throttling: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, description="Minimal period of time in seconds which shall elapse between two consecutive notifications. ")
+    created_at: Optional[datetime] = Field(None, alias="createdAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ")
+    modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
+    deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
+    status: Optional[StrictStr] = Field(None, description="Read-only. Provided by the system when querying the details of a subscription. ")
+    time_interval: Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)] = Field(..., alias="timeInterval", description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ")
     context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "timeInterval", "watchedAttributes", "throttling", "@context"]
+    __properties = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "watchedAttributes", "throttling", "createdAt", "modifiedAt", "deletedAt", "status", "timeInterval", "@context"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -71,6 +75,16 @@ class UpdateSubscriptionRequest(BaseModel):
         for i in value:
             if i not in ('entityCreated', 'entityUpdated', 'entityDeleted', 'attributeCreated', 'attributeUpdated', 'attributeDeleted'):
                 raise ValueError("each list item must be one of ('entityCreated', 'entityUpdated', 'entityDeleted', 'attributeCreated', 'attributeUpdated', 'attributeDeleted')")
+        return value
+
+    @validator('status')
+    def status_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in ('active', 'paused', 'expired'):
+            raise ValueError("must be one of enum values ('active', 'paused', 'expired')")
         return value
 
     class Config:
@@ -95,6 +109,7 @@ class UpdateSubscriptionRequest(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "status",
                             "additional_properties"
                           },
                           exclude_none=True)
@@ -143,15 +158,19 @@ class UpdateSubscriptionRequest(BaseModel):
             "q": obj.get("q"),
             "geo_q": GeoQuery.from_dict(obj.get("geoQ")) if obj.get("geoQ") is not None else None,
             "csf": obj.get("csf"),
-            "is_active": obj.get("isActive") if obj.get("isActive") is not None else True,
+            "is_active": obj.get("isActive"),
             "notification": NotificationParams.from_dict(obj.get("notification")) if obj.get("notification") is not None else None,
             "expires_at": obj.get("expiresAt"),
             "temporal_q": TemporalQuery.from_dict(obj.get("temporalQ")) if obj.get("temporalQ") is not None else None,
             "scope_q": obj.get("scopeQ"),
             "lang": obj.get("lang"),
-            "time_interval": obj.get("timeInterval"),
             "watched_attributes": obj.get("watchedAttributes"),
             "throttling": obj.get("throttling"),
+            "created_at": obj.get("createdAt"),
+            "modified_at": obj.get("modifiedAt"),
+            "deleted_at": obj.get("deletedAt"),
+            "status": obj.get("status"),
+            "time_interval": obj.get("timeInterval"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties

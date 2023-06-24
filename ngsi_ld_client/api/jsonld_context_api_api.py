@@ -24,6 +24,7 @@ from pydantic import Field, StrictBool, StrictStr
 from typing import Any, Dict, Optional
 
 from ngsi_ld_client.models.list_contexts200_response import ListContexts200Response
+from ngsi_ld_client.models.retrieve_context200_response import RetrieveContext200Response
 
 from ngsi_ld_client.api_client import ApiClient
 from ngsi_ld_client.api_response import ApiResponse
@@ -47,7 +48,7 @@ class JSONLDContextAPIApi(object):
 
     @validate_arguments
     def create_context(self, body : Annotated[Dict[str, Any], Field(..., description="Payload body in the request contains a JSON object that has a root node named @context, which represents a JSON-LD \"local\" context. ")], **kwargs) -> None:  # noqa: E501
-        """Add a user @context to the internal cache  # noqa: E501
+        """Add a user @context to the internal cache   # noqa: E501
 
         5.13.2 Add @context.  With this operation, a client can ask the Broker to store the full content of a specific @context, by giving it to the Broker.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -76,7 +77,7 @@ class JSONLDContextAPIApi(object):
 
     @validate_arguments
     def create_context_with_http_info(self, body : Annotated[Dict[str, Any], Field(..., description="Payload body in the request contains a JSON object that has a root node named @context, which represents a JSON-LD \"local\" context. ")], **kwargs) -> ApiResponse:  # noqa: E501
-        """Add a user @context to the internal cache  # noqa: E501
+        """Add a user @context to the internal cache   # noqa: E501
 
         5.13.2 Add @context.  With this operation, a client can ask the Broker to store the full content of a specific @context, by giving it to the Broker.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -163,7 +164,7 @@ class JSONLDContextAPIApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json', 'application/json+ld']))
+                ['application/json+ld', 'application/json']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 
@@ -191,7 +192,7 @@ class JSONLDContextAPIApi(object):
 
     @validate_arguments
     def delete_context(self, context_id : Annotated[StrictStr, Field(..., description="Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. ")], reload : Annotated[Optional[StrictBool], Field(description="Indicates to perform a download and replace of the @context, as specified in clause 5.13.5.4. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
-        """Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it  # noqa: E501
+        """Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it   # noqa: E501
 
         5.13.5 Delete and Reload @context  With this operation, a client supplies a local identifier to the Broker, indicating a stored @context, that the Broker shall remove from its storage. For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. If the entry in the local storage that corresponds to the identifier is itself an array of @contexts, this operation will not delete the children, i.e. the @contexts in the array, but just the entry.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -228,7 +229,7 @@ class JSONLDContextAPIApi(object):
 
     @validate_arguments
     def delete_context_with_http_info(self, context_id : Annotated[StrictStr, Field(..., description="Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. ")], reload : Annotated[Optional[StrictBool], Field(description="Indicates to perform a download and replace of the @context, as specified in clause 5.13.5.4. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
-        """Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it  # noqa: E501
+        """Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it   # noqa: E501
 
         5.13.5 Delete and Reload @context  With this operation, a client supplies a local identifier to the Broker, indicating a stored @context, that the Broker shall remove from its storage. For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. If the entry in the local storage that corresponds to the identifier is itself an array of @contexts, this operation will not delete the children, i.e. the @contexts in the array, but just the entry.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -360,7 +361,7 @@ class JSONLDContextAPIApi(object):
 
     @validate_arguments
     def list_contexts(self, details : Annotated[Optional[StrictBool], Field(description="Whether a list of URLs or a more detailed list of JSON Objects is requested.")] = None, kind : Annotated[Optional[StrictStr], Field(description="Can be either \"Cached\", \"Hosted\", or \"ImplicitlyCreated\". ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ListContexts200Response:  # noqa: E501
-        """List all cached @contexts  # noqa: E501
+        """List all cached @contexts   # noqa: E501
 
         5.13.3 List @contexts.  With this operation a client can obtain a list of URLs that represent all of the @contexts stored in the local context store of the Broker. Each URL can be used to download the corresponding @context, and, in case the @context's kind is \"Cached\", it shall be the original URL the Broker downloaded the @context from.  In case a \"details\" flag is set to true, the client obtains a list of JSON objects, each representing information (metadata) about an @context currently stored by the Broker. Each JSON object contains information about the @context's original URL (if any), its local identifier in the Broker's storage, its kind (\"Cached\", \"Hosted\" and \"ImplicitlyCreated\"), its creation timestamp, its expiry date (if \"Cached\"), and additional optional information.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -397,7 +398,7 @@ class JSONLDContextAPIApi(object):
 
     @validate_arguments
     def list_contexts_with_http_info(self, details : Annotated[Optional[StrictBool], Field(description="Whether a list of URLs or a more detailed list of JSON Objects is requested.")] = None, kind : Annotated[Optional[StrictStr], Field(description="Can be either \"Cached\", \"Hosted\", or \"ImplicitlyCreated\". ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
-        """List all cached @contexts  # noqa: E501
+        """List all cached @contexts   # noqa: E501
 
         5.13.3 List @contexts.  With this operation a client can obtain a list of URLs that represent all of the @contexts stored in the local context store of the Broker. Each URL can be used to download the corresponding @context, and, in case the @context's kind is \"Cached\", it shall be the original URL the Broker downloaded the @context from.  In case a \"details\" flag is set to true, the client obtains a list of JSON objects, each representing information (metadata) about an @context currently stored by the Broker. Each JSON object contains information about the @context's original URL (if any), its local identifier in the Broker's storage, its kind (\"Cached\", \"Hosted\" and \"ImplicitlyCreated\"), its creation timestamp, its expiry date (if \"Cached\"), and additional optional information.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -503,7 +504,7 @@ class JSONLDContextAPIApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
+            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
@@ -531,8 +532,8 @@ class JSONLDContextAPIApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def retrieve_context(self, context_id : Annotated[StrictStr, Field(..., description="Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. ")], details : Annotated[Optional[StrictBool], Field(description="Whether a list of URLs or a more detailed list of JSON Objects is requested.")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> object:  # noqa: E501
-        """Serve one specific user @context  # noqa: E501
+    def retrieve_context(self, context_id : Annotated[StrictStr, Field(..., description="Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. ")], details : Annotated[Optional[StrictBool], Field(description="Whether a list of URLs or a more detailed list of JSON Objects is requested.")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> RetrieveContext200Response:  # noqa: E501
+        """Serve one specific user @context   # noqa: E501
 
         5.13.4 Serve @context.  With this operation a client can obtain the full content of a specific @context (only for @contexts of kind \"Hosted\" or \"ImplicitlyCreated\"), which is currently stored in the Broker's internal storage, or its metadata (for all kinds of stored @contexts).   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -560,7 +561,7 @@ class JSONLDContextAPIApi(object):
         :return: Returns the result object.
                  If the method is called asynchronously,
                  returns the request thread.
-        :rtype: object
+        :rtype: RetrieveContext200Response
         """
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
@@ -569,7 +570,7 @@ class JSONLDContextAPIApi(object):
 
     @validate_arguments
     def retrieve_context_with_http_info(self, context_id : Annotated[StrictStr, Field(..., description="Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. ")], details : Annotated[Optional[StrictBool], Field(description="Whether a list of URLs or a more detailed list of JSON Objects is requested.")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
-        """Serve one specific user @context  # noqa: E501
+        """Serve one specific user @context   # noqa: E501
 
         5.13.4 Serve @context.  With this operation a client can obtain the full content of a specific @context (only for @contexts of kind \"Hosted\" or \"ImplicitlyCreated\"), which is currently stored in the Broker's internal storage, or its metadata (for all kinds of stored @contexts).   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -610,7 +611,7 @@ class JSONLDContextAPIApi(object):
         :return: Returns the result object.
                  If the method is called asynchronously,
                  returns the request thread.
-        :rtype: tuple(object, status_code(int), headers(HTTPHeaderDict))
+        :rtype: tuple(RetrieveContext200Response, status_code(int), headers(HTTPHeaderDict))
         """
 
         _params = locals()
@@ -675,13 +676,13 @@ class JSONLDContextAPIApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
+            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
 
         _response_types_map = {
-            '200': "object",
+            '200': "RetrieveContext200Response",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
             '422': "ProblemDetails",

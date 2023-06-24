@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-
+from typing import Optional
 from pydantic import BaseModel, Field
 from ngsi_ld_client.models.ld_context import LdContext
 
@@ -26,7 +26,7 @@ class CreateBatchRequest(BaseModel):
     """
     CreateBatchRequest
     """
-    context: LdContext = Field(..., alias="@context")
+    context: Optional[LdContext] = Field(None, alias="@context")
     additional_properties: Dict[str, Any] = {}
     __properties = ["@context"]
 
