@@ -24,6 +24,7 @@ from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalP
 from ngsi_ld_client.models.entity_scope import EntityScope
 from ngsi_ld_client.models.entity_type import EntityType
 from ngsi_ld_client.models.geo_property import GeoProperty
+from ngsi_ld_client.models.ld_context import LdContext
 
 class QueryEntity200ResponseInner1(BaseModel):
     """
@@ -39,8 +40,9 @@ class QueryEntity200ResponseInner1(BaseModel):
     modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
     deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
     additional_properties: Optional[EntityAdditionalProperties] = Field(None, alias="additionalProperties")
+    context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "createdAt", "modifiedAt", "deletedAt", "additionalProperties"]
+    __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "createdAt", "modifiedAt", "deletedAt", "additionalProperties", "@context"]
 
     class Config:
         """Pydantic configuration"""
@@ -88,6 +90,9 @@ class QueryEntity200ResponseInner1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of additional_properties
         if self.additional_properties:
             _dict['additionalProperties'] = self.additional_properties.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of context
+        if self.context:
+            _dict['@context'] = self.context.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -114,7 +119,8 @@ class QueryEntity200ResponseInner1(BaseModel):
             "created_at": obj.get("createdAt"),
             "modified_at": obj.get("modifiedAt"),
             "deleted_at": obj.get("deletedAt"),
-            "additional_properties": EntityAdditionalProperties.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None
+            "additional_properties": EntityAdditionalProperties.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None,
+            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

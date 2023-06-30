@@ -52,12 +52,10 @@ class TestReplaceAttrsRequest(unittest.TestCase):
                 previous_object = '', 
                 additional_properties = None, 
                 language_map = None, 
-                previous_language_map = None, 
-                context = None
+                previous_language_map = None
             )
         else :
             return ReplaceAttrsRequest(
-                context = None,
         )
         """
 

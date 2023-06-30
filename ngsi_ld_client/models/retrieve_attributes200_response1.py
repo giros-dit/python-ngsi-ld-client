@@ -19,22 +19,19 @@ import pprint
 import re  # noqa: F401
 
 from typing import Any, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, conlist, validator
-from ngsi_ld_client.models.attribute import Attribute
-from ngsi_ld_client.models.attribute_list import AttributeList
+from pydantic import BaseModel, Field, StrictStr, ValidationError, validator
+from ngsi_ld_client.models.retrieve_attributes200_response1_one_of import RetrieveAttributes200Response1OneOf
 from typing import Any, List
 from pydantic import StrictStr, Field
 
-RETRIEVEATTRIBUTES200RESPONSE1_ONE_OF_SCHEMAS = ["AttributeList", "List[Attribute]"]
+RETRIEVEATTRIBUTES200RESPONSE1_ONE_OF_SCHEMAS = ["RetrieveAttributes200Response1OneOf"]
 
 class RetrieveAttributes200Response1(BaseModel):
     """
     RetrieveAttributes200Response1
     """
-    # data type: AttributeList
-    oneof_schema_1_validator: Optional[AttributeList] = None
-    # data type: List[Attribute]
-    oneof_schema_2_validator: Optional[conlist(Attribute)] = None
+    # data type: RetrieveAttributes200Response1OneOf
+    oneof_schema_1_validator: Optional[RetrieveAttributes200Response1OneOf] = None
     actual_instance: Any
     one_of_schemas: List[str] = Field(RETRIEVEATTRIBUTES200RESPONSE1_ONE_OF_SCHEMAS, const=True)
 
@@ -53,26 +50,23 @@ class RetrieveAttributes200Response1(BaseModel):
 
     @validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
+        if v is None:
+            return v
+
         instance = RetrieveAttributes200Response1.construct()
         error_messages = []
         match = 0
-        # validate data type: AttributeList
-        if not isinstance(v, AttributeList):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `AttributeList`")
+        # validate data type: RetrieveAttributes200Response1OneOf
+        if not isinstance(v, RetrieveAttributes200Response1OneOf):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `RetrieveAttributes200Response1OneOf`")
         else:
             match += 1
-        # validate data type: List[Attribute]
-        try:
-            instance.oneof_schema_2_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in RetrieveAttributes200Response1 with oneOf schemas: AttributeList, List[Attribute]. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in RetrieveAttributes200Response1 with oneOf schemas: RetrieveAttributes200Response1OneOf. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in RetrieveAttributes200Response1 with oneOf schemas: AttributeList, List[Attribute]. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in RetrieveAttributes200Response1 with oneOf schemas: RetrieveAttributes200Response1OneOf. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -84,31 +78,25 @@ class RetrieveAttributes200Response1(BaseModel):
     def from_json(cls, json_str: str) -> RetrieveAttributes200Response1:
         """Returns the object represented by the json string"""
         instance = RetrieveAttributes200Response1.construct()
+        if json_str is None:
+            return instance
+
         error_messages = []
         match = 0
 
-        # deserialize data into AttributeList
+        # deserialize data into RetrieveAttributes200Response1OneOf
         try:
-            instance.actual_instance = AttributeList.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # deserialize data into List[Attribute]
-        try:
-            # validation
-            instance.oneof_schema_2_validator = json.loads(json_str)
-            # assign value to actual_instance
-            instance.actual_instance = instance.oneof_schema_2_validator
+            instance.actual_instance = RetrieveAttributes200Response1OneOf.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into RetrieveAttributes200Response1 with oneOf schemas: AttributeList, List[Attribute]. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into RetrieveAttributes200Response1 with oneOf schemas: RetrieveAttributes200Response1OneOf. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into RetrieveAttributes200Response1 with oneOf schemas: AttributeList, List[Attribute]. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into RetrieveAttributes200Response1 with oneOf schemas: RetrieveAttributes200Response1OneOf. Details: " + ", ".join(error_messages))
         else:
             return instance
 

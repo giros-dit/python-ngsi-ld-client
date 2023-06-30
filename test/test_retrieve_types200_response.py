@@ -38,11 +38,9 @@ class TestRetrieveTypes200Response(unittest.TestCase):
         model = ngsi_ld_client.models.retrieve_types200_response.RetrieveTypes200Response()  # noqa: E501
         if include_optional :
             return RetrieveTypes200Response(
-                context = None
             )
         else :
             return RetrieveTypes200Response(
-                context = None,
         )
         """
 

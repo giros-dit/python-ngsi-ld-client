@@ -21,10 +21,9 @@ from typing_extensions import Annotated
 
 from pydantic import Field, StrictBool, StrictStr
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from ngsi_ld_client.models.create_csr_request import CreateCSRRequest
-from ngsi_ld_client.models.update_csr_request import UpdateCSRRequest
 
 from ngsi_ld_client.api_client import ApiClient
 from ngsi_ld_client.api_response import ApiResponse
@@ -188,7 +187,7 @@ class ContextSourceRegistrationApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json+ld', 'application/json']))
+                ['application/json', 'application/json+ld']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 
@@ -537,20 +536,20 @@ class ContextSourceRegistrationApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def update_csr(self, registration_id : Annotated[StrictStr, Field(..., description="Id (URI) of the context source registration.")], update_csr_request : UpdateCSRRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
+    def update_csr(self, registration_id : Annotated[StrictStr, Field(..., description="Id (URI) of the context source registration.")], request_body : Dict[str, Any], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
         """Csource registration update by id   # noqa: E501
 
         5.9.3 Update Context Source Registration.  This operation allows updating a Context Source Registration in an NGSI-LD system.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.update_csr(registration_id, update_csr_request, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.update_csr(registration_id, request_body, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
         :param registration_id: Id (URI) of the context source registration. (required)
         :type registration_id: str
-        :param update_csr_request: (required)
-        :type update_csr_request: UpdateCSRRequest
+        :param request_body: (required)
+        :type request_body: Dict[str, object]
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -571,23 +570,23 @@ class ContextSourceRegistrationApi(object):
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
             raise ValueError("Error! Please call the update_csr_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.update_csr_with_http_info(registration_id, update_csr_request, local, link, ngsild_tenant, **kwargs)  # noqa: E501
+        return self.update_csr_with_http_info(registration_id, request_body, local, link, ngsild_tenant, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def update_csr_with_http_info(self, registration_id : Annotated[StrictStr, Field(..., description="Id (URI) of the context source registration.")], update_csr_request : UpdateCSRRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def update_csr_with_http_info(self, registration_id : Annotated[StrictStr, Field(..., description="Id (URI) of the context source registration.")], request_body : Dict[str, Any], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Csource registration update by id   # noqa: E501
 
         5.9.3 Update Context Source Registration.  This operation allows updating a Context Source Registration in an NGSI-LD system.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.update_csr_with_http_info(registration_id, update_csr_request, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.update_csr_with_http_info(registration_id, request_body, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
         :param registration_id: Id (URI) of the context source registration. (required)
         :type registration_id: str
-        :param update_csr_request: (required)
-        :type update_csr_request: UpdateCSRRequest
+        :param request_body: (required)
+        :type request_body: Dict[str, object]
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -623,7 +622,7 @@ class ContextSourceRegistrationApi(object):
 
         _all_params = [
             'registration_id',
-            'update_csr_request',
+            'request_body',
             'local',
             'link',
             'ngsild_tenant'
@@ -676,8 +675,8 @@ class ContextSourceRegistrationApi(object):
         _files = {}
         # process the body parameter
         _body_params = None
-        if _params['update_csr_request'] is not None:
-            _body_params = _params['update_csr_request']
+        if _params['request_body'] is not None:
+            _body_params = _params['request_body']
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
@@ -686,7 +685,7 @@ class ContextSourceRegistrationApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json+ld', 'application/json']))
+                ['application/json', 'application/json+ld']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 

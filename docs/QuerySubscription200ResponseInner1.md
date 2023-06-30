@@ -26,6 +26,7 @@ Name | Type | Description | Notes
 **deleted_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32).  | [optional] 
 **status** | **str** | Read-only. Provided by the system when querying the details of a subscription.  | [optional] [readonly] 
 **time_interval** | **float** | Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached.  | 
+**context** | [**LdContext**](LdContext.md) |  | 
 
 ## Example
 

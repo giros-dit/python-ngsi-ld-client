@@ -24,7 +24,6 @@ from pydantic import Field, StrictBool, StrictStr
 from typing import Any, Dict, Optional
 
 from ngsi_ld_client.models.list_contexts200_response import ListContexts200Response
-from ngsi_ld_client.models.retrieve_context200_response import RetrieveContext200Response
 
 from ngsi_ld_client.api_client import ApiClient
 from ngsi_ld_client.api_response import ApiResponse
@@ -164,7 +163,7 @@ class JSONLDContextAPIApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json+ld', 'application/json']))
+                ['application/json', 'application/json+ld']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 
@@ -504,7 +503,7 @@ class JSONLDContextAPIApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
@@ -532,7 +531,7 @@ class JSONLDContextAPIApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def retrieve_context(self, context_id : Annotated[StrictStr, Field(..., description="Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. ")], details : Annotated[Optional[StrictBool], Field(description="Whether a list of URLs or a more detailed list of JSON Objects is requested.")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> RetrieveContext200Response:  # noqa: E501
+    def retrieve_context(self, context_id : Annotated[StrictStr, Field(..., description="Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. ")], details : Annotated[Optional[StrictBool], Field(description="Whether a list of URLs or a more detailed list of JSON Objects is requested.")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> object:  # noqa: E501
         """Serve one specific user @context   # noqa: E501
 
         5.13.4 Serve @context.  With this operation a client can obtain the full content of a specific @context (only for @contexts of kind \"Hosted\" or \"ImplicitlyCreated\"), which is currently stored in the Broker's internal storage, or its metadata (for all kinds of stored @contexts).   # noqa: E501
@@ -561,7 +560,7 @@ class JSONLDContextAPIApi(object):
         :return: Returns the result object.
                  If the method is called asynchronously,
                  returns the request thread.
-        :rtype: RetrieveContext200Response
+        :rtype: object
         """
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
@@ -611,7 +610,7 @@ class JSONLDContextAPIApi(object):
         :return: Returns the result object.
                  If the method is called asynchronously,
                  returns the request thread.
-        :rtype: tuple(RetrieveContext200Response, status_code(int), headers(HTTPHeaderDict))
+        :rtype: tuple(object, status_code(int), headers(HTTPHeaderDict))
         """
 
         _params = locals()
@@ -676,13 +675,13 @@ class JSONLDContextAPIApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
 
         _response_types_map = {
-            '200': "RetrieveContext200Response",
+            '200': "object",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
             '422': "ProblemDetails",

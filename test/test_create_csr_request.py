@@ -92,8 +92,7 @@ class TestCreateCSRRequest(unittest.TestCase):
                 times_sent = 0, 
                 times_failed = 0, 
                 last_success = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                last_failure = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                context = None
+                last_failure = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
             )
         else :
             return CreateCSRRequest(
@@ -113,7 +112,6 @@ class TestCreateCSRRequest(unittest.TestCase):
                             ''
                             ], )
                     ],
-                context = None,
         )
         """
 

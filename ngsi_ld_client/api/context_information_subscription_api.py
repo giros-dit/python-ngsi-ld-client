@@ -24,7 +24,7 @@ from pydantic import Field, StrictBool, StrictStr
 from typing import Optional
 
 from ngsi_ld_client.models.create_subscription_request import CreateSubscriptionRequest
-from ngsi_ld_client.models.update_subscription_request import UpdateSubscriptionRequest
+from ngsi_ld_client.models.subscription import Subscription
 
 from ngsi_ld_client.api_client import ApiClient
 from ngsi_ld_client.api_response import ApiResponse
@@ -188,7 +188,7 @@ class ContextInformationSubscriptionApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json+ld', 'application/json']))
+                ['application/json', 'application/json+ld']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 
@@ -376,20 +376,20 @@ class ContextInformationSubscriptionApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def update_subscription(self, subscription_id : Annotated[StrictStr, Field(..., description="Id (URI) of the concerned subscription.")], update_subscription_request : UpdateSubscriptionRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
+    def update_subscription(self, subscription_id : Annotated[StrictStr, Field(..., description="Id (URI) of the concerned subscription.")], subscription : Subscription, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
         """Subscription update by id   # noqa: E501
 
         5.8.2 Update Subscription.  This operation allows updating an existing subscription.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.update_subscription(subscription_id, update_subscription_request, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.update_subscription(subscription_id, subscription, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
         :param subscription_id: Id (URI) of the concerned subscription. (required)
         :type subscription_id: str
-        :param update_subscription_request: (required)
-        :type update_subscription_request: UpdateSubscriptionRequest
+        :param subscription: (required)
+        :type subscription: Subscription
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -410,23 +410,23 @@ class ContextInformationSubscriptionApi(object):
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
             raise ValueError("Error! Please call the update_subscription_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.update_subscription_with_http_info(subscription_id, update_subscription_request, local, link, ngsild_tenant, **kwargs)  # noqa: E501
+        return self.update_subscription_with_http_info(subscription_id, subscription, local, link, ngsild_tenant, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def update_subscription_with_http_info(self, subscription_id : Annotated[StrictStr, Field(..., description="Id (URI) of the concerned subscription.")], update_subscription_request : UpdateSubscriptionRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def update_subscription_with_http_info(self, subscription_id : Annotated[StrictStr, Field(..., description="Id (URI) of the concerned subscription.")], subscription : Subscription, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Subscription update by id   # noqa: E501
 
         5.8.2 Update Subscription.  This operation allows updating an existing subscription.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.update_subscription_with_http_info(subscription_id, update_subscription_request, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.update_subscription_with_http_info(subscription_id, subscription, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
         :param subscription_id: Id (URI) of the concerned subscription. (required)
         :type subscription_id: str
-        :param update_subscription_request: (required)
-        :type update_subscription_request: UpdateSubscriptionRequest
+        :param subscription: (required)
+        :type subscription: Subscription
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -462,7 +462,7 @@ class ContextInformationSubscriptionApi(object):
 
         _all_params = [
             'subscription_id',
-            'update_subscription_request',
+            'subscription',
             'local',
             'link',
             'ngsild_tenant'
@@ -515,8 +515,8 @@ class ContextInformationSubscriptionApi(object):
         _files = {}
         # process the body parameter
         _body_params = None
-        if _params['update_subscription_request'] is not None:
-            _body_params = _params['update_subscription_request']
+        if _params['subscription'] is not None:
+            _body_params = _params['subscription']
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
@@ -525,7 +525,7 @@ class ContextInformationSubscriptionApi(object):
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json+ld', 'application/json']))
+                ['application/json', 'application/json+ld']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 

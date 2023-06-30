@@ -113,7 +113,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -211,7 +211,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -223,7 +223,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **temporal_query_batch**
-> List[QueryTemporal200ResponseInner] temporal_query_batch(temporal_query_batch_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[QueryTemporal200ResponseInner] temporal_query_batch(query_temporal, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Temporal Representation of Entity Query based on POST 
 
@@ -235,8 +235,8 @@ Temporal Representation of Entity Query based on POST
 import time
 import os
 import ngsi_ld_client
+from ngsi_ld_client.models.query_temporal import QueryTemporal
 from ngsi_ld_client.models.query_temporal200_response_inner import QueryTemporal200ResponseInner
-from ngsi_ld_client.models.temporal_query_batch_request import TemporalQueryBatchRequest
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -251,14 +251,14 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.TemporalContextInformationConsumptionApi(api_client)
-    temporal_query_batch_request = ngsi_ld_client.TemporalQueryBatchRequest() # TemporalQueryBatchRequest | 
+    query_temporal = ngsi_ld_client.QueryTemporal() # QueryTemporal | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
         # Temporal Representation of Entity Query based on POST 
-        api_response = api_instance.temporal_query_batch(temporal_query_batch_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.temporal_query_batch(query_temporal, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of TemporalContextInformationConsumptionApi->temporal_query_batch:\n")
         pprint(api_response)
     except Exception as e:
@@ -270,7 +270,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **temporal_query_batch_request** | [**TemporalQueryBatchRequest**](TemporalQueryBatchRequest.md)|  | 
+ **query_temporal** | [**QueryTemporal**](QueryTemporal.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
@@ -285,8 +285,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json+ld, application/json
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Content-Type**: application/json, application/json+ld
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |

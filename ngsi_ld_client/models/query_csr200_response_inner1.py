@@ -23,6 +23,7 @@ from pydantic import BaseModel, Field, StrictStr, confloat, conint, conlist, con
 from ngsi_ld_client.models.csource_registration_scope import CsourceRegistrationScope
 from ngsi_ld_client.models.geometry import Geometry
 from ngsi_ld_client.models.key_value_pair import KeyValuePair
+from ngsi_ld_client.models.ld_context import LdContext
 from ngsi_ld_client.models.registration_info import RegistrationInfo
 from ngsi_ld_client.models.registration_management_info import RegistrationManagementInfo
 from ngsi_ld_client.models.time_interval import TimeInterval
@@ -58,8 +59,9 @@ class QueryCSR200ResponseInner1(BaseModel):
     times_failed: Optional[Union[confloat(ge=0, strict=True), conint(ge=0, strict=True)]] = Field(None, alias="timesFailed", description="Number of times that the registration triggered a distributed operation request that failed.")
     last_success: Optional[datetime] = Field(None, alias="lastSuccess", description="Timestamp corresponding to the instant when the last successfully distributed operation was sent. Created on first successful operation. ")
     last_failure: Optional[datetime] = Field(None, alias="lastFailure", description="Timestamp corresponding to the instant when the last distributed operation resulting in a failure (for instance, in the HTTP binding, an HTTP response code other than 2xx) was returned. ")
+    context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["id", "type", "registrationName", "description", "information", "tenant", "observationInterval", "managementInterval", "location", "observationSpace", "operationSpace", "expiresAt", "endpoint", "contextSourceInfo", "scope", "mode", "operations", "refreshRate", "management", "createdAt", "modifiedAt", "deletedAt", "status", "timesSent", "timesFailed", "lastSuccess", "lastFailure"]
+    __properties = ["id", "type", "registrationName", "description", "information", "tenant", "observationInterval", "managementInterval", "location", "observationSpace", "operationSpace", "expiresAt", "endpoint", "contextSourceInfo", "scope", "mode", "operations", "refreshRate", "management", "createdAt", "modifiedAt", "deletedAt", "status", "timesSent", "timesFailed", "lastSuccess", "lastFailure", "@context"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -156,6 +158,9 @@ class QueryCSR200ResponseInner1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of management
         if self.management:
             _dict['management'] = self.management.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of context
+        if self.context:
+            _dict['@context'] = self.context.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -199,7 +204,8 @@ class QueryCSR200ResponseInner1(BaseModel):
             "times_sent": obj.get("timesSent"),
             "times_failed": obj.get("timesFailed"),
             "last_success": obj.get("lastSuccess"),
-            "last_failure": obj.get("lastFailure")
+            "last_failure": obj.get("lastFailure"),
+            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

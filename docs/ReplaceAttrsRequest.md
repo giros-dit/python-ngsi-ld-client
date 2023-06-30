@@ -19,7 +19,6 @@ Name | Type | Description | Notes
 **additional_properties** | [**EntityAdditionalProperties**](EntityAdditionalProperties.md) |  | [optional] 
 **language_map** | **object** | String Property Values defined in multiple natural languages.  | [optional] 
 **previous_language_map** | **object** | Previous Language Property languageMap. Only used in notifications.  | [optional] [readonly] 
-**context** | [**LdContext**](LdContext.md) |  | 
 
 ## Example
 

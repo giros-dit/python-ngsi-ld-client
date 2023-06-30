@@ -92,7 +92,8 @@ class TestQueryCSR200ResponseInner1(unittest.TestCase):
                 times_sent = 0, 
                 times_failed = 0, 
                 last_success = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                last_failure = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
+                last_failure = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                context = None
             )
         else :
             return QueryCSR200ResponseInner1(
@@ -114,6 +115,7 @@ class TestQueryCSR200ResponseInner1(unittest.TestCase):
                             ], )
                     ],
                 endpoint = '',
+                context = None,
         )
         """
 

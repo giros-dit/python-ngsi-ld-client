@@ -63,7 +63,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json+ld, application/json
+ - **Content-Type**: application/json, application/json+ld
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
@@ -213,7 +213,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -224,7 +224,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_context**
-> RetrieveContext200Response retrieve_context(context_id, details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> object retrieve_context(context_id, details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Serve one specific user @context 
 
@@ -236,7 +236,6 @@ Serve one specific user @context
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.retrieve_context200_response import RetrieveContext200Response
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -279,7 +278,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RetrieveContext200Response**](RetrieveContext200Response.md)
+**object**
 
 ### Authorization
 
@@ -288,7 +287,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |

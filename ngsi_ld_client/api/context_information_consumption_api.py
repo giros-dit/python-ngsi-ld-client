@@ -23,14 +23,14 @@ from pydantic import Field, StrictBool, StrictStr, conint, conlist
 
 from typing import Any, List, Optional
 
+from ngsi_ld_client.models.attribute import Attribute
+from ngsi_ld_client.models.entity_type_info import EntityTypeInfo
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
-from ngsi_ld_client.models.query_batch_request import QueryBatchRequest
+from ngsi_ld_client.models.query import Query
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
 from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
-from ngsi_ld_client.models.retrieve_attr_info200_response import RetrieveAttrInfo200Response
 from ngsi_ld_client.models.retrieve_attributes200_response import RetrieveAttributes200Response
-from ngsi_ld_client.models.retrieve_type_info200_response import RetrieveTypeInfo200Response
 from ngsi_ld_client.models.retrieve_types200_response import RetrieveTypes200Response
 
 from ngsi_ld_client.api_client import ApiClient
@@ -54,18 +54,18 @@ class ContextInformationConsumptionApi(object):
         self.api_client = api_client
 
     @validate_arguments
-    def query_batch(self, query_batch_request : QueryBatchRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> List[QueryEntity200ResponseInner]:  # noqa: E501
+    def query_batch(self, query : Query, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> List[QueryEntity200ResponseInner]:  # noqa: E501
         """Query entities based on POST   # noqa: E501
 
         5.7.2 Query Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.query_batch(query_batch_request, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.query_batch(query, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
-        :param query_batch_request: (required)
-        :type query_batch_request: QueryBatchRequest
+        :param query: (required)
+        :type query: Query
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -86,21 +86,21 @@ class ContextInformationConsumptionApi(object):
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
             raise ValueError("Error! Please call the query_batch_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.query_batch_with_http_info(query_batch_request, local, link, ngsild_tenant, **kwargs)  # noqa: E501
+        return self.query_batch_with_http_info(query, local, link, ngsild_tenant, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def query_batch_with_http_info(self, query_batch_request : QueryBatchRequest, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def query_batch_with_http_info(self, query : Query, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Query entities based on POST   # noqa: E501
 
         5.7.2 Query Entity.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.query_batch_with_http_info(query_batch_request, local, link, ngsild_tenant, async_req=True)
+        >>> thread = api.query_batch_with_http_info(query, local, link, ngsild_tenant, async_req=True)
         >>> result = thread.get()
 
-        :param query_batch_request: (required)
-        :type query_batch_request: QueryBatchRequest
+        :param query: (required)
+        :type query: Query
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
         :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
@@ -135,7 +135,7 @@ class ContextInformationConsumptionApi(object):
         _params = locals()
 
         _all_params = [
-            'query_batch_request',
+            'query',
             'local',
             'link',
             'ngsild_tenant'
@@ -185,17 +185,17 @@ class ContextInformationConsumptionApi(object):
         _files = {}
         # process the body parameter
         _body_params = None
-        if _params['query_batch_request'] is not None:
-            _body_params = _params['query_batch_request']
+        if _params['query'] is not None:
+            _body_params = _params['query']
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # set the HTTP header `Content-Type`
         _content_types_list = _params.get('_content_type',
             self.api_client.select_header_content_type(
-                ['application/json+ld', 'application/json']))
+                ['application/json', 'application/json+ld']))
         if _content_types_list:
                 _header_params['Content-Type'] = _content_types_list
 
@@ -484,7 +484,7 @@ class ContextInformationConsumptionApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo+json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo+json', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
@@ -665,7 +665,7 @@ class ContextInformationConsumptionApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
@@ -693,7 +693,7 @@ class ContextInformationConsumptionApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def retrieve_attr_info(self, attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> RetrieveAttrInfo200Response:  # noqa: E501
+    def retrieve_attr_info(self, attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> Attribute:  # noqa: E501
         """Retrieve Available Attribute Information   # noqa: E501
 
         5.7.10 Retrieve Available Attribute information.  This operation allows retrieving detailed attribute information about a specified NGSI-LD attribute that belongs to entity instances existing within the NGSI-LD system. The detailed representation includes  the attribute name (as short name if available in the provided @context) and the type names  for which entity instances exist that have the respective attribute, a count of available  attribute instances and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty).   # noqa: E501
@@ -720,7 +720,7 @@ class ContextInformationConsumptionApi(object):
         :return: Returns the result object.
                  If the method is called asynchronously,
                  returns the request thread.
-        :rtype: RetrieveAttrInfo200Response
+        :rtype: Attribute
         """
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
@@ -768,7 +768,7 @@ class ContextInformationConsumptionApi(object):
         :return: Returns the result object.
                  If the method is called asynchronously,
                  returns the request thread.
-        :rtype: tuple(RetrieveAttrInfo200Response, status_code(int), headers(HTTPHeaderDict))
+        :rtype: tuple(Attribute, status_code(int), headers(HTTPHeaderDict))
         """
 
         _params = locals()
@@ -829,13 +829,13 @@ class ContextInformationConsumptionApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
 
         _response_types_map = {
-            '200': "RetrieveAttrInfo200Response",
+            '200': "Attribute",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
         }
@@ -994,7 +994,7 @@ class ContextInformationConsumptionApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
@@ -1192,7 +1192,7 @@ class ContextInformationConsumptionApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo+json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo+json', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
@@ -1357,7 +1357,7 @@ class ContextInformationConsumptionApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
@@ -1386,7 +1386,7 @@ class ContextInformationConsumptionApi(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def retrieve_type_info(self, type : Annotated[StrictStr, Field(..., description="Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> RetrieveTypeInfo200Response:  # noqa: E501
+    def retrieve_type_info(self, type : Annotated[StrictStr, Field(..., description="Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> EntityTypeInfo:  # noqa: E501
         """Details about available entity type   # noqa: E501
 
         5.7.7 Retrieve Available Entity Type information.  This operation allows retrieving detailed entity type information about a specified NGSI-LD entity type for which entity instances exist within the NGSI-LD system. The detailed representation includes the type name (as short name if available in the provided @context), the count of available entity instances and details about attributes that existing instances of this entity type have, including their name (as short name if available in the provided @context) and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty).   # noqa: E501
@@ -1413,7 +1413,7 @@ class ContextInformationConsumptionApi(object):
         :return: Returns the result object.
                  If the method is called asynchronously,
                  returns the request thread.
-        :rtype: RetrieveTypeInfo200Response
+        :rtype: EntityTypeInfo
         """
         kwargs['_return_http_data_only'] = True
         if '_preload_content' in kwargs:
@@ -1461,7 +1461,7 @@ class ContextInformationConsumptionApi(object):
         :return: Returns the result object.
                  If the method is called asynchronously,
                  returns the request thread.
-        :rtype: tuple(RetrieveTypeInfo200Response, status_code(int), headers(HTTPHeaderDict))
+        :rtype: tuple(EntityTypeInfo, status_code(int), headers(HTTPHeaderDict))
         """
 
         _params = locals()
@@ -1522,13 +1522,13 @@ class ContextInformationConsumptionApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
 
         _response_types_map = {
-            '200': "RetrieveTypeInfo200Response",
+            '200': "EntityTypeInfo",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
         }
@@ -1687,7 +1687,7 @@ class ContextInformationConsumptionApi(object):
         _body_params = None
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json+ld', 'application/json', 'application/geo'])  # noqa: E501
+            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501

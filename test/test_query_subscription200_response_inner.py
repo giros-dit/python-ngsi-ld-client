@@ -103,8 +103,7 @@ class TestQuerySubscription200ResponseInner(unittest.TestCase):
                 modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                 deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                 status = 'active', 
-                time_interval = 1, 
-                context = None
+                time_interval = 1
             )
         else :
             return QuerySubscription200ResponseInner(
@@ -145,7 +144,6 @@ class TestQuerySubscription200ResponseInner(unittest.TestCase):
                     last_failure = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     last_success = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ),
                 time_interval = 1,
-                context = None,
         )
         """
 

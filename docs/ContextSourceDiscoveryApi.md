@@ -110,7 +110,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -183,7 +183,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |

@@ -38,11 +38,19 @@ class TestRetrieveAttributes200Response(unittest.TestCase):
         model = ngsi_ld_client.models.retrieve_attributes200_response.RetrieveAttributes200Response()  # noqa: E501
         if include_optional :
             return RetrieveAttributes200Response(
-                context = None
+                id = '', 
+                type = 'AttributeList', 
+                attribute_list = [
+                    ''
+                    ]
             )
         else :
             return RetrieveAttributes200Response(
-                context = None,
+                id = '',
+                type = 'AttributeList',
+                attribute_list = [
+                    ''
+                    ],
         )
         """
 

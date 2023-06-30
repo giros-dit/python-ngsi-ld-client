@@ -22,7 +22,6 @@ from typing import List, Optional, Union
 from pydantic import BaseModel, Field, StrictBool, StrictStr, confloat, conint, conlist, validator
 from ngsi_ld_client.models.entity_selector import EntitySelector
 from ngsi_ld_client.models.geo_query import GeoQuery
-from ngsi_ld_client.models.ld_context import LdContext
 from ngsi_ld_client.models.notification_params import NotificationParams
 from ngsi_ld_client.models.temporal_query import TemporalQuery
 
@@ -52,9 +51,8 @@ class QuerySubscription200ResponseInner(BaseModel):
     deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
     status: Optional[StrictStr] = Field(None, description="Read-only. Provided by the system when querying the details of a subscription. ")
     time_interval: Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)] = Field(..., alias="timeInterval", description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ")
-    context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "watchedAttributes", "throttling", "createdAt", "modifiedAt", "deletedAt", "status", "timeInterval", "@context"]
+    __properties = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "watchedAttributes", "throttling", "createdAt", "modifiedAt", "deletedAt", "status", "timeInterval"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -126,9 +124,6 @@ class QuerySubscription200ResponseInner(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of temporal_q
         if self.temporal_q:
             _dict['temporalQ'] = self.temporal_q.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of context
-        if self.context:
-            _dict['@context'] = self.context.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -167,8 +162,7 @@ class QuerySubscription200ResponseInner(BaseModel):
             "modified_at": obj.get("modifiedAt"),
             "deleted_at": obj.get("deletedAt"),
             "status": obj.get("status"),
-            "time_interval": obj.get("timeInterval"),
-            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
+            "time_interval": obj.get("timeInterval")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

@@ -70,7 +70,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json+ld, application/json
+ - **Content-Type**: application/json, application/json+ld
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
@@ -226,7 +226,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_csr**
-> update_csr(registration_id, update_csr_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> update_csr(registration_id, request_body, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Csource registration update by id 
 
@@ -238,7 +238,6 @@ Csource registration update by id
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.update_csr_request import UpdateCSRRequest
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -254,14 +253,14 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextSourceRegistrationApi(api_client)
     registration_id = 'registration_id_example' # str | Id (URI) of the context source registration.
-    update_csr_request = ngsi_ld_client.UpdateCSRRequest() # UpdateCSRRequest | 
+    request_body = None # Dict[str, object] | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
         # Csource registration update by id 
-        api_instance.update_csr(registration_id, update_csr_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_instance.update_csr(registration_id, request_body, local=local, link=link, ngsild_tenant=ngsild_tenant)
     except Exception as e:
         print("Exception when calling ContextSourceRegistrationApi->update_csr: %s\n" % e)
 ```
@@ -272,7 +271,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **registration_id** | **str**| Id (URI) of the context source registration. | 
- **update_csr_request** | [**UpdateCSRRequest**](UpdateCSRRequest.md)|  | 
+ **request_body** | [**Dict[str, object]**](object.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
@@ -287,7 +286,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json+ld, application/json
+ - **Content-Type**: application/json, application/json+ld
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details

@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 
 # **query_batch**
-> List[QueryEntity200ResponseInner] query_batch(query_batch_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[QueryEntity200ResponseInner] query_batch(query, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Query entities based on POST 
 
@@ -28,7 +28,7 @@ Query entities based on POST
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.query_batch_request import QueryBatchRequest
+from ngsi_ld_client.models.query import Query
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -44,14 +44,14 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
-    query_batch_request = ngsi_ld_client.QueryBatchRequest() # QueryBatchRequest | 
+    query = ngsi_ld_client.Query() # Query | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
         # Query entities based on POST 
-        api_response = api_instance.query_batch(query_batch_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.query_batch(query, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextInformationConsumptionApi->query_batch:\n")
         pprint(api_response)
     except Exception as e:
@@ -63,7 +63,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query_batch_request** | [**QueryBatchRequest**](QueryBatchRequest.md)|  | 
+ **query** | [**Query**](Query.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
@@ -78,8 +78,8 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json+ld, application/json
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Content-Type**: application/json, application/json+ld
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -183,7 +183,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo+json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo+json, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -261,7 +261,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -272,7 +272,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_attr_info**
-> RetrieveAttrInfo200Response retrieve_attr_info(attr_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> Attribute retrieve_attr_info(attr_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Retrieve Available Attribute Information 
 
@@ -284,7 +284,7 @@ Retrieve Available Attribute Information
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.retrieve_attr_info200_response import RetrieveAttrInfo200Response
+from ngsi_ld_client.models.attribute import Attribute
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -325,7 +325,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RetrieveAttrInfo200Response**](RetrieveAttrInfo200Response.md)
+[**Attribute**](Attribute.md)
 
 ### Authorization
 
@@ -334,7 +334,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -408,7 +408,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -490,7 +490,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo+json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo+json, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -564,7 +564,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -576,7 +576,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_type_info**
-> RetrieveTypeInfo200Response retrieve_type_info(type, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> EntityTypeInfo retrieve_type_info(type, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Details about available entity type 
 
@@ -588,7 +588,7 @@ Details about available entity type
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.retrieve_type_info200_response import RetrieveTypeInfo200Response
+from ngsi_ld_client.models.entity_type_info import EntityTypeInfo
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -629,7 +629,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RetrieveTypeInfo200Response**](RetrieveTypeInfo200Response.md)
+[**EntityTypeInfo**](EntityTypeInfo.md)
 
 ### Authorization
 
@@ -638,7 +638,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -712,7 +712,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json+ld, application/json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
 | Status code | Description | Response headers |

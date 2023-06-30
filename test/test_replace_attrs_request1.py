@@ -43,8 +43,16 @@ class TestReplaceAttrsRequest1(unittest.TestCase):
                 observed_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                 unit_code = '', 
                 dataset_id = '', 
+                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                instance_id = '', 
+                previous_value = None, 
                 object = '', 
-                language_map = ngsi_ld_client.models.language_map.languageMap(), 
+                previous_object = '', 
+                additional_properties = None, 
+                language_map = None, 
+                previous_language_map = None, 
                 context = None
             )
         else :

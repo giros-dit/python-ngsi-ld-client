@@ -31,7 +31,6 @@ Name | Type | Description | Notes
 **times_failed** | **float** | Number of times that the registration triggered a distributed operation request that failed. | [optional] [readonly] 
 **last_success** | **datetime** | Timestamp corresponding to the instant when the last successfully distributed operation was sent. Created on first successful operation.  | [optional] [readonly] 
 **last_failure** | **datetime** | Timestamp corresponding to the instant when the last distributed operation resulting in a failure (for instance, in the HTTP binding, an HTTP response code other than 2xx) was returned.  | [optional] [readonly] 
-**context** | [**LdContext**](LdContext.md) |  | 
 
 ## Example
 
