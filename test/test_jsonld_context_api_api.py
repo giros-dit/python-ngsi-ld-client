@@ -31,28 +31,28 @@ class TestJSONLDContextAPIApi(unittest.TestCase):
     def test_create_context(self):
         """Test case for create_context
 
-        Add a user @context to the internal cache   # noqa: E501
+        Add a user @context to the internal cache  # noqa: E501
         """
         pass
 
     def test_delete_context(self):
         """Test case for delete_context
 
-        Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it   # noqa: E501
+        Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it  # noqa: E501
         """
         pass
 
     def test_list_contexts(self):
         """Test case for list_contexts
 
-        List all cached @contexts   # noqa: E501
+        List all cached @contexts  # noqa: E501
         """
         pass
 
     def test_retrieve_context(self):
         """Test case for retrieve_context
 
-        Serve one specific user @context   # noqa: E501
+        Serve one specific user @context  # noqa: E501
         """
         pass
 

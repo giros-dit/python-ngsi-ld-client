@@ -38,14 +38,14 @@ class TestContextSourceRegistrationSubscriptionApi(unittest.TestCase):
     def test_query_csr_subscription(self):
         """Test case for query_csr_subscription
 
-        Retrieval of list of subscriptions to Csource registrations   # noqa: E501
+        Retrieval of list of subscription to Csource registration   # noqa: E501
         """
         pass
 
     def test_retrieve_csr_subscription(self):
         """Test case for retrieve_csr_subscription
 
-        Retrieval of subscription to Csource registration by id   # noqa: E501
+        Retrieval of list of subscription to Csource registration   # noqa: E501
         """
         pass
 

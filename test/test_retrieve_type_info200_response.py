@@ -38,6 +38,7 @@ class TestRetrieveTypeInfo200Response(unittest.TestCase):
         model = ngsi_ld_client.models.retrieve_type_info200_response.RetrieveTypeInfo200Response()  # noqa: E501
         if include_optional :
             return RetrieveTypeInfo200Response(
+                context = None, 
                 id = '', 
                 type = 'EntityTypeInfo', 
                 type_name = '', 
@@ -54,11 +55,11 @@ class TestRetrieveTypeInfo200Response(unittest.TestCase):
                         type_names = [
                             ''
                             ], )
-                    ], 
-                context = None
+                    ]
             )
         else :
             return RetrieveTypeInfo200Response(
+                context = None,
                 id = '',
                 type = 'EntityTypeInfo',
                 type_name = '',
@@ -76,7 +77,6 @@ class TestRetrieveTypeInfo200Response(unittest.TestCase):
                             ''
                             ], )
                     ],
-                context = None,
         )
         """
 

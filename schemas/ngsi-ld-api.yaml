@@ -110,29 +110,23 @@ paths:
             NGSILD-Warning:
               $ref: '#/components/headers/NGSILD-Warning'
           content:
-            application/json+ld:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/Entity'
-                    - type: object
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
-                    - required:
-                        - id
-                        - type
-                        - '@context'
             application/json:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - $ref: '#/components/schemas/Entity'
-                    - required:
-                      - id
-                      - type
+                  $ref: '#/components/schemas/Entity.Output'
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - '@context'
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Entity.Output'
             application/geo+json:
               schema:
                   $ref: '#/components/schemas/FeatureCollection'
@@ -181,25 +175,19 @@ paths:
             NGSILD-Warning:
               $ref: '#/components/headers/NGSILD-Warning'
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity.Output'
             application/json+ld:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/Entity'
                   - type: object
+                    required:
+                      - '@context'
                     properties:
                       '@context':
                         $ref:  '#/components/schemas/LdContext'
-                  - required:
-                      - id
-                      - type
-                      - '@context'
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/Entity'
-                  - required:
-                    - id
-                    - type
+                  - $ref: '#/components/schemas/Entity.Output'
             application/geo+json:
               schema:
                   $ref: '#/components/schemas/Feature'
@@ -261,7 +249,7 @@ paths:
       tags:
         - Context Information Provision
       summary: |
-        Entity merge by id
+        Entity merge by id.
       description: |
         5.6.17 Merge entity.
 
@@ -310,7 +298,7 @@ paths:
       tags:
         - Context Information Provision
       summary: |
-        Entity replacement by id
+        Entity replacement by id.
       description: |
         5.6.18 Replace entity.
 
@@ -492,7 +480,7 @@ paths:
       tags:
         - Context Information Provision
       summary: |
-        Attribute replace
+        Attribute replace.
       description: |
         5.6.19 Attribute replace.
 
@@ -528,8 +516,7 @@ paths:
     post:
       tags:
         - Context Source Registration
-      summary: |
-        Csource registration creation
+      summary: Csource registration creation
       description: |
         5.9.2 Register Context Source.
 
@@ -545,7 +532,7 @@ paths:
         description: |
           Payload body in the request contains a JSON-LD object which represents
           the context source registration that is to be created.
-        $ref: '#/components/requestBodies/CsourceRegistration'
+        $ref: '#/components/requestBodies/CsourceRegistration.Input'
       responses:
         '201':
           description: |
@@ -619,41 +606,30 @@ paths:
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
           content:
-            application/json+ld:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/CsourceRegistration'
-                    - type: object
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
-                    - required:
-                      - id
-                      - type
-                      - information
-                      - endpoint
-                      - '@context'
             application/json:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - $ref: '#/components/schemas/CsourceRegistration'
-                    - required:
-                      - id
-                      - type
-                      - information
-                      - endpoint
+                  $ref: '#/components/schemas/CsourceRegistration.Output'
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - '@context'
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/CsourceRegistration.Output'
         '400':
           $ref: '#/components/responses/BadRequest'
   /csourceRegistrations/{registrationId}:
     get:
       tags:
         - Context Source Discovery
-      summary: |
-        Csource registration retrieval by id
+      summary: Csource registration retrieval by id
       description: |
         5.10.1 Retrieve Context Source Registration.
 
@@ -675,29 +651,19 @@ paths:
             NGSILD-Warning:
               $ref: '#/components/headers/NGSILD-Warning'
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsourceRegistration.Output'
             application/json+ld:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/CsourceRegistration'
                   - type: object
+                    required:
+                      - '@context'
                     properties:
                       '@context':
                         $ref:  '#/components/schemas/LdContext'
-                  - required:
-                    - id
-                    - type
-                    - information
-                    - endpoint
-                    - '@context'
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/CsourceRegistration'
-                  - required:
-                    - id
-                    - type
-                    - information
-                    - endpoint
+                  - $ref: '#/components/schemas/CsourceRegistration.Output'
         '400':
           headers:
             NGSILD-Warning:
@@ -711,8 +677,7 @@ paths:
     patch:
       tags:
         - Context Source Registration
-      summary: |
-        Csource registration update by id
+      summary: Csource registration update by id
       description: |
         5.9.3 Update Context Source Registration.
 
@@ -745,8 +710,7 @@ paths:
     delete:
       tags:
         - Context Source Registration
-      summary: |
-        Csource registration deletion by id
+      summary: Csource registration deletion by id
       description: |
         5.9.4 Delete Context Source Registration.
 
@@ -775,8 +739,7 @@ paths:
     post:
       tags:
         - Context Information Subscription
-      summary: |
-        Create Subscription
+      summary: Create Subscription
       description: |
         5.8.1 Create subscription.
 
@@ -809,8 +772,7 @@ paths:
     get:
       tags:
         - Context Information Consumption
-      summary: |
-        Retrieve list of Subscriptions
+      summary: Retrieve list of Subscriptions
       description: |
         5.8.4 Query Subscriptions.
 
@@ -834,39 +796,30 @@ paths:
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
           content:
-            application/json+ld:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/Subscription'
-                    - type: object
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
-                    - required:
-                      - id
-                      - type
-                      - notification
-                      - '@context'
             application/json:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - $ref: '#/components/schemas/Subscription'
-                    - required:
-                      - id
-                      - type
-                      - notification
+                  $ref: '#/components/schemas/Subscription.Output'
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - '@context'
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Subscription.Output'
         '400':
           $ref: '#/components/responses/BadRequest'
   /subscriptions/{subscriptionId}:
     get:
       tags:
         - Context Information Consumption
-      summary: |
-        Subscription retrieval by id
+      summary: Subscription retrieval by id
       description: |
         5.8.3 Retrieve Subscription.
 
@@ -888,27 +841,19 @@ paths:
             NGSILD-Warning:
               $ref: '#/components/headers/NGSILD-Warning'
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription.Output'
             application/json+ld:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/Subscription'
                   - type: object
+                    required:
+                      - '@context'
                     properties:
                       '@context':
                         $ref:  '#/components/schemas/LdContext'
-                  - required:
-                    - id
-                    - type
-                    - notification
-                    - '@context'
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/Subscription'
-                  - required:
-                    - id
-                    - type
-                    - notification
+                  - $ref: '#/components/schemas/Subscription.Output'
         '400':
           headers:
             NGSILD-Warning:
@@ -922,8 +867,7 @@ paths:
     patch:
       tags:
         - Context Information Subscription
-      summary: |
-        Subscription update by id
+      summary: Subscription update by id
       description: |
         5.8.2 Update Subscription.
 
@@ -955,8 +899,7 @@ paths:
     delete:
       tags:
         - Context Information Subscription
-      summary: |
-        Subscription deletion by id
+      summary: Subscription deletion by id
       description: |
         5.8.5 Delete Subscription.
 
@@ -1023,7 +966,7 @@ paths:
       tags:
         - Context Source Registration Subscription
       summary: |
-        Retrieval of list of subscriptions to Csource registrations
+        Retrieval of list of subscription to Csource registration
       description: |
         5.11.5 Query Context Source Registration Subscriptions.
 
@@ -1049,31 +992,23 @@ paths:
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
           content:
-            application/json+ld:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/Subscription'
-                    - type: object
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
-                    - required:
-                      - id
-                      - type
-                      - notification
-                      - '@context'
             application/json:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - $ref: '#/components/schemas/Subscription'
-                    - required:
-                      - id
-                      - type
-                      - notification
+                  $ref: '#/components/schemas/Subscription.Output'
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - '@context'
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Subscription.Output'
         '400':
           $ref: '#/components/responses/BadRequest'
   /csourceSubscriptions/{subscriptionId}:
@@ -1081,7 +1016,7 @@ paths:
       tags:
         - Context Source Registration Subscription
       summary: |
-        Retrieval of subscription to Csource registration by id
+        Retrieval of list of subscription to Csource registration
       description: |
         5.11.4 Retrieve Context Source Registration Subscription.
 
@@ -1106,27 +1041,19 @@ paths:
             NGSILD-Warning:
               $ref: '#/components/headers/NGSILD-Warning'
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription.Output'
             application/json+ld:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/Subscription'
                   - type: object
+                    required:
+                      - '@context'
                     properties:
                       '@context':
                         $ref:  '#/components/schemas/LdContext'
-                  - required:
-                    - id
-                    - type
-                    - notification
-                    - '@context'
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/Subscription'
-                  - required:
-                    - id
-                    - type
-                    - notification
+                  - $ref: '#/components/schemas/Subscription.Output'
         '400':
           headers:
             NGSILD-Warning:
@@ -1205,7 +1132,7 @@ paths:
       tags:
         - Context Information Provision
       summary: |
-        Batch Entity creation
+        Batch Entity creation.
       description: |
         5.6.7 Batch Entity Creation.
 
@@ -1273,7 +1200,7 @@ paths:
       tags:
         - Context Information Provision
       summary: |
-        Batch Entity create or update (upsert)
+        Batch Entity create or update (upsert).
       description: |
         5.6.8 Batch Entity Upsert.
 
@@ -1345,7 +1272,7 @@ paths:
       tags:
         - Context Information Provision
       summary: |
-        Batch Entity update
+        Batch Entity update.
       description: |
         5.6.9 Batch Entity Update.
 
@@ -1395,7 +1322,7 @@ paths:
       tags:
         - Context Information Provision
       summary: |
-        Batch Entity delete
+        Batch Entity delete.
       description: |
         5.6.10 Batch Entity Delete.
 
@@ -1442,10 +1369,8 @@ paths:
     post:
       tags:
         - Context Information Consumption
-      summary: |
-        Query entities based on POST
-      description: |
-        5.7.2 Query Entity.
+      summary: Query entities based on POST.
+      description: 5.7.2 Query Entity.
       operationId: queryBatch
       parameters:
         # Local Query param
@@ -1464,29 +1389,23 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
-            application/json+ld:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/Entity'
-                    - type: object
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
-                    - required:
-                        - id
-                        - type
-                        - '@context'
             application/json:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - $ref: '#/components/schemas/Entity'
-                    - required:
-                      - id
-                      - type
+                  $ref: '#/components/schemas/Entity.Input'
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - '@context'
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Entity.Input'
         '400':
           $ref: '#/components/responses/BadRequest'
   /entityOperations/merge:
@@ -1494,7 +1413,7 @@ paths:
       tags:
         - Context Information Provision
       summary: |
-        Batch Entity merge
+        Batch Entity merge.
       description: |
         5.6.20 Batch Entity Merge.
 
@@ -1544,7 +1463,7 @@ paths:
       tags:
         - Temporal Context Information Provision
       summary: |
-        Temporal Representation of Entity creation
+        Temporal Representation of Entity creation.
       description: |
         5.6.11 Upsert Temporal Representation.
 
@@ -1585,8 +1504,7 @@ paths:
     get:
       tags:
         - Temporal Context Information Consumption
-      summary: |
-        Query temporal evolution of Entities
+      summary: Query temporal evolution of Entities.
       description: |
         5.7.4 Query Temporal Evolution of Entities.
 
@@ -1631,29 +1549,23 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
-            application/json+ld:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/EntityTemporal'
-                    - type: object
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
-                    - required:
-                        - id
-                        - type
-                        - '@context'
             application/json:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - $ref: '#/components/schemas/EntityTemporal'
-                    - required:
-                      - id
-                      - type
+                  $ref: '#/components/schemas/EntityTemporal.Output'
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - '@context'
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/EntityTemporal.Output'
         '400':
           headers:
             NGSILD-Warning:
@@ -1663,8 +1575,7 @@ paths:
     get:
       tags:
         - Temporal Context Information Consumption
-      summary: |
-        Temporal Representation of Entity retrieval by id
+      summary: Temporal Representation of Entity retrieval by id
       description: |
         5.7.3 Retrieve Temporal Evolution of an Entity.
 
@@ -1702,25 +1613,19 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityTemporal.Output'
             application/json+ld:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/EntityTemporal'
                   - type: object
+                    required:
+                      - '@context'
                     properties:
                       '@context':
                         $ref:  '#/components/schemas/LdContext'
-                  - required:
-                      - id
-                      - type
-                      - '@context'
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/EntityTemporal'
-                  - required:
-                    - id
-                    - type
+                  - $ref: '#/components/schemas/EntityTemporal.Output'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -1729,7 +1634,7 @@ paths:
       tags:
         - Temporal Context Information Provision
       summary: |
-        Temporal Representation of Entity deletion by id
+        Temporal Representation of Entity deletion by id.
       description: |
         5.6.16 Delete Temporal Representation of an Entity.
 
@@ -1793,7 +1698,7 @@ paths:
       tags:
         - Temporal Context Information Provision
       summary: |
-        Attribute from Temporal Representation of Entity deletion
+        Attribute from Temporal Representation of Entity deletion.
       description: |
         5.6.13 Delete Attributes from Temporal Representation of an Entity.
 
@@ -1828,7 +1733,7 @@ paths:
       tags:
         - Temporal Context Information Provision
       summary: |
-        Attribute Instance update
+        Attribute Instance update.
       description: |
         5.6.14 Partial Update Attribute instance in Temporal Representation of an Entity.
 
@@ -1866,7 +1771,7 @@ paths:
       tags:
         - Temporal Context Information Provision
       summary: |
-        Attribute Instance deletion by instance id
+        Attribute Instance deletion by instance id.
       description: |
         5.6.15 Delete Attribute Instance from Temporal Representation of an Entity.
 
@@ -1901,8 +1806,7 @@ paths:
     post:
       tags:
         - Temporal Context Information Consumption
-      summary: |
-        Temporal Representation of Entity Query based on POST
+      summary: Temporal Representation of Entity Query based on POST
       description: |
         5.7.4 Query Temporal Evolution of Entities.
 
@@ -1926,37 +1830,30 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
-            application/json+ld:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/EntityTemporal'
-                    - type: object
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
-                    - required:
-                        - id
-                        - type
-                        - '@context'
             application/json:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - $ref: '#/components/schemas/EntityTemporal'
-                    - required:
-                      - id
-                      - type
+                  $ref: '#/components/schemas/EntityTemporal.Output'
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - '@context'
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/EntityTemporal.Output'
         '400':
           $ref: '#/components/responses/BadRequest'
   /types:
     get:
       tags:
         - Context Information Consumption
-      summary: |
-        Retrieve available entity types
+      summary: Retrieve available entity types
       description: |
         5.7.5 Retrieve Available Entity Types.
 
@@ -1992,6 +1889,15 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/EntityTypeList'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/EntityType'
             application/json+ld:
               schema:
                 oneOf:
@@ -2015,23 +1921,13 @@ paths:
                     - type: array
                       items:
                         $ref: '#/components/schemas/EntityType'
-            application/json:
-              schema:
-                oneOf:
-                  - type: array
-                    items:
-                      $ref: '#/components/schemas/EntityTypeList'
-                  - type: array
-                    items:
-                      $ref: '#/components/schemas/EntityType'
         '400':
           $ref: '#/components/responses/BadRequest'
   /types/{type}:
     get:
       tags:
         - Context Information Consumption
-      summary: |
-        Details about available entity type
+      summary: Details about available entity type
       description: |
         5.7.7 Retrieve Available Entity Type information.
 
@@ -2059,19 +1955,19 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityTypeInfo'
             application/json+ld:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/EntityTypeInfo'
                   - type: object
                     required:
                       - '@context'
                     properties:
                       '@context':
                         $ref:  '#/components/schemas/LdContext'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EntityTypeInfo'
+                  - $ref: '#/components/schemas/EntityTypeInfo'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -2080,8 +1976,7 @@ paths:
     get:
       tags:
         - Context Information Consumption
-      summary: |
-        Retrieve Available Attributes
+      summary: Retrieve Available Attributes
       description: |
         5.7.8 Retrieve Available attributes.
 
@@ -2117,27 +2012,6 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
-            application/json+ld:
-              schema:
-                oneOf:
-                  - allOf:
-                    - $ref: '#/components/schemas/AttributeList'
-                    - type: object
-                      required:
-                        - '@context'
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
-                  - allOf:
-                    - type: array
-                      items:
-                        $ref: '#/components/schemas/Attribute'
-                    - type: object
-                      required:
-                        - '@context'
-                      properties:
-                        '@context':
-                          $ref:  '#/components/schemas/LdContext'
             application/json:
               schema:
                 oneOf:
@@ -2145,14 +2019,34 @@ paths:
                   - type: array
                     items:
                       $ref: '#/components/schemas/Attribute'
+            application/json+ld:
+              schema:
+                oneOf:
+                  - allOf:
+                    - type: object
+                      required:
+                        - '@context'
+                      properties:
+                        '@context':
+                          $ref:  '#/components/schemas/LdContext'
+                    - $ref: '#/components/schemas/AttributeList'
+                  - allOf:
+                    - type: object
+                      required:
+                        - '@context'
+                      properties:
+                        '@context':
+                          $ref:  '#/components/schemas/LdContext'
+                    - type: array
+                      items:
+                        $ref: '#/components/schemas/Attribute'
         '400':
           $ref: '#/components/responses/BadRequest'
   /attributes/{attrId}:
     get:
       tags:
         - Context Information Consumption
-      summary: |
-        Retrieve Available Attribute Information
+      summary: Retrieve Available Attribute Information
       description: |
         5.7.10 Retrieve Available Attribute information.
 
@@ -2179,19 +2073,19 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attribute'
             application/json+ld:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/Attribute'
                   - type: object
                     required:
                       - '@context'
                     properties:
                       '@context':
                         $ref:  '#/components/schemas/LdContext'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Attribute'
+                  - $ref: '#/components/schemas/Attribute'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -2200,8 +2094,7 @@ paths:
     post:
       tags:
         - JSON-LD Context API
-      summary: |
-        Add a user @context to the internal cache
+      summary: Add a user @context to the internal cache
       description: |
         5.13.2 Add @context.
 
@@ -2214,10 +2107,10 @@ paths:
           which represents a JSON-LD "local" context.
         required: true
         content:
-          application/json+ld:
+          application/json:
             schema:
               type: object
-          application/json:
+          application/json+ld:
             schema:
               type: object
       responses:
@@ -2235,8 +2128,7 @@ paths:
     get:
       tags:
         - JSON-LD Context API
-      summary: |
-        List all cached @contexts
+      summary: List all cached @contexts
       description: |
         5.13.3 List @contexts.
 
@@ -2269,31 +2161,6 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
-            # TODO: Output data described in 5.13.3.5, but not formally defined in tables.
-            application/json+ld:
-              schema:
-                oneOf:
-                  - type: array
-                    items:
-                      allOf:
-                        - type: string
-                          format: uri
-                        - type: object
-                          required:
-                            - '@context'
-                          properties:
-                            '@context':
-                              $ref:  '#/components/schemas/LdContext'
-                  - type: array
-                    items:
-                      allOf:
-                        - type: object
-                        - type: object
-                          required:
-                            - '@context'
-                          properties:
-                            '@context':
-                              $ref:  '#/components/schemas/LdContext'
             application/json:
               schema:
                 oneOf:
@@ -2304,14 +2171,37 @@ paths:
                   - type: array
                     items:
                       type: object
+            application/json+ld:
+              schema:
+                oneOf:
+                  - allOf:
+                      - type: object
+                        required:
+                          - '@context'
+                        properties:
+                          '@context':
+                            $ref:  '#/components/schemas/LdContext'
+                      - type: array
+                        items:
+                          type: string
+                          format: uri
+                  - allOf:
+                      - type: object
+                        required:
+                          - '@context'
+                        properties:
+                          '@context':
+                            $ref:  '#/components/schemas/LdContext'
+                      - type: array
+                        items:
+                          type: object
         '400':
           $ref: '#/components/responses/BadRequest'
   /jsonldContexts/{contextId}:
     get:
       tags:
         - JSON-LD Context API
-      summary: |
-        Serve one specific user @context
+      summary: Serve one specific user @context
       description: |
         5.13.4 Serve @context.
 
@@ -2340,6 +2230,9 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
           content:
+            application/json:
+              schema:
+                type: object
             application/json+ld:
               schema:
                 allOf:
@@ -2350,9 +2243,6 @@ paths:
                       '@context':
                         $ref:  '#/components/schemas/LdContext'
                   - type: object
-            application/json:
-              schema:
-                type: object
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -2362,8 +2252,7 @@ paths:
     delete:
       tags:
         - JSON-LD Context API
-      summary: |
-        Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it
+      summary: Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it
       description: |
         5.13.5 Delete and Reload @context
 
@@ -2557,6 +2446,7 @@ components:
       explode: false
       schema:
         type: string
+        default: 'PT0S'
       required: false
     Query.attrs:
       name: attrs
@@ -2713,6 +2603,7 @@ components:
       explode: true
       schema:
         type: string
+        default: location
       required: false
     Query.georel:
       name: georel
@@ -2914,6 +2805,7 @@ components:
           - createdAt
           - modifiedAt
           - deletedAt
+        default: observedAt
       required: false
     Query.timerel:
       name: timerel
@@ -2943,236 +2835,207 @@ components:
     AttributeFragment:
       required: true
       content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/PropertyFragment.Input'
+              - $ref: '#/components/schemas/RelationshipFragment.Input'
+              - $ref: '#/components/schemas/GeoPropertyFragment.Input'
+              - $ref: '#/components/schemas/LanguagePropertyFragment.Input'
         application/json+ld:
           schema:
             allOf:
               - oneOf:
-                - $ref: '#/components/schemas/Property'
-                - $ref: '#/components/schemas/Relationship'
-                - $ref: '#/components/schemas/GeoProperty'
-                - $ref: '#/components/schemas/LanguageProperty'
+                - $ref: '#/components/schemas/PropertyFragment.Input'
+                - $ref: '#/components/schemas/RelationshipFragment.Input'
+                - $ref: '#/components/schemas/GeoPropertyFragment.Input'
+                - $ref: '#/components/schemas/LanguagePropertyFragment.Input'
               - type: object
                 required:
                   - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-        application/json:
-          schema:
-            oneOf:
-              - $ref: '#/components/schemas/Property'
-              - $ref: '#/components/schemas/Relationship'
-              - $ref: '#/components/schemas/GeoProperty'
-              - $ref: '#/components/schemas/LanguageProperty'
-    CsourceRegistration:
+    CsourceRegistration.Input:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CsourceRegistration.Input'
         application/json+ld:
           schema:
             allOf:
-              - $ref: '#/components/schemas/CsourceRegistration'
+              - $ref: '#/components/schemas/CsourceRegistration.Input'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - type
-                - information
-                - '@context'
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/CsourceRegistration'
-              - required:
-                - type
-                - information
     CsourceRegistrationFragment:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CsourceRegistrationFragment'
         application/json+ld:
           schema:
             allOf:
-              - $ref: '#/components/schemas/CsourceRegistration'
+              - $ref: '#/components/schemas/CsourceRegistrationFragment'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - '@context'
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CsourceRegistration'
     Entity:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Entity.Input'
         application/json+ld:
           schema:
             allOf:
-              - $ref: '#/components/schemas/Entity'
+              - $ref: '#/components/schemas/Entity.Input'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - id
-                - type
-                - '@context'
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Entity'
-              - required:
-                - id
-                - type
     EntityInputArray:
       required: true
       content:
-        application/json+ld:
-          schema:
-            allOf:
-              - type: array
-                items:
-                  $ref: '#/components/schemas/Entity'
-              - type: object
-                properties:
-                  '@context':
-                    $ref:  '#/components/schemas/LdContext'
-              - required:
-                - id
-                - type
-                - '@context'
         application/json:
           schema:
             type: array
             items:
-              allOf:
-                - $ref: '#/components/schemas/Entity'
-                - required:
-                  - id
-                  - type
+              $ref: '#/components/schemas/Entity.Input'
+        application/json+ld:
+          schema:
+            allOf:
+              - type: object
+                required:
+                  - '@context'
+                properties:
+                  '@context':
+                    $ref:  '#/components/schemas/LdContext'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Entity.Input'
     EntityFragment:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EntityFragment.Input'
         application/json+ld:
           schema:
             allOf:
-              - $ref: '#/components/schemas/Entity'
+              - $ref: '#/components/schemas/EntityFragment.Input'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - '@context'
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Entity'
     EntityTemporal:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EntityTemporal.Input'
         application/json+ld:
           schema:
             allOf:
-              - $ref: '#/components/schemas/EntityTemporal'
+              - $ref: '#/components/schemas/EntityTemporal.Input'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - id
-                - type
-                - '@context'
-        application/json:
-          schema:
-            $ref: '#/components/schemas/EntityTemporal'
-            required:
-              - id
-              - type
     EntityTemporalFragment:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EntityTemporalFragment.Input'
         application/json+ld:
           schema:
             allOf:
-              - $ref: '#/components/schemas/EntityTemporal'
+              - $ref: '#/components/schemas/EntityTemporalFragment.Input'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - '@context'
-        application/json:
-          schema:
-            $ref: '#/components/schemas/EntityTemporal'
     Query:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Query'
         application/json+ld:
           schema:
             allOf:
               - $ref: '#/components/schemas/Query'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - '@context'
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Query'
     QueryTemporal:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Query.temporal'
         application/json+ld:
           schema:
             allOf:
               - $ref: '#/components/schemas/Query.temporal'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - '@context'
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Query.temporal'
     Subscription:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Subscription.Input'
         application/json+ld:
           schema:
             allOf:
-              - $ref: '#/components/schemas/Subscription'
+              - $ref: '#/components/schemas/Subscription.Input'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - id
-                - type
-                - '@context'
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Subscription'
-              - required:
-                - id
-                - type
     SubscriptionFragment:
       required: true
       content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SubscriptionFragment'
         application/json+ld:
           schema:
             allOf:
-              - $ref: '#/components/schemas/Subscription'
+              - $ref: '#/components/schemas/SubscriptionFragment'
               - type: object
+                required:
+                  - '@context'
                 properties:
                   '@context':
                     $ref:  '#/components/schemas/LdContext'
-              - required:
-                - '@context'
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Subscription'
   schemas:
     AnyValue:
       description: Any JSON value as defined by IETF RFC 8259.
@@ -3290,9 +3153,9 @@ components:
               - type: string
                 format: uri
               - type: object
-    Entity:
+    Entity.Common:
       description: |
-        NGSI-LD Entity (see 5.4).
+        Fragment of NGSI-LD Entity (see 5.4).
       type: object
       properties:
         id:
@@ -3316,38 +3179,115 @@ components:
             - type: array
               items:
                 type: string
-        location:
-          description: |
-            Default geospatial Property of an entity. See clause 4.7.
-          $ref: '#/components/schemas/GeoProperty'
-        observationSpace:
-          $ref: '#/components/schemas/GeoProperty'
-        operationSpace:
-          $ref: '#/components/schemas/GeoProperty'
-        # Clause 5.2.2 Common members. System-generated
-        createdAt:
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
-        additionalProperties:
-          oneOf:
-            - $ref: '#/components/schemas/Property'
-            - type: array
-              items:
-                $ref: '#/components/schemas/Property'
-            - $ref: '#/components/schemas/Relationship'
-            - type: array
-              items:
-                $ref: '#/components/schemas/Relationship'
-    Property:
+    EntityFragment.Input:
+      allOf:
+        - $ref: '#/components/schemas/Entity.Common'
+        - type: object
+          properties:
+            location:
+              description: |
+                Default geospatial Property of an entity. See clause 4.7.
+              $ref: '#/components/schemas/GeoProperty.Input'
+            observationSpace:
+              $ref: '#/components/schemas/GeoProperty.Input'
+            operationSpace:
+              $ref: '#/components/schemas/GeoProperty.Input'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Input'
+              - $ref: '#/components/schemas/Relationship.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Input'
+    Entity.Input:
+      description: |
+        5.2.4 NGSI-LD Entity.
+      allOf:
+        - $ref: '#/components/schemas/EntityFragment.Input'
+        - required:
+          - id
+          - type
+    Entity.Output:
+      allOf:
+        - $ref: '#/components/schemas/Entity.Common'
+        - type: object
+          properties:
+            location:
+              description: |
+                Default geospatial Property of an entity. See clause 4.7.
+              $ref: '#/components/schemas/GeoProperty.Output'
+            observationSpace:
+              $ref: '#/components/schemas/GeoProperty.Output'
+            operationSpace:
+              $ref: '#/components/schemas/GeoProperty.Output'
+        - type: object
+          properties:
+            # Clause 5.2.2 Common members. System-generated.
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            modifiedAt:
+              $ref: '#/components/schemas/ModifiedAt'
+            deletedAt:
+                $ref: '#/components/schemas/DeletedAt'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Output'
+              - $ref: '#/components/schemas/Relationship.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Output'
+        - required:
+          - id
+          - type
+    EntityNotification.Output:
+      allOf:
+        - $ref: '#/components/schemas/Entity.Common'
+        - type: object
+          properties:
+            location:
+              description: |
+                Default geospatial Property of an entity. See clause 4.7.
+              $ref: '#/components/schemas/GeoProperty.Output'
+            observationSpace:
+              $ref: '#/components/schemas/GeoProperty.Output'
+            operationSpace:
+              $ref: '#/components/schemas/GeoProperty.Output'
+        - type: object
+          properties:
+            # Clause 5.2.2 Common members. System-generated.
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            modifiedAt:
+              $ref: '#/components/schemas/ModifiedAt'
+            deletedAt:
+                $ref: '#/components/schemas/DeletedAt'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/PropertyNotification.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/PropertyNotification.Output'
+              - $ref: '#/components/schemas/RelationshipNotification.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/RelationshipNotification.Output'
+              - $ref: '#/components/schemas/LanguagePropertyNotification.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/LanguagePropertyNotification.Output'
+        - required:
+          - id
+          - type
+    Property.Common:
       description: |
         5.2.5 NGSI-LD Property.
       type: object
@@ -3358,13 +3298,10 @@ components:
           type: string
           enum:
             - Property
-          default: Property
         value:
           description: |
             Property value.
-          oneOf:
-            - $ref: '#/components/schemas/DateTimeValue'
-            - $ref: '#/components/schemas/AnyValue'
+          $ref: '#/components/schemas/AnyValue'
         observedAt:
           $ref: '#/components/schemas/ObservedAt'
           description: |
@@ -3380,45 +3317,68 @@ components:
             It allows identifying a set or group of property values.
           type: string
           format: uri
-        # Clause 5.2.2 Common members. System-generated
-        createdAt:
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
-        instanceId:
-          description: |
-            A URI uniquely identifying a Property instance,
-            as mandated by (see clause 4.5.7). System generated.
-          type: string
-          format: uri
-          readOnly: true
-        previousValue:
-          description: |
-            Previous Property value. Only used in notifications.
-          allOf:
-            - oneOf:
-              - $ref: '#/components/schemas/DateTimeValue'
-              - $ref: '#/components/schemas/AnyValue'
-          readOnly: true
-      additionalProperties:
-        oneOf:
-          - $ref: '#/components/schemas/Property'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Property'
-          - $ref: '#/components/schemas/Relationship'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Relationship'
-    Relationship:
+    PropertyFragment.Input:
+      allOf:
+        - $ref: '#/components/schemas/Property.Common'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Input'
+              - $ref: '#/components/schemas/Relationship.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Input'
+    Property.Input:
+      allOf:
+        - $ref: '#/components/schemas/PropertyFragment.Input'
+      required:
+        - type
+        - value
+    Property.Output:
+      allOf:
+        - $ref: '#/components/schemas/Property.Common'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Output'
+              - $ref: '#/components/schemas/Relationship.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Output'
+        - type: object
+          properties:
+            # Clause 5.2.2 Common members. System-generated
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            modifiedAt:
+              $ref: '#/components/schemas/ModifiedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
+            instanceId:
+              description: |
+                A URI uniquely identifying a Property instance,
+                as mandated by (see clause 4.5.7). System generated.
+              type: string
+              format: uri
+      required:
+        - type
+        - value
+    PropertyNotification.Output:
+      allOf:
+        - $ref: '#/components/schemas/Property.Output'
+        - type: object
+          properties:
+            previousValue:
+              description: |
+                Previous Property value.
+              $ref: '#/components/schemas/AnyValue'
+    Relationship.Common:
       description: |
         5.2.6 NGSI-LD Relationship.
       properties:
@@ -3428,7 +3388,6 @@ components:
           type: string
           enum:
             - Relationship
-          default: Relationship
         object:
           description: |
             Relationship's target object.
@@ -3441,44 +3400,69 @@ components:
             It allows identifying a set or group of target relationship objects.
           type: string
           format: uri
-        # Clause 5.2.2 Common members. System-generated
-        createdAt:
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
-        instanceId:
-          description: |
-            A URI uniquely identifying a Relationship instance
-            (see clause 4.5.8). System generated.
-          type: string
-          format: uri
-          readOnly: true
-        previousObject:
-          description: |
-            Previous Relationship's target object. Only used in notifications.
-          type: string
-          format: uri
-          readOnly: true
-        additionalProperties:
-          oneOf:
-            - $ref: '#/components/schemas/Property'
-            - type: array
-              items:
-                $ref: '#/components/schemas/Property'
-            - $ref: '#/components/schemas/Relationship'
-            - type: array
-              items:
-                $ref: '#/components/schemas/Relationship'
-
-    GeoProperty:
+    RelationshipFragment.Input:
+      allOf:
+        - $ref: '#/components/schemas/Relationship.Common'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Input'
+              - $ref: '#/components/schemas/Relationship.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Input'
+    Relationship.Input:
+      allOf:
+        - $ref: '#/components/schemas/RelationshipFragment.Input'
+      required:
+        - type
+        - object
+    Relationship.Output:
+      allOf:
+        - $ref: '#/components/schemas/Relationship.Common'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Output'
+              - $ref: '#/components/schemas/Relationship.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Output'
+        - type: object
+          properties:
+            # Clause 5.2.2 Common members. System-generated
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            modifiedAt:
+              $ref: '#/components/schemas/ModifiedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
+            instanceId:
+              description: |
+                A URI uniquely identifying a Relationship instance
+                (see clause 4.5.8). System generated.
+              type: string
+              format: uri
+      required:
+        - type
+        - object
+    RelationshipNotification.Output:
+      allOf:
+        - $ref: '#/components/schemas/Relationship.Output'
+        - type: object
+          properties:
+            previousObject:
+              description: |
+                Previous Relationship's target object.
+              type: string
+              format: uri
+    GeoProperty.Common:
       description: |
         5.2.7 NGSI-LD GeoProperty.
       type: object
@@ -3489,7 +3473,6 @@ components:
           type: string
           enum:
             - GeoProperty
-          default: GeoProperty
         value:
           $ref: '#/components/schemas/Geometry'
         observedAt:
@@ -3499,36 +3482,58 @@ components:
             It allows identifying a set or group of property values.
           type: string
           format: uri
-      # Clause 5.2.2 Common members. System-generated
-        createdAt:
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
-        instanceId:
-          description: |
-            A URI uniquely identifying a Property instance,
-            as mandated by (see clause 4.5.7). System generated.
-          type: string
-          format: uri
-          readOnly: true
-      additionalProperties:
-        oneOf:
-          - $ref: '#/components/schemas/Property'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Property'
-          - $ref: '#/components/schemas/Relationship'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Relationship'
+    GeoPropertyFragment.Input:
+      allOf:
+        - $ref: '#/components/schemas/GeoProperty.Common'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Input'
+              - $ref: '#/components/schemas/Relationship.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Input'
+    GeoProperty.Input:
+      allOf:
+        - $ref: '#/components/schemas/GeoPropertyFragment.Input'
+      required:
+        - type
+        - value
+    GeoProperty.Output:
+      allOf:
+        - $ref: '#/components/schemas/GeoProperty.Common'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Output'
+              - $ref: '#/components/schemas/Relationship.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Output'
+        - type: object
+          properties:
+            # Clause 5.2.2 Common members. System-generated
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            modifiedAt:
+              $ref: '#/components/schemas/ModifiedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
+            instanceId:
+              description: |
+                A URI uniquely identifying a Property instance,
+                as mandated by (see clause 4.5.7). System generated.
+              type: string
+              format: uri
+      required:
+        - type
+        - value
     EntityInfo:
       description: |
         5.2.8 represents what Entities, Entity Types or group of Entity ids
@@ -3555,7 +3560,7 @@ components:
                 type: string
       required:
         - type
-    CsourceRegistration:
+    CsourceRegistrationFragment:
       description: |
         5.2.9 represents the data needed to register a new Context Source.
       type: object
@@ -3659,6 +3664,7 @@ components:
             - exclusive
             - redirect
             - auxiliary
+          default: inclusive
         operations:
           description: |
             The definition limited subset of API operations supported by the registered Context Source.
@@ -3677,55 +3683,58 @@ components:
             Holds additional optional registration management information that can be used
             to limit unnecessary distributed operation requests.
           $ref: '#/components/schemas/RegistrationManagementInfo'
-        # Clause 5.2.2 Common members. System-generated
-        createdAt:
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
-        status:
-          description: |
-            Read-only. Status of the Registration. It shall be "ok" if the last attempt to perform a distributed
-            operation succeeded. It shall be "failed" if the last attempt to perform a distributed operation failed.
-          type: string
-          enum:
-            - ok
-            - failed
-          readOnly: true
-        timesSent:
-          description: |
-            Number of times that the registration triggered a distributed operation, including failed attempts.
-          type: number
-          minimum: 0
-          readOnly: true
-        timesFailed:
-          description: Number of times that the registration triggered a distributed operation request that failed.
-          type: number
-          minimum: 0
-          readOnly: true
-        lastSuccess:
-          description: |
-            Timestamp corresponding to the instant when the last successfully distributed operation was sent.
-            Created on first successful operation.
-          type: string
-          format: date-time
-          readOnly: true
-        lastFailure:
-          description: |
-            Timestamp corresponding to the instant when the last distributed operation resulting in
-            a failure (for instance, in the HTTP binding, an HTTP response code other than 2xx) was returned.
-          type: string
-          format: date-time
-          readOnly: true
       additionalProperties:
         $ref: '#/components/schemas/AnyValue'
+    CsourceRegistration.Input:
+      allOf:
+        - $ref: '#/components/schemas/CsourceRegistrationFragment'
+        - required:
+          - type
+          - information
+          - endpoint
+    CsourceRegistration.Output:
+      allOf:
+        - $ref: '#/components/schemas/CsourceRegistration.Input'
+        - type: object
+          properties:
+            # Clause 5.2.2 Common members
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            modifiedAt:
+              $ref: '#/components/schemas/ModifiedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
+            status:
+              description: |
+                Read-only. Status of the Registration. It shall be "ok" if the last attempt to perform a distributed
+                operation succeeded. It shall be "failed" if the last attempt to perform a distributed operation failed.
+              type: string
+              enum:
+                - ok
+                - failed
+            timesSent:
+              description: |
+                Number of times that the registration triggered a distributed operation, including failed attempts.
+              type: number
+              minimum: 0
+            timesFailed:
+              description: Number of times that the registration triggered a distributed operation request that failed.
+              type: number
+              minimum: 0
+            lastSuccess:
+              description: |
+                Timestamp corresponding to the instant when the last successfully distributed operation was sent.
+                Created on first successful operation.
+              type: string
+              format: date-time
+            lastFailure:
+              description: |
+                Timestamp corresponding to the instant when the last distributed operation resulting in
+                a failure (for instance, in the HTTP binding, an HTTP response code other than 2xx) was returned.
+              type: string
+              format: date-time
+        - required:
+          - id
     RegistrationInfo:
       description: |
         5.2.10 RegistrationInfo.
@@ -3815,6 +3824,9 @@ components:
               - attributeCreated
               - attributeUpdated
               - attributeDeleted
+          default:
+            - attributeCreated
+            - attributeUpdated
         q:
           description: |
             Query that shall be met by subscribed entities in order to trigger the notification.
@@ -3834,6 +3846,7 @@ components:
             true indicates that the Subscription is under operation.
             false indicates that the subscription is paused and notifications shall not be delivered.
           type: boolean
+          default: true
         notification:
           description: |
             Notification details.
@@ -3856,44 +3869,20 @@ components:
           description: |
             Language filter to be applied to the query (clause 4.15).
           type: string
-    Subscription.Periodic:
+    SubscriptionFragment.Periodic:
       allOf:
         - $ref: '#/components/schemas/Subscription.Common'
-        - type: object
-          properties:
+        - properties:
             timeInterval:
               description: |
                 Indicates that a notification shall be delivered periodically regardless of attribute changes.
                 Actually, when the time interval (in seconds) specified in this value field is reached.
               type: number
               minimum: 1
-            # Clause 5.2.2 Common members. System-generated.
-            createdAt:
-              $ref: '#/components/schemas/CreatedAt'
-              readOnly: true
-            modifiedAt:
-              $ref: '#/components/schemas/ModifiedAt'
-              readOnly: true
-            deletedAt:
-              $ref: '#/components/schemas/DeletedAt'
-              readOnly: true
-            status:
-              description: |
-                Read-only. Provided by the system when querying the details of a subscription.
-              type: string
-              enum:
-                - active
-                - paused
-                - expired
-              readOnly: true
-        - required:
-          - entities
-          - timeInterval
-    Subscription.OnChange:
+    SubscriptionFragment.OnChange:
       allOf:
         - $ref: '#/components/schemas/Subscription.Common'
-        - type: object
-          properties:
+        - properties:
             watchedAttributes:
               description: |
                 Watched Attributes (Properties or Relationships). If not defined it means any Attribute.
@@ -3906,17 +3895,41 @@ components:
                 Minimal period of time in seconds which shall elapse between two consecutive notifications.
               type: number
               minimum: 1
+    SubscriptionFragment:
+      oneOf:
+        - $ref: '#/components/schemas/SubscriptionFragment.Periodic'
+        - $ref: '#/components/schemas/SubscriptionFragment.OnChange'
+
+    Subscription.Periodic:
+      allOf:
+        - $ref: '#/components/schemas/SubscriptionFragment.Periodic'
+        - required:
+          - type
+          - notification
+          - entities
+          - timeInterval
+    Subscription.OnChange:
+      allOf:
+        - $ref: '#/components/schemas/SubscriptionFragment.OnChange'
+        - required:
+          - type
+          - notification
+    Subscription.Input:
+      oneOf:
+        - $ref: '#/components/schemas/Subscription.Periodic'
+        - $ref: '#/components/schemas/Subscription.OnChange'
+    Subscription.Output:
+      allOf:
+        - $ref: '#/components/schemas/Subscription.Input'
+        - type: object
+          properties:
             # Clause 5.2.2 Common members. System-generated.
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
-              readOnly: true
             modifiedAt:
               $ref: '#/components/schemas/ModifiedAt'
-              readOnly: true
             deletedAt:
-              allOf:
-                - $ref: '#/components/schemas/DeletedAt'
-              readOnly: true
+              $ref: '#/components/schemas/DeletedAt'
             status:
               description: |
                 Read-only. Provided by the system when querying the details of a subscription.
@@ -3925,11 +3938,8 @@ components:
                 - active
                 - paused
                 - expired
-              readOnly: true
-    Subscription:
-      oneOf:
-        - $ref: '#/components/schemas/Subscription.OnChange'
-        - $ref: '#/components/schemas/Subscription.Periodic'
+        - required:
+          - id
     GeoQuery:
       description: |
         5.2.13 represents a geoquery used for Subscriptions.
@@ -3980,6 +3990,7 @@ components:
             If true, the system generated attributes createdAt and modifiedAt are included in
             the response payload body, in the case of a deletion also deletedAt.
           type: boolean
+          default: false
         format:
           description: |
             Conveys the representation format of the entities delivered at notification time.
@@ -3996,6 +4007,7 @@ components:
             This requires that it exists, i.e. in case of modifications and deletions,
              but not in the case of creations. showChanges cannot be true in case format is "keyValues".
           type: boolean
+          default: false
         endpoint:
           description: |
             Notification endpoint details.
@@ -4060,6 +4072,7 @@ components:
             - application/json
             - application/ld+json
             - application/geo+json
+          default: application/json
         timeout:
           description: |
             Maximum period of time in milliseconds which may elapse before a notification is assumed to have failed.
@@ -4175,7 +4188,7 @@ components:
       required:
         - attributeName
         - reason
-    EntityTemporal:
+    EntityTemporalFragment.Input:
       description: |
         5.2.20 This is the same data type as mandated by clause 5.2.4 with the only deviation that
         the representation of Properties and Relationships shall be the temporal one
@@ -4183,42 +4196,79 @@ components:
         as defined in clauses 4.5.7 and 4.5.8. Alternatively it is possible to specify
         the EntityTemporal by using the "Simplified Temporal Representation of an Entity",
         as defined in clause 4.5.9.
-      properties:
-        location:
-          description: |
-            Default geospatial Property of an entity. See clause 4.7.
-          $ref: '#/components/schemas/GeoProperty'
-        observationSpace:
-          $ref: '#/components/schemas/GeoProperty'
-        operationSpace:
-          $ref: '#/components/schemas/GeoProperty'
-        # Clause 5.2.2 Common members. System-generated
-        createdAt:
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
-      additionalProperties:
-        oneOf:
-          - type: array
-            items:
-              $ref: '#/components/schemas/Property'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Relationship'
-          - type: array
-            items:
-              $ref: '#/components/schemas/GeoProperty'
-          - type: array
-            items:
-              $ref: '#/components/schemas/LanguageProperty'
+      allOf:
+        - $ref: '#/components/schemas/Entity.Common'
+        - type: object
+          properties:
+            location:
+              description: |
+                Default geospatial Property of an entity. See clause 4.7.
+              $ref: '#/components/schemas/GeoProperty.Input'
+            observationSpace:
+              $ref: '#/components/schemas/GeoProperty.Input'
+            operationSpace:
+              $ref: '#/components/schemas/GeoProperty.Input'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/GeoProperty.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/LanguageProperty.Input'
+    EntityTemporal.Input:
+      allOf:
+        - $ref: '#/components/schemas/EntityTemporalFragment.Input'
+        - required:
+          - id
+          - type
+    EntityTemporal.Output:
+      allOf:
+        - $ref: '#/components/schemas/Entity.Common'
+        - type: object
+          properties:
+            location:
+              description: |
+                Default geospatial Property of an entity. See clause 4.7.
+              $ref: '#/components/schemas/GeoProperty.Output'
+            observationSpace:
+              $ref: '#/components/schemas/GeoProperty.Output'
+            operationSpace:
+              $ref: '#/components/schemas/GeoProperty.Output'
+        - type: object
+          properties:
+            # Clause 5.2.2 Common members. System-generated.
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            modifiedAt:
+              $ref: '#/components/schemas/ModifiedAt'
+            deletedAt:
+                $ref: '#/components/schemas/DeletedAt'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/GeoProperty.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/LanguageProperty.Output'
+        - required:
+          - id
+          - type
     TemporalQuery:
       description: |
         5.2.21 This datatype represents a temporal query.
@@ -4252,6 +4302,7 @@ components:
             - createdAt
             - modifiedAt
             - deletedAt
+          default: observedAt
       required:
         - timerel
         - timeAt
@@ -4578,25 +4629,25 @@ components:
                 type: string
       additionalProperties:
         oneOf:
-          - $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/Property.Output'
           - type: array
             items:
-              $ref: '#/components/schemas/Property'
-          - $ref: '#/components/schemas/Relationship'
+              $ref: '#/components/schemas/Property.Output'
+          - $ref: '#/components/schemas/Relationship.Output'
           - type: array
             items:
-              $ref: '#/components/schemas/Relationship'
-          - $ref: '#/components/schemas/GeoProperty'
+              $ref: '#/components/schemas/Relationship.Output'
+          - $ref: '#/components/schemas/GeoProperty.Output'
           - type: array
             items:
-              $ref: '#/components/schemas/GeoProperty'
-          - $ref: '#/components/schemas/LanguageProperty'
+              $ref: '#/components/schemas/GeoProperty.Output'
+          - $ref: '#/components/schemas/LanguageProperty.Output'
           - type: array
             items:
-              $ref: '#/components/schemas/LanguageProperty'
+              $ref: '#/components/schemas/LanguageProperty.Output'
       required:
         - type
-    LanguageProperty:
+    LanguageProperty.Common:
       description: |
         5.2.32 NGSI-LD LanguageProperty.
       type: object
@@ -4607,7 +4658,6 @@ components:
           type: string
           enum:
             - LanguageProperty
-          default: LanguageProperty
         languageMap:
           description: |
             String Property Values defined in multiple natural languages.
@@ -4619,45 +4669,70 @@ components:
             It allows identifying a set or group of property values.
           type: string
           format: uri
-        # Clause 5.2.2 Common members. System-generated
-        createdAt:
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
-        instanceId:
-          description: |
-            A URI uniquely identifying a Property instance,
-            as mandated by (see clause 4.5.7). System generated.
-          type: string
-          format: uri
-          readOnly: true
-        previousLanguageMap:
-          description: |
-            Previous Language Property languageMap. Only used in notifications.
-          type: object
-          readOnly: true
-      additionalProperties:
-        oneOf:
-          - $ref: '#/components/schemas/Property'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Property'
-          - $ref: '#/components/schemas/Relationship'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Relationship'
+    LanguagePropertyFragment.Input:
+      allOf:
+        - $ref: '#/components/schemas/LanguageProperty.Common'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Input'
+              - $ref: '#/components/schemas/Relationship.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Input'
+    LanguageProperty.Input:
+      allOf:
+        - $ref: '#/components/schemas/LanguagePropertyFragment.Input'
+      required:
+        - type
+        - value
+    LanguageProperty.Output:
+      allOf:
+        - $ref: '#/components/schemas/LanguageProperty.Common'
+        - type: object
+          additionalProperties:
+            oneOf:
+              - $ref: '#/components/schemas/Property.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Output'
+              - $ref: '#/components/schemas/Relationship.Output'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Output'
+        - type: object
+          properties:
+            # Clause 5.2.2 Common members. System-generated
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            modifiedAt:
+              $ref: '#/components/schemas/ModifiedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
+            instanceId:
+              description: |
+                A URI uniquely identifying a Property instance,
+                as mandated by (see clause 4.5.7). System generated.
+              type: string
+              format: uri
+      required:
+        - type
+        - value
+    LanguagePropertyNotification.Output:
+      allOf:
+        - $ref: '#/components/schemas/LanguageProperty.Output'
+        - type: object
+          properties:
+            previousLanguageMap:
+              description: |
+                Previous Language Property languageMap.
+              type: object
     EntitySelector:
       description: |
         5.2.33 This type selects which entity or group of entities are queried or subscribed to by Context Consumers.
-        `id` takes precedence over `idPattern`.
       type: object
       properties:
         id:
@@ -4747,7 +4822,7 @@ components:
           oneOf:
             - type: array
               items:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity.Output'
             - $ref: '#/components/schemas/FeatureCollection'
       required:
         - id
@@ -4787,8 +4862,7 @@ components:
             The content of the notification as NGSI-LD entities. See clause 5.2.4.
           type: array
           items:
-            $ref: '#/components/schemas/CsourceRegistration'
-          readOnly: true
+            $ref: '#/components/schemas/CsourceRegistration.Input'
         triggerReason:
           description: |
             Indicates whether the Csources in the CsourceRegistration.Input(s) in data are newly matching
@@ -4922,22 +4996,6 @@ components:
         - $ref: '#/components/schemas/Geometry.LineString'
         - $ref: '#/components/schemas/Geometry.MultiLineString'
         - $ref: '#/components/schemas/Geometry.MultiPolygon'
-    DateTimeValue:
-      description: |
-        Date representation as mandated by C.6 "Date Representation"
-      type: object
-      properties:
-        '@type':
-          type: string
-          enum:
-            - DateTime
-          default: DateTime
-        '@value':
-          type: string
-          format: date-time
-      required:
-        - '@type'
-        - '@value'
     #
     ######
     # Took "ProblemDetails" schema from ETSI NFV OAS

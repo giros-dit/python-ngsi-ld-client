@@ -38,7 +38,7 @@ class SubscriptionCommon(BaseModel):
     q: Optional[StrictStr] = Field(None, description="Query that shall be met by subscribed entities in order to trigger the notification. ")
     geo_q: Optional[GeoQuery] = Field(None, alias="geoQ")
     csf: Optional[StrictStr] = Field(None, description="Context source filter that shall be met by Context Source Registrations describing Context Sources to be used for Entity Subscriptions. ")
-    is_active: Optional[StrictBool] = Field(None, alias="isActive", description="Allows clients to temporarily pause the subscription by making it inactive. true indicates that the Subscription is under operation. false indicates that the subscription is paused and notifications shall not be delivered. ")
+    is_active: Optional[StrictBool] = Field(True, alias="isActive", description="Allows clients to temporarily pause the subscription by making it inactive. true indicates that the Subscription is under operation. false indicates that the subscription is paused and notifications shall not be delivered. ")
     notification: Optional[NotificationParams] = None
     expires_at: Optional[datetime] = Field(None, alias="expiresAt", description="Expiration date for the subscription. ")
     temporal_q: Optional[TemporalQuery] = Field(None, alias="temporalQ")
@@ -135,7 +135,7 @@ class SubscriptionCommon(BaseModel):
             "q": obj.get("q"),
             "geo_q": GeoQuery.from_dict(obj.get("geoQ")) if obj.get("geoQ") is not None else None,
             "csf": obj.get("csf"),
-            "is_active": obj.get("isActive"),
+            "is_active": obj.get("isActive") if obj.get("isActive") is not None else True,
             "notification": NotificationParams.from_dict(obj.get("notification")) if obj.get("notification") is not None else None,
             "expires_at": obj.get("expiresAt"),
             "temporal_q": TemporalQuery.from_dict(obj.get("temporalQ")) if obj.get("temporalQ") is not None else None,

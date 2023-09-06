@@ -38,9 +38,21 @@ class TestEntityType(unittest.TestCase):
         model = ngsi_ld_client.models.entity_type.EntityType()  # noqa: E501
         if include_optional :
             return EntityType(
+                id = '', 
+                type = 'EntityType', 
+                type_name = '', 
+                attribute_names = [
+                    ''
+                    ]
             )
         else :
             return EntityType(
+                id = '',
+                type = 'EntityType',
+                type_name = '',
+                attribute_names = [
+                    ''
+                    ],
         )
         """
 

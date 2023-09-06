@@ -17,25 +17,27 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
+
 from typing import Optional
-from pydantic import BaseModel, Field
-from ngsi_ld_client.models.geo_property import GeoProperty
+from pydantic import BaseModel, Field, StrictStr
+from ngsi_ld_client.models.entity_common_scope import EntityCommonScope
+from ngsi_ld_client.models.entity_common_type import EntityCommonType
+from ngsi_ld_client.models.geo_property_input import GeoPropertyInput
 from ngsi_ld_client.models.ld_context import LdContext
 
 class AppendAttrsTemporalRequest(BaseModel):
     """
     AppendAttrsTemporalRequest
     """
-    location: Optional[GeoProperty] = None
-    observation_space: Optional[GeoProperty] = Field(None, alias="observationSpace")
-    operation_space: Optional[GeoProperty] = Field(None, alias="operationSpace")
-    created_at: Optional[datetime] = Field(None, alias="createdAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ")
-    modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
-    deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
+    id: Optional[StrictStr] = Field(None, description="Entity id. ")
+    type: Optional[EntityCommonType] = None
+    scope: Optional[EntityCommonScope] = None
+    location: Optional[GeoPropertyInput] = None
+    observation_space: Optional[GeoPropertyInput] = Field(None, alias="observationSpace")
+    operation_space: Optional[GeoPropertyInput] = Field(None, alias="operationSpace")
     context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["location", "observationSpace", "operationSpace", "createdAt", "modifiedAt", "deletedAt", "@context"]
+    __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "@context"]
 
     class Config:
         """Pydantic configuration"""
@@ -59,12 +61,15 @@ class AppendAttrsTemporalRequest(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "created_at",
-                            "modified_at",
-                            "deleted_at",
                             "additional_properties"
                           },
                           exclude_none=True)
+        # override the default output from pydantic by calling `to_dict()` of type
+        if self.type:
+            _dict['type'] = self.type.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of scope
+        if self.scope:
+            _dict['scope'] = self.scope.to_dict()
         # override the default output from pydantic by calling `to_dict()` of location
         if self.location:
             _dict['location'] = self.location.to_dict()
@@ -94,12 +99,12 @@ class AppendAttrsTemporalRequest(BaseModel):
             return AppendAttrsTemporalRequest.parse_obj(obj)
 
         _obj = AppendAttrsTemporalRequest.parse_obj({
-            "location": GeoProperty.from_dict(obj.get("location")) if obj.get("location") is not None else None,
-            "observation_space": GeoProperty.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
-            "operation_space": GeoProperty.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
-            "created_at": obj.get("createdAt"),
-            "modified_at": obj.get("modifiedAt"),
-            "deleted_at": obj.get("deletedAt"),
+            "id": obj.get("id"),
+            "type": EntityCommonType.from_dict(obj.get("type")) if obj.get("type") is not None else None,
+            "scope": EntityCommonScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
+            "location": GeoPropertyInput.from_dict(obj.get("location")) if obj.get("location") is not None else None,
+            "observation_space": GeoPropertyInput.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
+            "operation_space": GeoPropertyInput.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties

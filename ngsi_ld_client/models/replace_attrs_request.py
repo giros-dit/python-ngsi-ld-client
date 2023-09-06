@@ -20,27 +20,27 @@ import re  # noqa: F401
 
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field, StrictStr, ValidationError, validator
-from ngsi_ld_client.models.geo_property import GeoProperty
-from ngsi_ld_client.models.language_property import LanguageProperty
-from ngsi_ld_client.models.model_property import ModelProperty
-from ngsi_ld_client.models.relationship import Relationship
+from ngsi_ld_client.models.geo_property_fragment_input import GeoPropertyFragmentInput
+from ngsi_ld_client.models.language_property_fragment_input import LanguagePropertyFragmentInput
+from ngsi_ld_client.models.property_fragment_input import PropertyFragmentInput
+from ngsi_ld_client.models.relationship_fragment_input import RelationshipFragmentInput
 from typing import Any, List
 from pydantic import StrictStr, Field
 
-REPLACEATTRSREQUEST_ONE_OF_SCHEMAS = ["GeoProperty", "LanguageProperty", "ModelProperty", "Relationship"]
+REPLACEATTRSREQUEST_ONE_OF_SCHEMAS = ["GeoPropertyFragmentInput", "LanguagePropertyFragmentInput", "PropertyFragmentInput", "RelationshipFragmentInput"]
 
 class ReplaceAttrsRequest(BaseModel):
     """
     ReplaceAttrsRequest
     """
-    # data type: ModelProperty
-    oneof_schema_1_validator: Optional[ModelProperty] = None
-    # data type: Relationship
-    oneof_schema_2_validator: Optional[Relationship] = None
-    # data type: GeoProperty
-    oneof_schema_3_validator: Optional[GeoProperty] = None
-    # data type: LanguageProperty
-    oneof_schema_4_validator: Optional[LanguageProperty] = None
+    # data type: PropertyFragmentInput
+    oneof_schema_1_validator: Optional[PropertyFragmentInput] = None
+    # data type: RelationshipFragmentInput
+    oneof_schema_2_validator: Optional[RelationshipFragmentInput] = None
+    # data type: GeoPropertyFragmentInput
+    oneof_schema_3_validator: Optional[GeoPropertyFragmentInput] = None
+    # data type: LanguagePropertyFragmentInput
+    oneof_schema_4_validator: Optional[LanguagePropertyFragmentInput] = None
     actual_instance: Any
     one_of_schemas: List[str] = Field(REPLACEATTRSREQUEST_ONE_OF_SCHEMAS, const=True)
 
@@ -62,32 +62,32 @@ class ReplaceAttrsRequest(BaseModel):
         instance = ReplaceAttrsRequest.construct()
         error_messages = []
         match = 0
-        # validate data type: ModelProperty
-        if not isinstance(v, ModelProperty):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `ModelProperty`")
+        # validate data type: PropertyFragmentInput
+        if not isinstance(v, PropertyFragmentInput):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `PropertyFragmentInput`")
         else:
             match += 1
-        # validate data type: Relationship
-        if not isinstance(v, Relationship):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `Relationship`")
+        # validate data type: RelationshipFragmentInput
+        if not isinstance(v, RelationshipFragmentInput):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `RelationshipFragmentInput`")
         else:
             match += 1
-        # validate data type: GeoProperty
-        if not isinstance(v, GeoProperty):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `GeoProperty`")
+        # validate data type: GeoPropertyFragmentInput
+        if not isinstance(v, GeoPropertyFragmentInput):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `GeoPropertyFragmentInput`")
         else:
             match += 1
-        # validate data type: LanguageProperty
-        if not isinstance(v, LanguageProperty):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `LanguageProperty`")
+        # validate data type: LanguagePropertyFragmentInput
+        if not isinstance(v, LanguagePropertyFragmentInput):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `LanguagePropertyFragmentInput`")
         else:
             match += 1
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in ReplaceAttrsRequest with oneOf schemas: GeoProperty, LanguageProperty, ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in ReplaceAttrsRequest with oneOf schemas: GeoPropertyFragmentInput, LanguagePropertyFragmentInput, PropertyFragmentInput, RelationshipFragmentInput. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in ReplaceAttrsRequest with oneOf schemas: GeoProperty, LanguageProperty, ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in ReplaceAttrsRequest with oneOf schemas: GeoPropertyFragmentInput, LanguagePropertyFragmentInput, PropertyFragmentInput, RelationshipFragmentInput. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -102,37 +102,37 @@ class ReplaceAttrsRequest(BaseModel):
         error_messages = []
         match = 0
 
-        # deserialize data into ModelProperty
+        # deserialize data into PropertyFragmentInput
         try:
-            instance.actual_instance = ModelProperty.from_json(json_str)
+            instance.actual_instance = PropertyFragmentInput.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into Relationship
+        # deserialize data into RelationshipFragmentInput
         try:
-            instance.actual_instance = Relationship.from_json(json_str)
+            instance.actual_instance = RelationshipFragmentInput.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into GeoProperty
+        # deserialize data into GeoPropertyFragmentInput
         try:
-            instance.actual_instance = GeoProperty.from_json(json_str)
+            instance.actual_instance = GeoPropertyFragmentInput.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into LanguageProperty
+        # deserialize data into LanguagePropertyFragmentInput
         try:
-            instance.actual_instance = LanguageProperty.from_json(json_str)
+            instance.actual_instance = LanguagePropertyFragmentInput.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into ReplaceAttrsRequest with oneOf schemas: GeoProperty, LanguageProperty, ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into ReplaceAttrsRequest with oneOf schemas: GeoPropertyFragmentInput, LanguagePropertyFragmentInput, PropertyFragmentInput, RelationshipFragmentInput. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into ReplaceAttrsRequest with oneOf schemas: GeoProperty, LanguageProperty, ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into ReplaceAttrsRequest with oneOf schemas: GeoPropertyFragmentInput, LanguagePropertyFragmentInput, PropertyFragmentInput, RelationshipFragmentInput. Details: " + ", ".join(error_messages))
         else:
             return instance
 

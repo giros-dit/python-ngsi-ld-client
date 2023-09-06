@@ -31,21 +31,21 @@ class TestContextInformationSubscriptionApi(unittest.TestCase):
     def test_create_subscription(self):
         """Test case for create_subscription
 
-        Create Subscription   # noqa: E501
+        Create Subscription  # noqa: E501
         """
         pass
 
     def test_delete_subscription(self):
         """Test case for delete_subscription
 
-        Subscription deletion by id   # noqa: E501
+        Subscription deletion by id  # noqa: E501
         """
         pass
 
     def test_update_subscription(self):
         """Test case for update_subscription
 
-        Subscription update by id   # noqa: E501
+        Subscription update by id  # noqa: E501
         """
         pass
 

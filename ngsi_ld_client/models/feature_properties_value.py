@@ -20,35 +20,35 @@ import re  # noqa: F401
 
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field, StrictStr, ValidationError, conlist, validator
-from ngsi_ld_client.models.geo_property import GeoProperty
-from ngsi_ld_client.models.language_property import LanguageProperty
-from ngsi_ld_client.models.model_property import ModelProperty
-from ngsi_ld_client.models.relationship import Relationship
+from ngsi_ld_client.models.geo_property_output import GeoPropertyOutput
+from ngsi_ld_client.models.language_property_output import LanguagePropertyOutput
+from ngsi_ld_client.models.property_output import PropertyOutput
+from ngsi_ld_client.models.relationship_output import RelationshipOutput
 from typing import Any, List
 from pydantic import StrictStr, Field
 
-FEATUREPROPERTIESVALUE_ONE_OF_SCHEMAS = ["GeoProperty", "LanguageProperty", "List[GeoProperty]", "List[LanguageProperty]", "List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
+FEATUREPROPERTIESVALUE_ONE_OF_SCHEMAS = ["GeoPropertyOutput", "LanguagePropertyOutput", "List[GeoPropertyOutput]", "List[LanguagePropertyOutput]", "List[PropertyOutput]", "List[RelationshipOutput]", "PropertyOutput", "RelationshipOutput"]
 
 class FeaturePropertiesValue(BaseModel):
     """
     FeaturePropertiesValue
     """
-    # data type: ModelProperty
-    oneof_schema_1_validator: Optional[ModelProperty] = None
-    # data type: List[ModelProperty]
-    oneof_schema_2_validator: Optional[conlist(ModelProperty)] = None
-    # data type: Relationship
-    oneof_schema_3_validator: Optional[Relationship] = None
-    # data type: List[Relationship]
-    oneof_schema_4_validator: Optional[conlist(Relationship)] = None
-    # data type: GeoProperty
-    oneof_schema_5_validator: Optional[GeoProperty] = None
-    # data type: List[GeoProperty]
-    oneof_schema_6_validator: Optional[conlist(GeoProperty)] = None
-    # data type: LanguageProperty
-    oneof_schema_7_validator: Optional[LanguageProperty] = None
-    # data type: List[LanguageProperty]
-    oneof_schema_8_validator: Optional[conlist(LanguageProperty)] = None
+    # data type: PropertyOutput
+    oneof_schema_1_validator: Optional[PropertyOutput] = None
+    # data type: List[PropertyOutput]
+    oneof_schema_2_validator: Optional[conlist(PropertyOutput)] = None
+    # data type: RelationshipOutput
+    oneof_schema_3_validator: Optional[RelationshipOutput] = None
+    # data type: List[RelationshipOutput]
+    oneof_schema_4_validator: Optional[conlist(RelationshipOutput)] = None
+    # data type: GeoPropertyOutput
+    oneof_schema_5_validator: Optional[GeoPropertyOutput] = None
+    # data type: List[GeoPropertyOutput]
+    oneof_schema_6_validator: Optional[conlist(GeoPropertyOutput)] = None
+    # data type: LanguagePropertyOutput
+    oneof_schema_7_validator: Optional[LanguagePropertyOutput] = None
+    # data type: List[LanguagePropertyOutput]
+    oneof_schema_8_validator: Optional[conlist(LanguagePropertyOutput)] = None
     actual_instance: Any
     one_of_schemas: List[str] = Field(FEATUREPROPERTIESVALUE_ONE_OF_SCHEMAS, const=True)
 
@@ -70,45 +70,45 @@ class FeaturePropertiesValue(BaseModel):
         instance = FeaturePropertiesValue.construct()
         error_messages = []
         match = 0
-        # validate data type: ModelProperty
-        if not isinstance(v, ModelProperty):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `ModelProperty`")
+        # validate data type: PropertyOutput
+        if not isinstance(v, PropertyOutput):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `PropertyOutput`")
         else:
             match += 1
-        # validate data type: List[ModelProperty]
+        # validate data type: List[PropertyOutput]
         try:
             instance.oneof_schema_2_validator = v
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # validate data type: Relationship
-        if not isinstance(v, Relationship):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `Relationship`")
+        # validate data type: RelationshipOutput
+        if not isinstance(v, RelationshipOutput):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `RelationshipOutput`")
         else:
             match += 1
-        # validate data type: List[Relationship]
+        # validate data type: List[RelationshipOutput]
         try:
             instance.oneof_schema_4_validator = v
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # validate data type: GeoProperty
-        if not isinstance(v, GeoProperty):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `GeoProperty`")
+        # validate data type: GeoPropertyOutput
+        if not isinstance(v, GeoPropertyOutput):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `GeoPropertyOutput`")
         else:
             match += 1
-        # validate data type: List[GeoProperty]
+        # validate data type: List[GeoPropertyOutput]
         try:
             instance.oneof_schema_6_validator = v
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # validate data type: LanguageProperty
-        if not isinstance(v, LanguageProperty):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `LanguageProperty`")
+        # validate data type: LanguagePropertyOutput
+        if not isinstance(v, LanguagePropertyOutput):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `LanguagePropertyOutput`")
         else:
             match += 1
-        # validate data type: List[LanguageProperty]
+        # validate data type: List[LanguagePropertyOutput]
         try:
             instance.oneof_schema_8_validator = v
             match += 1
@@ -116,10 +116,10 @@ class FeaturePropertiesValue(BaseModel):
             error_messages.append(str(e))
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in FeaturePropertiesValue with oneOf schemas: GeoProperty, LanguageProperty, List[GeoProperty], List[LanguageProperty], List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in FeaturePropertiesValue with oneOf schemas: GeoPropertyOutput, LanguagePropertyOutput, List[GeoPropertyOutput], List[LanguagePropertyOutput], List[PropertyOutput], List[RelationshipOutput], PropertyOutput, RelationshipOutput. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in FeaturePropertiesValue with oneOf schemas: GeoProperty, LanguageProperty, List[GeoProperty], List[LanguageProperty], List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in FeaturePropertiesValue with oneOf schemas: GeoPropertyOutput, LanguagePropertyOutput, List[GeoPropertyOutput], List[LanguagePropertyOutput], List[PropertyOutput], List[RelationshipOutput], PropertyOutput, RelationshipOutput. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -134,13 +134,13 @@ class FeaturePropertiesValue(BaseModel):
         error_messages = []
         match = 0
 
-        # deserialize data into ModelProperty
+        # deserialize data into PropertyOutput
         try:
-            instance.actual_instance = ModelProperty.from_json(json_str)
+            instance.actual_instance = PropertyOutput.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[ModelProperty]
+        # deserialize data into List[PropertyOutput]
         try:
             # validation
             instance.oneof_schema_2_validator = json.loads(json_str)
@@ -149,13 +149,13 @@ class FeaturePropertiesValue(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into Relationship
+        # deserialize data into RelationshipOutput
         try:
-            instance.actual_instance = Relationship.from_json(json_str)
+            instance.actual_instance = RelationshipOutput.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[Relationship]
+        # deserialize data into List[RelationshipOutput]
         try:
             # validation
             instance.oneof_schema_4_validator = json.loads(json_str)
@@ -164,13 +164,13 @@ class FeaturePropertiesValue(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into GeoProperty
+        # deserialize data into GeoPropertyOutput
         try:
-            instance.actual_instance = GeoProperty.from_json(json_str)
+            instance.actual_instance = GeoPropertyOutput.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[GeoProperty]
+        # deserialize data into List[GeoPropertyOutput]
         try:
             # validation
             instance.oneof_schema_6_validator = json.loads(json_str)
@@ -179,13 +179,13 @@ class FeaturePropertiesValue(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into LanguageProperty
+        # deserialize data into LanguagePropertyOutput
         try:
-            instance.actual_instance = LanguageProperty.from_json(json_str)
+            instance.actual_instance = LanguagePropertyOutput.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[LanguageProperty]
+        # deserialize data into List[LanguagePropertyOutput]
         try:
             # validation
             instance.oneof_schema_8_validator = json.loads(json_str)
@@ -197,10 +197,10 @@ class FeaturePropertiesValue(BaseModel):
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into FeaturePropertiesValue with oneOf schemas: GeoProperty, LanguageProperty, List[GeoProperty], List[LanguageProperty], List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into FeaturePropertiesValue with oneOf schemas: GeoPropertyOutput, LanguagePropertyOutput, List[GeoPropertyOutput], List[LanguagePropertyOutput], List[PropertyOutput], List[RelationshipOutput], PropertyOutput, RelationshipOutput. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into FeaturePropertiesValue with oneOf schemas: GeoProperty, LanguageProperty, List[GeoProperty], List[LanguageProperty], List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into FeaturePropertiesValue with oneOf schemas: GeoPropertyOutput, LanguagePropertyOutput, List[GeoPropertyOutput], List[LanguagePropertyOutput], List[PropertyOutput], List[RelationshipOutput], PropertyOutput, RelationshipOutput. Details: " + ", ".join(error_messages))
         else:
             return instance
 

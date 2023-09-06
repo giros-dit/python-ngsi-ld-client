@@ -38,7 +38,7 @@ class TestContextSourceDiscoveryApi(unittest.TestCase):
     def test_retrieve_csr(self):
         """Test case for retrieve_csr
 
-        Csource registration retrieval by id   # noqa: E501
+        Csource registration retrieval by id  # noqa: E501
         """
         pass
 

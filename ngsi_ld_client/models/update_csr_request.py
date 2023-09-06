@@ -18,9 +18,9 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import List, Optional, Union
-from pydantic import BaseModel, Field, StrictStr, confloat, conint, conlist, constr, validator
-from ngsi_ld_client.models.csource_registration_scope import CsourceRegistrationScope
+from typing import List, Optional
+from pydantic import BaseModel, Field, StrictStr, conlist, constr, validator
+from ngsi_ld_client.models.csource_registration_fragment_scope import CsourceRegistrationFragmentScope
 from ngsi_ld_client.models.geometry import Geometry
 from ngsi_ld_client.models.key_value_pair import KeyValuePair
 from ngsi_ld_client.models.ld_context import LdContext
@@ -46,22 +46,14 @@ class UpdateCSRRequest(BaseModel):
     expires_at: Optional[datetime] = Field(None, alias="expiresAt", description="Provides an expiration date. When passed the Context Source Registration will become invalid and the Context Source might no longer be available. ")
     endpoint: Optional[StrictStr] = Field(None, description="Endpoint expressed as dereferenceable URI through which the Context Source exposes its NGSI-LD interface. ")
     context_source_info: Optional[conlist(KeyValuePair)] = Field(None, alias="contextSourceInfo", description="Generic {key, value} array to convey optional information to provide when contacting the registered Context Source. ")
-    scope: Optional[CsourceRegistrationScope] = None
-    mode: Optional[StrictStr] = Field(None, description="The definition of the mode of distributed operation (see clause 4.3.6) supported by the registered Context Source. ")
+    scope: Optional[CsourceRegistrationFragmentScope] = None
+    mode: Optional[StrictStr] = Field('inclusive', description="The definition of the mode of distributed operation (see clause 4.3.6) supported by the registered Context Source. ")
     operations: Optional[conlist(StrictStr)] = Field(None, description="The definition limited subset of API operations supported by the registered Context Source.  If undefined, the default set of operations is \"federationOps\" (see clause 4.20). ")
     refresh_rate: Optional[StrictStr] = Field(None, alias="refreshRate", description="An indication of the likely period of time to elapse between updates at this registered endpoint. Brokers may optionally use this information to help implement caching. ")
     management: Optional[RegistrationManagementInfo] = None
-    created_at: Optional[datetime] = Field(None, alias="createdAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ")
-    modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
-    deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
-    status: Optional[StrictStr] = Field(None, description="Read-only. Status of the Registration. It shall be \"ok\" if the last attempt to perform a distributed operation succeeded. It shall be \"failed\" if the last attempt to perform a distributed operation failed. ")
-    times_sent: Optional[Union[confloat(ge=0, strict=True), conint(ge=0, strict=True)]] = Field(None, alias="timesSent", description="Number of times that the registration triggered a distributed operation, including failed attempts. ")
-    times_failed: Optional[Union[confloat(ge=0, strict=True), conint(ge=0, strict=True)]] = Field(None, alias="timesFailed", description="Number of times that the registration triggered a distributed operation request that failed.")
-    last_success: Optional[datetime] = Field(None, alias="lastSuccess", description="Timestamp corresponding to the instant when the last successfully distributed operation was sent. Created on first successful operation. ")
-    last_failure: Optional[datetime] = Field(None, alias="lastFailure", description="Timestamp corresponding to the instant when the last distributed operation resulting in a failure (for instance, in the HTTP binding, an HTTP response code other than 2xx) was returned. ")
     context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["id", "type", "registrationName", "description", "information", "tenant", "observationInterval", "managementInterval", "location", "observationSpace", "operationSpace", "expiresAt", "endpoint", "contextSourceInfo", "scope", "mode", "operations", "refreshRate", "management", "createdAt", "modifiedAt", "deletedAt", "status", "timesSent", "timesFailed", "lastSuccess", "lastFailure", "@context"]
+    __properties = ["id", "type", "registrationName", "description", "information", "tenant", "observationInterval", "managementInterval", "location", "observationSpace", "operationSpace", "expiresAt", "endpoint", "contextSourceInfo", "scope", "mode", "operations", "refreshRate", "management", "@context"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -81,16 +73,6 @@ class UpdateCSRRequest(BaseModel):
 
         if value not in ('inclusive', 'exclusive', 'redirect', 'auxiliary'):
             raise ValueError("must be one of enum values ('inclusive', 'exclusive', 'redirect', 'auxiliary')")
-        return value
-
-    @validator('status')
-    def status_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in ('ok', 'failed'):
-            raise ValueError("must be one of enum values ('ok', 'failed')")
         return value
 
     class Config:
@@ -115,14 +97,6 @@ class UpdateCSRRequest(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "created_at",
-                            "modified_at",
-                            "deleted_at",
-                            "status",
-                            "times_sent",
-                            "times_failed",
-                            "last_success",
-                            "last_failure",
                             "additional_properties"
                           },
                           exclude_none=True)
@@ -195,19 +169,11 @@ class UpdateCSRRequest(BaseModel):
             "expires_at": obj.get("expiresAt"),
             "endpoint": obj.get("endpoint"),
             "context_source_info": [KeyValuePair.from_dict(_item) for _item in obj.get("contextSourceInfo")] if obj.get("contextSourceInfo") is not None else None,
-            "scope": CsourceRegistrationScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
-            "mode": obj.get("mode"),
+            "scope": CsourceRegistrationFragmentScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
+            "mode": obj.get("mode") if obj.get("mode") is not None else 'inclusive',
             "operations": obj.get("operations"),
             "refresh_rate": obj.get("refreshRate"),
             "management": RegistrationManagementInfo.from_dict(obj.get("management")) if obj.get("management") is not None else None,
-            "created_at": obj.get("createdAt"),
-            "modified_at": obj.get("modifiedAt"),
-            "deleted_at": obj.get("deletedAt"),
-            "status": obj.get("status"),
-            "times_sent": obj.get("timesSent"),
-            "times_failed": obj.get("timesFailed"),
-            "last_success": obj.get("lastSuccess"),
-            "last_failure": obj.get("lastFailure"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties

@@ -20,19 +20,19 @@ import re  # noqa: F401
 
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field, StrictStr, ValidationError, conlist, validator
-from ngsi_ld_client.models.entity import Entity
+from ngsi_ld_client.models.entity_output import EntityOutput
 from ngsi_ld_client.models.feature_collection import FeatureCollection
 from typing import Any, List
 from pydantic import StrictStr, Field
 
-NOTIFICATIONDATA_ONE_OF_SCHEMAS = ["FeatureCollection", "List[Entity]"]
+NOTIFICATIONDATA_ONE_OF_SCHEMAS = ["FeatureCollection", "List[EntityOutput]"]
 
 class NotificationData(BaseModel):
     """
     The content of the notification as NGSI-LD Entities. See clause 5.2.4.  If the notification has been triggered from a Subscription that has the notification. endpoint.accept field set to application/geo+json then data is returned as a FeatureCollection. In this case, if the notification.endpoint.rece iverInfo contains the key \"Prefer\" and it is set to the value \"body=json\", then the FeatureCollection will not contain an @context field.  If endpoint.accept is not set or holds another value then Entity[] is returned. 
     """
-    # data type: List[Entity]
-    oneof_schema_1_validator: Optional[conlist(Entity)] = None
+    # data type: List[EntityOutput]
+    oneof_schema_1_validator: Optional[conlist(EntityOutput)] = None
     # data type: FeatureCollection
     oneof_schema_2_validator: Optional[FeatureCollection] = None
     actual_instance: Any
@@ -56,7 +56,7 @@ class NotificationData(BaseModel):
         instance = NotificationData.construct()
         error_messages = []
         match = 0
-        # validate data type: List[Entity]
+        # validate data type: List[EntityOutput]
         try:
             instance.oneof_schema_1_validator = v
             match += 1
@@ -69,10 +69,10 @@ class NotificationData(BaseModel):
             match += 1
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in NotificationData with oneOf schemas: FeatureCollection, List[Entity]. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in NotificationData with oneOf schemas: FeatureCollection, List[EntityOutput]. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in NotificationData with oneOf schemas: FeatureCollection, List[Entity]. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in NotificationData with oneOf schemas: FeatureCollection, List[EntityOutput]. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -87,7 +87,7 @@ class NotificationData(BaseModel):
         error_messages = []
         match = 0
 
-        # deserialize data into List[Entity]
+        # deserialize data into List[EntityOutput]
         try:
             # validation
             instance.oneof_schema_1_validator = json.loads(json_str)
@@ -105,10 +105,10 @@ class NotificationData(BaseModel):
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into NotificationData with oneOf schemas: FeatureCollection, List[Entity]. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into NotificationData with oneOf schemas: FeatureCollection, List[EntityOutput]. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into NotificationData with oneOf schemas: FeatureCollection, List[Entity]. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into NotificationData with oneOf schemas: FeatureCollection, List[EntityOutput]. Details: " + ", ".join(error_messages))
         else:
             return instance
 

@@ -27,9 +27,9 @@ class NotificationParams(BaseModel):
     5.2.14 represents the parameters that allow to convey the details of a notification. 
     """
     attributes: Optional[conlist(StrictStr, min_items=1)] = Field(None, description="Entity Attribute Names (Properties or Relationships) to be included in the notification payload body. If undefined it will mean all Attributes. ")
-    sys_attrs: Optional[StrictBool] = Field(None, alias="sysAttrs", description="If true, the system generated attributes createdAt and modifiedAt are included in the response payload body, in the case of a deletion also deletedAt. ")
+    sys_attrs: Optional[StrictBool] = Field(False, alias="sysAttrs", description="If true, the system generated attributes createdAt and modifiedAt are included in the response payload body, in the case of a deletion also deletedAt. ")
     format: Optional[StrictStr] = Field(None, description="Conveys the representation format of the entities delivered at notification time. By default, it will be in the normalized format. ")
-    show_changes: Optional[StrictBool] = Field(None, alias="showChanges", description="If true the previous value (previousValue) of Properties or languageMap (previousLanguageMap) of Language Properties or object (previousObject) of Relationships is provided in addition to the current one. This requires that it exists, i.e. in case of modifications and deletions,  but not in the case of creations. showChanges cannot be true in case format is \"keyValues\". ")
+    show_changes: Optional[StrictBool] = Field(False, alias="showChanges", description="If true the previous value (previousValue) of Properties or languageMap (previousLanguageMap) of Language Properties or object (previousObject) of Relationships is provided in addition to the current one. This requires that it exists, i.e. in case of modifications and deletions,  but not in the case of creations. showChanges cannot be true in case format is \"keyValues\". ")
     endpoint: Endpoint = Field(...)
     status: Optional[StrictStr] = Field(None, description="Status of the Notification. It shall be \"ok\" if the last attempt to notify the subscriber succeeded. It shall be \"failed\" if the last attempt to notify the subscriber failed. ")
     times_sent: Optional[Union[confloat(ge=0, strict=True), conint(ge=0, strict=True)]] = Field(None, alias="timesSent", description="Number of times that the notification has been sent. Provided by the system when querying the details of a subscription. ")
@@ -106,9 +106,9 @@ class NotificationParams(BaseModel):
 
         _obj = NotificationParams.parse_obj({
             "attributes": obj.get("attributes"),
-            "sys_attrs": obj.get("sysAttrs"),
+            "sys_attrs": obj.get("sysAttrs") if obj.get("sysAttrs") is not None else False,
             "format": obj.get("format"),
-            "show_changes": obj.get("showChanges"),
+            "show_changes": obj.get("showChanges") if obj.get("showChanges") is not None else False,
             "endpoint": Endpoint.from_dict(obj.get("endpoint")) if obj.get("endpoint") is not None else None,
             "status": obj.get("status"),
             "times_sent": obj.get("timesSent"),

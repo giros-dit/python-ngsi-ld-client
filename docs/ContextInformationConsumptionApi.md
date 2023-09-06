@@ -4,23 +4,23 @@ All URIs are relative to *https://localhost/ngsi-ld/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**query_batch**](ContextInformationConsumptionApi.md#query_batch) | **POST** /entityOperations/query | Query entities based on POST 
+[**query_batch**](ContextInformationConsumptionApi.md#query_batch) | **POST** /entityOperations/query | Query entities based on POST.
 [**query_entity**](ContextInformationConsumptionApi.md#query_entity) | **GET** /entities | Query entities 
-[**query_subscription**](ContextInformationConsumptionApi.md#query_subscription) | **GET** /subscriptions | Retrieve list of Subscriptions 
-[**retrieve_attr_info**](ContextInformationConsumptionApi.md#retrieve_attr_info) | **GET** /attributes/{attrId} | Retrieve Available Attribute Information 
-[**retrieve_attributes**](ContextInformationConsumptionApi.md#retrieve_attributes) | **GET** /attributes | Retrieve Available Attributes 
+[**query_subscription**](ContextInformationConsumptionApi.md#query_subscription) | **GET** /subscriptions | Retrieve list of Subscriptions
+[**retrieve_attr_info**](ContextInformationConsumptionApi.md#retrieve_attr_info) | **GET** /attributes/{attrId} | Retrieve Available Attribute Information
+[**retrieve_attributes**](ContextInformationConsumptionApi.md#retrieve_attributes) | **GET** /attributes | Retrieve Available Attributes
 [**retrieve_entity**](ContextInformationConsumptionApi.md#retrieve_entity) | **GET** /entities/{entityId} | Entity retrieval by id 
-[**retrieve_subscription**](ContextInformationConsumptionApi.md#retrieve_subscription) | **GET** /subscriptions/{subscriptionId} | Subscription retrieval by id 
-[**retrieve_type_info**](ContextInformationConsumptionApi.md#retrieve_type_info) | **GET** /types/{type} | Details about available entity type 
-[**retrieve_types**](ContextInformationConsumptionApi.md#retrieve_types) | **GET** /types | Retrieve available entity types 
+[**retrieve_subscription**](ContextInformationConsumptionApi.md#retrieve_subscription) | **GET** /subscriptions/{subscriptionId} | Subscription retrieval by id
+[**retrieve_type_info**](ContextInformationConsumptionApi.md#retrieve_type_info) | **GET** /types/{type} | Details about available entity type
+[**retrieve_types**](ContextInformationConsumptionApi.md#retrieve_types) | **GET** /types | Retrieve available entity types
 
 
 # **query_batch**
-> List[QueryEntity200ResponseInner] query_batch(query, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[EntityInput] query_batch(query, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Query entities based on POST 
+Query entities based on POST.
 
-5.7.2 Query Entity. 
+5.7.2 Query Entity.
 
 ### Example
 
@@ -28,8 +28,8 @@ Query entities based on POST
 import time
 import os
 import ngsi_ld_client
+from ngsi_ld_client.models.entity_input import EntityInput
 from ngsi_ld_client.models.query import Query
-from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -50,7 +50,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Query entities based on POST 
+        # Query entities based on POST.
         api_response = api_instance.query_batch(query, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextInformationConsumptionApi->query_batch:\n")
         pprint(api_response)
@@ -70,7 +70,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List[QueryEntity200ResponseInner]**](QueryEntity200ResponseInner.md)
+[**List[EntityInput]**](EntityInput.md)
 
 ### Authorization
 
@@ -90,7 +90,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **query_entity**
-> List[QueryEntity200ResponseInner] query_entity(id=id, type=type, id_pattern=id_pattern, attrs=attrs, q=q, csf=csf, geometry=geometry, georel=georel, coordinates=coordinates, geoproperty=geoproperty, geometry_property=geometry_property, lang=lang, scope_q=scope_q, limit=limit, count=count, options=options, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[EntityOutput] query_entity(id=id, type=type, id_pattern=id_pattern, attrs=attrs, q=q, csf=csf, geometry=geometry, georel=georel, coordinates=coordinates, geoproperty=geoproperty, geometry_property=geometry_property, lang=lang, scope_q=scope_q, limit=limit, count=count, options=options, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Query entities 
 
@@ -102,7 +102,7 @@ Query entities
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
+from ngsi_ld_client.models.entity_output import EntityOutput
 from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -127,7 +127,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     geometry = 'geometry_example' # str | Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  (optional)
     georel = ngsi_ld_client.QueryEntityGeorelParameter() # QueryEntityGeorelParameter | Geo relationship as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  (optional)
     coordinates = ngsi_ld_client.QueryEntityCoordinatesParameter() # QueryEntityCoordinatesParameter | Coordinates serialized as a string as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  (optional)
-    geoproperty = 'geoproperty_example' # str | The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present.  (optional)
+    geoproperty = 'location' # str | The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present.  (optional) (default to 'location')
     geometry_property = 'geometry_property_example' # str | In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field.  (optional)
     lang = 'lang_example' # str | It is used to reduce languageMaps to a string or string array property in a single preferred language.  (optional)
     scope_q = 'scope_q_example' # str | Scope query (see clause 4.19).  (optional)
@@ -161,7 +161,7 @@ Name | Type | Description  | Notes
  **geometry** | **str**| Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  | [optional] 
  **georel** | [**QueryEntityGeorelParameter**](.md)| Geo relationship as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  | [optional] 
  **coordinates** | [**QueryEntityCoordinatesParameter**](.md)| Coordinates serialized as a string as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  | [optional] 
- **geoproperty** | **str**| The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present.  | [optional] 
+ **geoproperty** | **str**| The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present.  | [optional] [default to &#39;location&#39;]
  **geometry_property** | **str**| In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field.  | [optional] 
  **lang** | **str**| It is used to reduce languageMaps to a string or string array property in a single preferred language.  | [optional] 
  **scope_q** | **str**| Scope query (see clause 4.19).  | [optional] 
@@ -174,7 +174,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List[QueryEntity200ResponseInner]**](QueryEntity200ResponseInner.md)
+[**List[EntityOutput]**](EntityOutput.md)
 
 ### Authorization
 
@@ -194,9 +194,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **query_subscription**
-> List[QuerySubscription200ResponseInner] query_subscription(options=options, limit=limit, count=count, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[SubscriptionOutput] query_subscription(options=options, limit=limit, count=count, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Retrieve list of Subscriptions 
+Retrieve list of Subscriptions
 
 5.8.4 Query Subscriptions.  This operation allows querying existing Subscriptions. 
 
@@ -207,7 +207,7 @@ import time
 import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
-from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
+from ngsi_ld_client.models.subscription_output import SubscriptionOutput
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -230,7 +230,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Retrieve list of Subscriptions 
+        # Retrieve list of Subscriptions
         api_response = api_instance.query_subscription(options=options, limit=limit, count=count, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextInformationConsumptionApi->query_subscription:\n")
         pprint(api_response)
@@ -252,7 +252,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List[QuerySubscription200ResponseInner]**](QuerySubscription200ResponseInner.md)
+[**List[SubscriptionOutput]**](SubscriptionOutput.md)
 
 ### Authorization
 
@@ -274,7 +274,7 @@ No authorization required
 # **retrieve_attr_info**
 > Attribute retrieve_attr_info(attr_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Retrieve Available Attribute Information 
+Retrieve Available Attribute Information
 
 5.7.10 Retrieve Available Attribute information.  This operation allows retrieving detailed attribute information about a specified NGSI-LD attribute that belongs to entity instances existing within the NGSI-LD system. The detailed representation includes  the attribute name (as short name if available in the provided @context) and the type names  for which entity instances exist that have the respective attribute, a count of available  attribute instances and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty). 
 
@@ -305,7 +305,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Retrieve Available Attribute Information 
+        # Retrieve Available Attribute Information
         api_response = api_instance.retrieve_attr_info(attr_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextInformationConsumptionApi->retrieve_attr_info:\n")
         pprint(api_response)
@@ -348,7 +348,7 @@ No authorization required
 # **retrieve_attributes**
 > RetrieveAttributes200Response retrieve_attributes(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Retrieve Available Attributes 
+Retrieve Available Attributes
 
 5.7.8 Retrieve Available attributes.  This operation allows retrieving a list of NGSI-LD attributes that belong to entity instances existing within the NGSI- LD system. 
 
@@ -379,7 +379,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Retrieve Available Attributes 
+        # Retrieve Available Attributes
         api_response = api_instance.retrieve_attributes(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextInformationConsumptionApi->retrieve_attributes:\n")
         pprint(api_response)
@@ -419,7 +419,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_entity**
-> QueryEntity200ResponseInner retrieve_entity(entity_id, attrs=attrs, geometry_property=geometry_property, lang=lang, options=options, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> EntityOutput retrieve_entity(entity_id, attrs=attrs, geometry_property=geometry_property, lang=lang, options=options, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Entity retrieval by id 
 
@@ -431,7 +431,7 @@ Entity retrieval by id
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
+from ngsi_ld_client.models.entity_output import EntityOutput
 from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -481,7 +481,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**QueryEntity200ResponseInner**](QueryEntity200ResponseInner.md)
+[**EntityOutput**](EntityOutput.md)
 
 ### Authorization
 
@@ -502,9 +502,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_subscription**
-> QuerySubscription200ResponseInner retrieve_subscription(subscription_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> SubscriptionOutput retrieve_subscription(subscription_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Subscription retrieval by id 
+Subscription retrieval by id
 
 5.8.3 Retrieve Subscription.  This operation allows retrieving an existing subscription. 
 
@@ -514,7 +514,7 @@ Subscription retrieval by id
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
+from ngsi_ld_client.models.subscription_output import SubscriptionOutput
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -535,7 +535,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Subscription retrieval by id 
+        # Subscription retrieval by id
         api_response = api_instance.retrieve_subscription(subscription_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextInformationConsumptionApi->retrieve_subscription:\n")
         pprint(api_response)
@@ -555,7 +555,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**QuerySubscription200ResponseInner**](QuerySubscription200ResponseInner.md)
+[**SubscriptionOutput**](SubscriptionOutput.md)
 
 ### Authorization
 
@@ -578,7 +578,7 @@ No authorization required
 # **retrieve_type_info**
 > EntityTypeInfo retrieve_type_info(type, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Details about available entity type 
+Details about available entity type
 
 5.7.7 Retrieve Available Entity Type information.  This operation allows retrieving detailed entity type information about a specified NGSI-LD entity type for which entity instances exist within the NGSI-LD system. The detailed representation includes the type name (as short name if available in the provided @context), the count of available entity instances and details about attributes that existing instances of this entity type have, including their name (as short name if available in the provided @context) and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty). 
 
@@ -609,7 +609,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Details about available entity type 
+        # Details about available entity type
         api_response = api_instance.retrieve_type_info(type, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextInformationConsumptionApi->retrieve_type_info:\n")
         pprint(api_response)
@@ -652,7 +652,7 @@ No authorization required
 # **retrieve_types**
 > RetrieveTypes200Response retrieve_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Retrieve available entity types 
+Retrieve available entity types
 
 5.7.5 Retrieve Available Entity Types.  This operation allows retrieving a list of NGSI-LD entity types for which entity instances exist within the NGSI-LD system. 
 
@@ -683,7 +683,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Retrieve available entity types 
+        # Retrieve available entity types
         api_response = api_instance.retrieve_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextInformationConsumptionApi->retrieve_types:\n")
         pprint(api_response)

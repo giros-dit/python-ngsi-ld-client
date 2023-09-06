@@ -5,13 +5,13 @@ All URIs are relative to *https://localhost/ngsi-ld/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_csr_subscription**](ContextSourceRegistrationSubscriptionApi.md#create_csr_subscription) | **POST** /csourceSubscriptions | Create subscription to Csource registration 
-[**query_csr_subscription**](ContextSourceRegistrationSubscriptionApi.md#query_csr_subscription) | **GET** /csourceSubscriptions | Retrieval of list of subscriptions to Csource registrations 
-[**retrieve_csr_subscription**](ContextSourceRegistrationSubscriptionApi.md#retrieve_csr_subscription) | **GET** /csourceSubscriptions/{subscriptionId} | Retrieval of subscription to Csource registration by id 
+[**query_csr_subscription**](ContextSourceRegistrationSubscriptionApi.md#query_csr_subscription) | **GET** /csourceSubscriptions | Retrieval of list of subscription to Csource registration 
+[**retrieve_csr_subscription**](ContextSourceRegistrationSubscriptionApi.md#retrieve_csr_subscription) | **GET** /csourceSubscriptions/{subscriptionId} | Retrieval of list of subscription to Csource registration 
 [**update_csr_subscription**](ContextSourceRegistrationSubscriptionApi.md#update_csr_subscription) | **PATCH** /csourceSubscriptions/{subscriptionId} | Csource registration subscription update by id 
 
 
 # **create_csr_subscription**
-> create_csr_subscription(create_subscription_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> create_csr_subscription(subscription_input, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Create subscription to Csource registration 
 
@@ -23,7 +23,7 @@ Create subscription to Csource registration
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.create_subscription_request import CreateSubscriptionRequest
+from ngsi_ld_client.models.subscription_input import SubscriptionInput
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -38,14 +38,14 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextSourceRegistrationSubscriptionApi(api_client)
-    create_subscription_request = ngsi_ld_client.CreateSubscriptionRequest() # CreateSubscriptionRequest | 
+    subscription_input = ngsi_ld_client.SubscriptionInput() # SubscriptionInput | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
         # Create subscription to Csource registration 
-        api_instance.create_csr_subscription(create_subscription_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_instance.create_csr_subscription(subscription_input, local=local, link=link, ngsild_tenant=ngsild_tenant)
     except Exception as e:
         print("Exception when calling ContextSourceRegistrationSubscriptionApi->create_csr_subscription: %s\n" % e)
 ```
@@ -55,7 +55,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_subscription_request** | [**CreateSubscriptionRequest**](CreateSubscriptionRequest.md)|  | 
+ **subscription_input** | [**SubscriptionInput**](SubscriptionInput.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
@@ -84,9 +84,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **query_csr_subscription**
-> List[QuerySubscription200ResponseInner] query_csr_subscription(options=options, limit=limit, count=count, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[SubscriptionOutput] query_csr_subscription(options=options, limit=limit, count=count, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Retrieval of list of subscriptions to Csource registrations 
+Retrieval of list of subscription to Csource registration 
 
 5.11.5 Query Context Source Registration Subscriptions.  This operation allows querying existing Context Source Registration Subscriptions. 
 
@@ -97,7 +97,7 @@ import time
 import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
-from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
+from ngsi_ld_client.models.subscription_output import SubscriptionOutput
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -120,7 +120,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Retrieval of list of subscriptions to Csource registrations 
+        # Retrieval of list of subscription to Csource registration 
         api_response = api_instance.query_csr_subscription(options=options, limit=limit, count=count, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextSourceRegistrationSubscriptionApi->query_csr_subscription:\n")
         pprint(api_response)
@@ -142,7 +142,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List[QuerySubscription200ResponseInner]**](QuerySubscription200ResponseInner.md)
+[**List[SubscriptionOutput]**](SubscriptionOutput.md)
 
 ### Authorization
 
@@ -162,9 +162,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_csr_subscription**
-> QuerySubscription200ResponseInner retrieve_csr_subscription(subscription_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> SubscriptionOutput retrieve_csr_subscription(subscription_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
-Retrieval of subscription to Csource registration by id 
+Retrieval of list of subscription to Csource registration 
 
 5.11.4 Retrieve Context Source Registration Subscription.  This operation allows retrieving an existing Context Source Registration Subscription. 
 
@@ -174,7 +174,7 @@ Retrieval of subscription to Csource registration by id
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
+from ngsi_ld_client.models.subscription_output import SubscriptionOutput
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -195,7 +195,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
-        # Retrieval of subscription to Csource registration by id 
+        # Retrieval of list of subscription to Csource registration 
         api_response = api_instance.retrieve_csr_subscription(subscription_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
         print("The response of ContextSourceRegistrationSubscriptionApi->retrieve_csr_subscription:\n")
         pprint(api_response)
@@ -215,7 +215,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**QuerySubscription200ResponseInner**](QuerySubscription200ResponseInner.md)
+[**SubscriptionOutput**](SubscriptionOutput.md)
 
 ### Authorization
 
@@ -236,7 +236,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_csr_subscription**
-> update_csr_subscription(subscription_id, subscription, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> update_csr_subscription(subscription_id, subscription_fragment, local=local, link=link, ngsild_tenant=ngsild_tenant)
 
 Csource registration subscription update by id 
 
@@ -248,7 +248,7 @@ Csource registration subscription update by id
 import time
 import os
 import ngsi_ld_client
-from ngsi_ld_client.models.subscription import Subscription
+from ngsi_ld_client.models.subscription_fragment import SubscriptionFragment
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -264,14 +264,14 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextSourceRegistrationSubscriptionApi(api_client)
     subscription_id = 'subscription_id_example' # str | Id (URI) of the concerned subscription.
-    subscription = ngsi_ld_client.Subscription() # Subscription | 
+    subscription_fragment = ngsi_ld_client.SubscriptionFragment() # SubscriptionFragment | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
         # Csource registration subscription update by id 
-        api_instance.update_csr_subscription(subscription_id, subscription, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_instance.update_csr_subscription(subscription_id, subscription_fragment, local=local, link=link, ngsild_tenant=ngsild_tenant)
     except Exception as e:
         print("Exception when calling ContextSourceRegistrationSubscriptionApi->update_csr_subscription: %s\n" % e)
 ```
@@ -282,7 +282,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **subscription_id** | **str**| Id (URI) of the concerned subscription. | 
- **subscription** | [**Subscription**](Subscription.md)|  | 
+ **subscription_fragment** | [**SubscriptionFragment**](SubscriptionFragment.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 

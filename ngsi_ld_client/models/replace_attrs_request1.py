@@ -20,33 +20,23 @@ import json
 from datetime import datetime
 from typing import Any, Dict, Optional
 from pydantic import BaseModel, Field, StrictStr, validator
-from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalProperties
 from ngsi_ld_client.models.geometry import Geometry
 from ngsi_ld_client.models.ld_context import LdContext
-from ngsi_ld_client.models.property_previous_value import PropertyPreviousValue
 
 class ReplaceAttrsRequest1(BaseModel):
     """
     ReplaceAttrsRequest1
     """
-    type: Optional[StrictStr] = Field('LanguageProperty', description="Node type. ")
+    type: Optional[StrictStr] = Field(None, description="Node type. ")
     value: Optional[Geometry] = None
     observed_at: Optional[datetime] = Field(None, alias="observedAt", description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ")
     unit_code: Optional[StrictStr] = Field(None, alias="unitCode", description="Property Value's unit code. ")
     dataset_id: Optional[StrictStr] = Field(None, alias="datasetId", description="It allows identifying a set or group of property values. ")
-    created_at: Optional[datetime] = Field(None, alias="createdAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ")
-    modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
-    deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
-    instance_id: Optional[StrictStr] = Field(None, alias="instanceId", description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ")
-    previous_value: Optional[PropertyPreviousValue] = Field(None, alias="previousValue")
     object: Optional[StrictStr] = Field(None, description="Relationship's target object. ")
-    previous_object: Optional[StrictStr] = Field(None, alias="previousObject", description="Previous Relationship's target object. Only used in notifications. ")
-    additional_properties: Optional[EntityAdditionalProperties] = Field(None, alias="additionalProperties")
     language_map: Optional[Dict[str, Any]] = Field(None, alias="languageMap", description="String Property Values defined in multiple natural languages. ")
-    previous_language_map: Optional[Dict[str, Any]] = Field(None, alias="previousLanguageMap", description="Previous Language Property languageMap. Only used in notifications. ")
     context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue", "object", "previousObject", "additionalProperties", "languageMap", "previousLanguageMap", "@context"]
+    __properties = ["type", "value", "observedAt", "unitCode", "datasetId", "object", "languageMap", "@context"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -80,24 +70,12 @@ class ReplaceAttrsRequest1(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "created_at",
-                            "modified_at",
-                            "deleted_at",
-                            "instance_id",
-                            "previous_object",
-                            "previous_language_map",
                             "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of value
         if self.value:
             _dict['value'] = self.value.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of previous_value
-        if self.previous_value:
-            _dict['previousValue'] = self.previous_value.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of additional_properties
-        if self.additional_properties:
-            _dict['additionalProperties'] = self.additional_properties.to_dict()
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
@@ -118,21 +96,13 @@ class ReplaceAttrsRequest1(BaseModel):
             return ReplaceAttrsRequest1.parse_obj(obj)
 
         _obj = ReplaceAttrsRequest1.parse_obj({
-            "type": obj.get("type") if obj.get("type") is not None else 'LanguageProperty',
+            "type": obj.get("type"),
             "value": Geometry.from_dict(obj.get("value")) if obj.get("value") is not None else None,
             "observed_at": obj.get("observedAt"),
             "unit_code": obj.get("unitCode"),
             "dataset_id": obj.get("datasetId"),
-            "created_at": obj.get("createdAt"),
-            "modified_at": obj.get("modifiedAt"),
-            "deleted_at": obj.get("deletedAt"),
-            "instance_id": obj.get("instanceId"),
-            "previous_value": PropertyPreviousValue.from_dict(obj.get("previousValue")) if obj.get("previousValue") is not None else None,
             "object": obj.get("object"),
-            "previous_object": obj.get("previousObject"),
-            "additional_properties": EntityAdditionalProperties.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None,
             "language_map": obj.get("languageMap"),
-            "previous_language_map": obj.get("previousLanguageMap"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties

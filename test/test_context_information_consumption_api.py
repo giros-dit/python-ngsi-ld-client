@@ -31,7 +31,7 @@ class TestContextInformationConsumptionApi(unittest.TestCase):
     def test_query_batch(self):
         """Test case for query_batch
 
-        Query entities based on POST   # noqa: E501
+        Query entities based on POST.  # noqa: E501
         """
         pass
 
@@ -45,21 +45,21 @@ class TestContextInformationConsumptionApi(unittest.TestCase):
     def test_query_subscription(self):
         """Test case for query_subscription
 
-        Retrieve list of Subscriptions   # noqa: E501
+        Retrieve list of Subscriptions  # noqa: E501
         """
         pass
 
     def test_retrieve_attr_info(self):
         """Test case for retrieve_attr_info
 
-        Retrieve Available Attribute Information   # noqa: E501
+        Retrieve Available Attribute Information  # noqa: E501
         """
         pass
 
     def test_retrieve_attributes(self):
         """Test case for retrieve_attributes
 
-        Retrieve Available Attributes   # noqa: E501
+        Retrieve Available Attributes  # noqa: E501
         """
         pass
 
@@ -73,21 +73,21 @@ class TestContextInformationConsumptionApi(unittest.TestCase):
     def test_retrieve_subscription(self):
         """Test case for retrieve_subscription
 
-        Subscription retrieval by id   # noqa: E501
+        Subscription retrieval by id  # noqa: E501
         """
         pass
 
     def test_retrieve_type_info(self):
         """Test case for retrieve_type_info
 
-        Details about available entity type   # noqa: E501
+        Details about available entity type  # noqa: E501
         """
         pass
 
     def test_retrieve_types(self):
         """Test case for retrieve_types
 
-        Retrieve available entity types   # noqa: E501
+        Retrieve available entity types  # noqa: E501
         """
         pass
 

@@ -85,14 +85,7 @@ class TestCreateCSRRequest(unittest.TestCase):
                     cache_duration = '', 
                     timeout = 1, 
                     cooldown = 1, ), 
-                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                status = 'ok', 
-                times_sent = 0, 
-                times_failed = 0, 
-                last_success = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                last_failure = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
+                context = None
             )
         else :
             return CreateCSRRequest(
@@ -112,6 +105,8 @@ class TestCreateCSRRequest(unittest.TestCase):
                             ''
                             ], )
                     ],
+                endpoint = '',
+                context = None,
         )
         """
 

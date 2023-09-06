@@ -38,9 +38,11 @@ class TestListContexts200Response1(unittest.TestCase):
         model = ngsi_ld_client.models.list_contexts200_response1.ListContexts200Response1()  # noqa: E501
         if include_optional :
             return ListContexts200Response1(
+                context = None
             )
         else :
             return ListContexts200Response1(
+                context = None,
         )
         """
 

@@ -38,7 +38,7 @@ class TestContextInformationProvisionApi(unittest.TestCase):
     def test_create_batch(self):
         """Test case for create_batch
 
-        Batch Entity creation   # noqa: E501
+        Batch Entity creation.   # noqa: E501
         """
         pass
 
@@ -59,7 +59,7 @@ class TestContextInformationProvisionApi(unittest.TestCase):
     def test_delete_batch(self):
         """Test case for delete_batch
 
-        Batch Entity delete   # noqa: E501
+        Batch Entity delete.   # noqa: E501
         """
         pass
 
@@ -73,28 +73,28 @@ class TestContextInformationProvisionApi(unittest.TestCase):
     def test_merge_batch(self):
         """Test case for merge_batch
 
-        Batch Entity merge   # noqa: E501
+        Batch Entity merge.   # noqa: E501
         """
         pass
 
     def test_merge_entity(self):
         """Test case for merge_entity
 
-        Entity merge by id   # noqa: E501
+        Entity merge by id.   # noqa: E501
         """
         pass
 
     def test_replace_attrs(self):
         """Test case for replace_attrs
 
-        Attribute replace   # noqa: E501
+        Attribute replace.   # noqa: E501
         """
         pass
 
     def test_replace_entity(self):
         """Test case for replace_entity
 
-        Entity replacement by id   # noqa: E501
+        Entity replacement by id.   # noqa: E501
         """
         pass
 
@@ -108,7 +108,7 @@ class TestContextInformationProvisionApi(unittest.TestCase):
     def test_update_batch(self):
         """Test case for update_batch
 
-        Batch Entity update   # noqa: E501
+        Batch Entity update.   # noqa: E501
         """
         pass
 
@@ -122,7 +122,7 @@ class TestContextInformationProvisionApi(unittest.TestCase):
     def test_upsert_batch(self):
         """Test case for upsert_batch
 
-        Batch Entity create or update (upsert)   # noqa: E501
+        Batch Entity create or update (upsert).   # noqa: E501
         """
         pass
 

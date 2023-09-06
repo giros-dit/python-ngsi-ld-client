@@ -26,15 +26,15 @@ class RetrieveAttrInfo200Response(BaseModel):
     """
     RetrieveAttrInfo200Response
     """
+    context: LdContext = Field(..., alias="@context")
     id: StrictStr = Field(..., description="Full URI of attribute name. ")
     type: StrictStr = Field(..., description="JSON-LD @type. ")
     attribute_name: StrictStr = Field(..., alias="attributeName", description="Name of the attribute, short name if contained in @context. ")
     attribute_count: Optional[Union[StrictFloat, StrictInt]] = Field(None, alias="attributeCount", description="Number of attribute instances with this attribute name. ")
     attribute_types: Optional[conlist(StrictStr)] = Field(None, alias="attributeTypes", description="List of attribute types (e.g. Property, Relationship, GeoProperty) for which entity instances exist, which contain an attribute with this name. ")
     type_names: Optional[conlist(StrictStr)] = Field(None, alias="typeNames", description="List of entity type names for which entity instances exist containing attributes that have the respective name. ")
-    context: LdContext = Field(..., alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["id", "type", "attributeName", "attributeCount", "attributeTypes", "typeNames", "@context"]
+    __properties = ["@context", "id", "type", "attributeName", "attributeCount", "attributeTypes", "typeNames"]
 
     @validator('type')
     def type_validate_enum(cls, value):
@@ -88,13 +88,13 @@ class RetrieveAttrInfo200Response(BaseModel):
             return RetrieveAttrInfo200Response.parse_obj(obj)
 
         _obj = RetrieveAttrInfo200Response.parse_obj({
+            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None,
             "id": obj.get("id"),
             "type": obj.get("type"),
             "attribute_name": obj.get("attributeName"),
             "attribute_count": obj.get("attributeCount"),
             "attribute_types": obj.get("attributeTypes"),
-            "type_names": obj.get("typeNames"),
-            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
+            "type_names": obj.get("typeNames")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():
