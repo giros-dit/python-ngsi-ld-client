@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **str** | Node type.  | [optional] [default to 'LanguageProperty']
+**type** | **str** | Node type.  | [optional] [default to 'Property']
 **value** | [**Geometry**](Geometry.md) |  | [optional] 
 **observed_at** | **datetime** | Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time.  | [optional] 
 **unit_code** | **str** | Property Value&#39;s unit code.  | [optional] 

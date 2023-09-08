@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | Subscription identifier (JSON-LD @id).  | 
+**id** | **str** | Subscription identifier (JSON-LD @id).  | [optional] 
 **type** | **str** | JSON-LD @type.  | 
 **subscription_name** | **str** | A (short) name given to this Subscription.  | [optional] 
 **description** | **str** | Subscription description.  | [optional] 
@@ -19,12 +19,12 @@ Name | Type | Description | Notes
 **temporal_q** | [**TemporalQuery**](TemporalQuery.md) |  | [optional] 
 **scope_q** | **str** | Scope query.  | [optional] 
 **lang** | **str** | Language filter to be applied to the query (clause 4.15).  | [optional] 
+**created_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  | [optional] [readonly] 
+**modified_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  | [optional] [readonly] 
+**deleted_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32).  | [optional] [readonly] 
+**status** | **str** | Read-only. Provided by the system when querying the details of a subscription.  | [optional] [readonly] 
 **watched_attributes** | **List[str]** | Watched Attributes (Properties or Relationships). If not defined it means any Attribute.  | [optional] 
 **throttling** | **float** | Minimal period of time in seconds which shall elapse between two consecutive notifications.  | [optional] 
-**created_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  | [optional] 
-**modified_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  | [optional] 
-**deleted_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32).  | [optional] 
-**status** | **str** | Read-only. Provided by the system when querying the details of a subscription.  | [optional] [readonly] 
 **time_interval** | **float** | Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached.  | 
 
 ## Example

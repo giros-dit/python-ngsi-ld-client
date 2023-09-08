@@ -47,6 +47,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -113,6 +114,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     except Exception as e:
         print("Exception when calling JSONLDContextAPIApi->delete_context: %s\n" % e)
 ```
+
 
 
 ### Parameters
@@ -192,6 +194,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -264,6 +267,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     except Exception as e:
         print("Exception when calling JSONLDContextAPIApi->retrieve_context: %s\n" % e)
 ```
+
 
 
 ### Parameters

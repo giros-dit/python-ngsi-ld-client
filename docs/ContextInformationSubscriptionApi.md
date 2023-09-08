@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 
 # **create_subscription**
-> create_subscription(create_subscription_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> create_subscription(local=local, link=link, ngsild_tenant=ngsild_tenant, create_subscription_request=create_subscription_request)
 
 Create Subscription 
 
@@ -37,27 +37,28 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationSubscriptionApi(api_client)
-    create_subscription_request = ngsi_ld_client.CreateSubscriptionRequest() # CreateSubscriptionRequest | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    create_subscription_request = ngsi_ld_client.CreateSubscriptionRequest() # CreateSubscriptionRequest |  (optional)
 
     try:
         # Create Subscription 
-        api_instance.create_subscription(create_subscription_request, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_instance.create_subscription(local=local, link=link, ngsild_tenant=ngsild_tenant, create_subscription_request=create_subscription_request)
     except Exception as e:
         print("Exception when calling ContextInformationSubscriptionApi->create_subscription: %s\n" % e)
 ```
+
 
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_subscription_request** | [**CreateSubscriptionRequest**](CreateSubscriptionRequest.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **create_subscription_request** | [**CreateSubscriptionRequest**](CreateSubscriptionRequest.md)|  | [optional] 
 
 ### Return type
 
@@ -121,6 +122,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -153,7 +155,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_subscription**
-> update_subscription(subscription_id, subscription, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> update_subscription(subscription_id, local=local, link=link, ngsild_tenant=ngsild_tenant, subscription=subscription)
 
 Subscription update by id 
 
@@ -181,17 +183,18 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationSubscriptionApi(api_client)
     subscription_id = 'subscription_id_example' # str | Id (URI) of the concerned subscription.
-    subscription = ngsi_ld_client.Subscription() # Subscription | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    subscription = ngsi_ld_client.Subscription() # Subscription |  (optional)
 
     try:
         # Subscription update by id 
-        api_instance.update_subscription(subscription_id, subscription, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_instance.update_subscription(subscription_id, local=local, link=link, ngsild_tenant=ngsild_tenant, subscription=subscription)
     except Exception as e:
         print("Exception when calling ContextInformationSubscriptionApi->update_subscription: %s\n" % e)
 ```
+
 
 
 ### Parameters
@@ -199,10 +202,10 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **subscription_id** | **str**| Id (URI) of the concerned subscription. | 
- **subscription** | [**Subscription**](Subscription.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **subscription** | [**Subscription**](Subscription.md)|  | [optional] 
 
 ### Return type
 

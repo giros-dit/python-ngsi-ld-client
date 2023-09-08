@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 
 # **query_batch**
-> List[QueryEntity200ResponseInner] query_batch(query, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[QueryEntity200ResponseInner] query_batch(local=local, link=link, ngsild_tenant=ngsild_tenant, query=query)
 
 Query entities based on POST 
 
@@ -44,14 +44,14 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
-    query = ngsi_ld_client.Query() # Query | 
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    query = ngsi_ld_client.Query() # Query |  (optional)
 
     try:
         # Query entities based on POST 
-        api_response = api_instance.query_batch(query, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.query_batch(local=local, link=link, ngsild_tenant=ngsild_tenant, query=query)
         print("The response of ContextInformationConsumptionApi->query_batch:\n")
         pprint(api_response)
     except Exception as e:
@@ -59,14 +59,15 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query** | [**Query**](Query.md)|  | 
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **query** | [**Query**](Query.md)|  | [optional] 
 
 ### Return type
 
@@ -146,6 +147,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     except Exception as e:
         print("Exception when calling ContextInformationConsumptionApi->query_entity: %s\n" % e)
 ```
+
 
 
 ### Parameters
@@ -239,6 +241,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -314,6 +317,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -386,6 +390,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     except Exception as e:
         print("Exception when calling ContextInformationConsumptionApi->retrieve_attributes: %s\n" % e)
 ```
+
 
 
 ### Parameters
@@ -466,6 +471,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -544,6 +550,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -618,6 +625,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 ```
 
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -690,6 +698,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     except Exception as e:
         print("Exception when calling ContextInformationConsumptionApi->retrieve_types: %s\n" % e)
 ```
+
 
 
 ### Parameters
