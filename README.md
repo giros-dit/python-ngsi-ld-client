@@ -15,6 +15,7 @@ To generate the code derived from the particular schemas defined within the Open
 ```bash
 $ docker run --rm -v ${PWD}:/python-ngsi-ld-client openapitools/openapi-generator-cli generate -i /python-ngsi-ld-client/schemas/ngsi-ld-api.yaml -g python --package-name ngsi_ld_client -o /python-ngsi-ld-client --additional-properties disallowAdditionalPropertiesIfNotPresent=false --skip-validate-spec
 ```
+
 ## Requirements.
 
 Python 3.7+
