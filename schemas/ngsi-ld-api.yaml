@@ -47,9 +47,11 @@ paths:
       requestBody:
         description: |
           Payload body in the request contains a JSON-LD object which represents the entity that is to be created.
+        required: true
         content:
           application/json:
             schema:
+              additionalProperties: false
               allOf:
                 - $ref: '#/components/schemas/Entity'
                 - required:

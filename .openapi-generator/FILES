@@ -19,6 +19,7 @@ docs/CreateBatch201Response.md
 docs/CreateBatchRequest.md
 docs/CreateCSRRequest.md
 docs/CreateCSRRequest1.md
+docs/CreateEntityRequest.md
 docs/CreateSubscriptionRequest.md
 docs/CreateSubscriptionRequest1.md
 docs/CsourceNotification.md
@@ -138,6 +139,7 @@ ngsi_ld_client/models/create_batch201_response.py
 ngsi_ld_client/models/create_batch_request.py
 ngsi_ld_client/models/create_csr_request.py
 ngsi_ld_client/models/create_csr_request1.py
+ngsi_ld_client/models/create_entity_request.py
 ngsi_ld_client/models/create_subscription_request.py
 ngsi_ld_client/models/create_subscription_request1.py
 ngsi_ld_client/models/csource_notification.py
@@ -251,6 +253,7 @@ test/test_create_batch201_response.py
 test/test_create_batch_request.py
 test/test_create_csr_request.py
 test/test_create_csr_request1.py
+test/test_create_entity_request.py
 test/test_create_subscription_request.py
 test/test_create_subscription_request1.py
 test/test_csource_notification.py
