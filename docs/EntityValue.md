@@ -1,4 +1,4 @@
-# EntityAdditionalProperties
+# EntityValue
 
 
 ## Properties
@@ -16,24 +16,24 @@ Name | Type | Description | Notes
 **previous_value** | [**PropertyPreviousValue**](PropertyPreviousValue.md) |  | [optional] 
 **object** | **str** | Relationship&#39;s target object.  | [optional] 
 **previous_object** | **str** | Previous Relationship&#39;s target object. Only used in notifications.  | [optional] [readonly] 
-**additional_properties** | [**EntityAdditionalProperties**](EntityAdditionalProperties.md) |  | [optional] 
+**additional_properties** | [**EntityValue**](EntityValue.md) |  | [optional] 
 
 ## Example
 
 ```python
-from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalProperties
+from ngsi_ld_client.models.entity_value import EntityValue
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of EntityAdditionalProperties from a JSON string
-entity_additional_properties_instance = EntityAdditionalProperties.from_json(json)
+# create an instance of EntityValue from a JSON string
+entity_value_instance = EntityValue.from_json(json)
 # print the JSON string representation of the object
-print EntityAdditionalProperties.to_json()
+print EntityValue.to_json()
 
 # convert the object into a dict
-entity_additional_properties_dict = entity_additional_properties_instance.to_dict()
-# create an instance of EntityAdditionalProperties from a dict
-entity_additional_properties_form_dict = entity_additional_properties.from_dict(entity_additional_properties_dict)
+entity_value_dict = entity_value_instance.to_dict()
+# create an instance of EntityValue from a dict
+entity_value_form_dict = entity_value.from_dict(entity_value_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

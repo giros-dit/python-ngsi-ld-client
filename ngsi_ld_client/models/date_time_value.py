@@ -18,46 +18,54 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict
-from pydantic import BaseModel, Field, StrictStr, validator
+from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, StrictStr, field_validator
+from pydantic import Field
+from typing import Dict, Any
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 class DateTimeValue(BaseModel):
     """
-    Date representation as mandated by C.6 \"Date Representation\" 
+    Date representation as mandated by C.6 \"Date Representation\"   # noqa: E501
     """
-    type: StrictStr = Field(..., alias="@type")
-    value: datetime = Field(..., alias="@value")
+    type: StrictStr = Field(alias="@type")
+    value: datetime = Field(alias="@value")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["@type", "@value"]
+    __properties: ClassVar[List[str]] = ["@type", "@value"]
 
-    @validator('type')
+    @field_validator('type')
     def type_validate_enum(cls, value):
         """Validates the enum"""
         if value not in ('DateTime'):
             raise ValueError("must be one of enum values ('DateTime')")
         return value
 
-    class Config:
-        """Pydantic configuration"""
-        allow_population_by_field_name = True
-        validate_assignment = True
+    model_config = {
+        "populate_by_name": True,
+        "validate_assignment": True
+    }
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
-        return pprint.pformat(self.dict(by_alias=True))
+        return pprint.pformat(self.model_dump(by_alias=True))
 
     def to_json(self) -> str:
         """Returns the JSON representation of the model using alias"""
+        # TODO: pydantic v2: use .model_dump_json(by_alias=True, exclude_unset=True) instead
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> DateTimeValue:
+    def from_json(cls, json_str: str) -> Self:
         """Create an instance of DateTimeValue from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
+        _dict = self.model_dump(by_alias=True,
                           exclude={
                             "additional_properties"
                           },
@@ -70,17 +78,17 @@ class DateTimeValue(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> DateTimeValue:
+    def from_dict(cls, obj: dict) -> Self:
         """Create an instance of DateTimeValue from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return DateTimeValue.parse_obj(obj)
+            return cls.model_validate(obj)
 
-        _obj = DateTimeValue.parse_obj({
-            "type": obj.get("@type") if obj.get("@type") is not None else 'DateTime',
-            "value": obj.get("@value")
+        _obj = cls.model_validate({
+            "@type": obj.get("@type") if obj.get("@type") is not None else 'DateTime',
+            "@value": obj.get("@value")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

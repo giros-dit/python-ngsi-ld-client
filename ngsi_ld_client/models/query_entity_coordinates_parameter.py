@@ -19,11 +19,18 @@ import pprint
 import re  # noqa: F401
 
 from typing import Any, List, Optional, Union
-from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, ValidationError, conlist, validator
+from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, ValidationError, field_validator
+from pydantic import Field
+from typing_extensions import Annotated
 from ngsi_ld_client.models.geometry_line_string import GeometryLineString
 from ngsi_ld_client.models.geometry_linear_ring import GeometryLinearRing
-from typing import Union, Any, List, TYPE_CHECKING
+from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
+from typing_extensions import Literal
 from pydantic import StrictStr, Field
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 QUERYENTITYCOORDINATESPARAMETER_ONE_OF_SCHEMAS = ["GeometryLineString", "List[GeometryLinearRing]", "List[List[float]]", "List[float]"]
 
@@ -32,21 +39,20 @@ class QueryEntityCoordinatesParameter(BaseModel):
     QueryEntityCoordinatesParameter
     """
     # data type: List[float]
-    oneof_schema_1_validator: Optional[conlist(Union[StrictFloat, StrictInt], max_items=2, min_items=2)] = Field(None, description="A single position. ")
+    oneof_schema_1_validator: Optional[Annotated[List[Union[StrictFloat, StrictInt]], Field(min_length=2, max_length=2)]] = Field(default=None, description="A single position. ")
     # data type: List[List[float]]
-    oneof_schema_2_validator: Optional[conlist(conlist(Union[StrictFloat, StrictInt], max_items=2, min_items=2))] = Field(None, description="An array of positions. ")
+    oneof_schema_2_validator: Optional[List[Annotated[List[Union[StrictFloat, StrictInt]], Field(min_length=2, max_length=2)]]] = Field(default=None, description="An array of positions. ")
     # data type: GeometryLineString
     oneof_schema_3_validator: Optional[GeometryLineString] = None
     # data type: List[GeometryLinearRing]
-    oneof_schema_4_validator: Optional[conlist(GeometryLinearRing)] = Field(None, description="An array of linear rings. ")
-    if TYPE_CHECKING:
-        actual_instance: Union[GeometryLineString, List[GeometryLinearRing], List[List[float]], List[float]]
-    else:
-        actual_instance: Any
-    one_of_schemas: List[str] = Field(QUERYENTITYCOORDINATESPARAMETER_ONE_OF_SCHEMAS, const=True)
+    oneof_schema_4_validator: Optional[List[GeometryLinearRing]] = Field(default=None, description="An array of linear rings. ")
+    actual_instance: Optional[Union[GeometryLineString, List[GeometryLinearRing], List[List[float]], List[float]]] = None
+    one_of_schemas: List[str] = Literal["GeometryLineString", "List[GeometryLinearRing]", "List[List[float]]", "List[float]"]
 
-    class Config:
-        validate_assignment = True
+    model_config = {
+        "validate_assignment": True
+    }
+
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -58,9 +64,9 @@ class QueryEntityCoordinatesParameter(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @validator('actual_instance')
+    @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = QueryEntityCoordinatesParameter.construct()
+        instance = QueryEntityCoordinatesParameter.model_construct()
         error_messages = []
         match = 0
         # validate data type: List[float]
@@ -96,13 +102,13 @@ class QueryEntityCoordinatesParameter(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> QueryEntityCoordinatesParameter:
+    def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
-    def from_json(cls, json_str: str) -> QueryEntityCoordinatesParameter:
+    def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
-        instance = QueryEntityCoordinatesParameter.construct()
+        instance = cls.model_construct()
         error_messages = []
         match = 0
 
@@ -174,6 +180,6 @@ class QueryEntityCoordinatesParameter(BaseModel):
 
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        return pprint.pformat(self.model_dump())
 
 

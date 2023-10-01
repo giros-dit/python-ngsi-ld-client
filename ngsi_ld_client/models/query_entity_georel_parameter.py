@@ -19,9 +19,16 @@ import pprint
 import re  # noqa: F401
 
 from typing import Any, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, constr, validator
-from typing import Union, Any, List, TYPE_CHECKING
+from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
+from pydantic import Field
+from typing_extensions import Annotated
+from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
+from typing_extensions import Literal
 from pydantic import StrictStr, Field
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 QUERYENTITYGEORELPARAMETER_ONE_OF_SCHEMAS = ["str"]
 
@@ -32,15 +39,14 @@ class QueryEntityGeorelParameter(BaseModel):
     # data type: str
     oneof_schema_1_validator: Optional[StrictStr] = None
     # data type: str
-    oneof_schema_2_validator: Optional[constr(strict=True)] = None
-    if TYPE_CHECKING:
-        actual_instance: Union[str]
-    else:
-        actual_instance: Any
-    one_of_schemas: List[str] = Field(QUERYENTITYGEORELPARAMETER_ONE_OF_SCHEMAS, const=True)
+    oneof_schema_2_validator: Optional[Annotated[str, Field(strict=True)]] = None
+    actual_instance: Optional[Union[str]] = None
+    one_of_schemas: List[str] = Literal["str"]
 
-    class Config:
-        validate_assignment = True
+    model_config = {
+        "validate_assignment": True
+    }
+
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -52,9 +58,9 @@ class QueryEntityGeorelParameter(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @validator('actual_instance')
+    @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = QueryEntityGeorelParameter.construct()
+        instance = QueryEntityGeorelParameter.model_construct()
         error_messages = []
         match = 0
         # validate data type: str
@@ -79,13 +85,13 @@ class QueryEntityGeorelParameter(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> QueryEntityGeorelParameter:
+    def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
-    def from_json(cls, json_str: str) -> QueryEntityGeorelParameter:
+    def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
-        instance = QueryEntityGeorelParameter.construct()
+        instance = cls.model_construct()
         error_messages = []
         match = 0
 
@@ -142,6 +148,6 @@ class QueryEntityGeorelParameter(BaseModel):
 
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        return pprint.pformat(self.model_dump())
 
 

@@ -19,33 +19,37 @@ import pprint
 import re  # noqa: F401
 
 from typing import Any, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, conlist, validator
+from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
 from ngsi_ld_client.models.model_property import ModelProperty
-from typing import Union, Any, List, TYPE_CHECKING
+from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
+from typing_extensions import Literal
 from pydantic import StrictStr, Field
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
-ENTITYADDITIONALPROPERTIES_ONE_OF_SCHEMAS = ["List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
+ENTITYVALUE_ONE_OF_SCHEMAS = ["List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
 
-class EntityAdditionalProperties(BaseModel):
+class EntityValue(BaseModel):
     """
-    EntityAdditionalProperties
+    EntityValue
     """
     # data type: ModelProperty
     oneof_schema_1_validator: Optional[ModelProperty] = None
     # data type: List[ModelProperty]
-    oneof_schema_2_validator: Optional[conlist(ModelProperty)] = None
+    oneof_schema_2_validator: Optional[List[ModelProperty]] = None
     # data type: Relationship
     oneof_schema_3_validator: Optional[Relationship] = None
     # data type: List[Relationship]
-    oneof_schema_4_validator: Optional[conlist(Relationship)] = None
-    if TYPE_CHECKING:
-        actual_instance: Union[List[ModelProperty], List[Relationship], ModelProperty, Relationship]
-    else:
-        actual_instance: Any
-    one_of_schemas: List[str] = Field(ENTITYADDITIONALPROPERTIES_ONE_OF_SCHEMAS, const=True)
+    oneof_schema_4_validator: Optional[List[Relationship]] = None
+    actual_instance: Optional[Union[List[ModelProperty], List[Relationship], ModelProperty, Relationship]] = None
+    one_of_schemas: List[str] = Literal["List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
 
-    class Config:
-        validate_assignment = True
+    model_config = {
+        "validate_assignment": True
+    }
+
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -57,9 +61,9 @@ class EntityAdditionalProperties(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @validator('actual_instance')
+    @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = EntityAdditionalProperties.construct()
+        instance = EntityValue.model_construct()
         error_messages = []
         match = 0
         # validate data type: ModelProperty
@@ -86,21 +90,21 @@ class EntityAdditionalProperties(BaseModel):
             error_messages.append(str(e))
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in EntityAdditionalProperties with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in EntityValue with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in EntityAdditionalProperties with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in EntityValue with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
         else:
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> EntityAdditionalProperties:
+    def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
-    def from_json(cls, json_str: str) -> EntityAdditionalProperties:
+    def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
-        instance = EntityAdditionalProperties.construct()
+        instance = cls.model_construct()
         error_messages = []
         match = 0
 
@@ -137,10 +141,10 @@ class EntityAdditionalProperties(BaseModel):
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into EntityAdditionalProperties with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into EntityValue with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into EntityAdditionalProperties with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into EntityValue with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
         else:
             return instance
 
@@ -169,8 +173,11 @@ class EntityAdditionalProperties(BaseModel):
 
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        return pprint.pformat(self.model_dump())
 
-from ngsi_ld_client.models.relationship import Relationship
-EntityAdditionalProperties.update_forward_refs()
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ngsi_ld_client.models.relationship import Relationship
+    # TODO: pydantic v2
+    # EntityValue.model_rebuild()
 

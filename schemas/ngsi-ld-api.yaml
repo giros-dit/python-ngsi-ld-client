@@ -3850,16 +3850,16 @@ components:
           allOf:
             - $ref: '#/components/schemas/DeletedAt'
           readOnly: true
-        additionalProperties:
-          oneOf:
-            - $ref: '#/components/schemas/Property'
-            - type: array
-              items:
-                $ref: '#/components/schemas/Property'
-            - $ref: '#/components/schemas/Relationship'
-            - type: array
-              items:
-                $ref: '#/components/schemas/Relationship'
+      additionalProperties:
+        oneOf:
+          - $ref: '#/components/schemas/Property'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/Relationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
     EntityInfo:
       description: |
         5.2.8 represents what Entities, Entity Types or group of Entity ids

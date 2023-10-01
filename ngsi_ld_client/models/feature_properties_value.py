@@ -19,13 +19,18 @@ import pprint
 import re  # noqa: F401
 
 from typing import Any, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, conlist, validator
+from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
 from ngsi_ld_client.models.geo_property import GeoProperty
 from ngsi_ld_client.models.language_property import LanguageProperty
 from ngsi_ld_client.models.model_property import ModelProperty
 from ngsi_ld_client.models.relationship import Relationship
-from typing import Union, Any, List, TYPE_CHECKING
+from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
+from typing_extensions import Literal
 from pydantic import StrictStr, Field
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 FEATUREPROPERTIESVALUE_ONE_OF_SCHEMAS = ["GeoProperty", "LanguageProperty", "List[GeoProperty]", "List[LanguageProperty]", "List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
 
@@ -36,27 +41,26 @@ class FeaturePropertiesValue(BaseModel):
     # data type: ModelProperty
     oneof_schema_1_validator: Optional[ModelProperty] = None
     # data type: List[ModelProperty]
-    oneof_schema_2_validator: Optional[conlist(ModelProperty)] = None
+    oneof_schema_2_validator: Optional[List[ModelProperty]] = None
     # data type: Relationship
     oneof_schema_3_validator: Optional[Relationship] = None
     # data type: List[Relationship]
-    oneof_schema_4_validator: Optional[conlist(Relationship)] = None
+    oneof_schema_4_validator: Optional[List[Relationship]] = None
     # data type: GeoProperty
     oneof_schema_5_validator: Optional[GeoProperty] = None
     # data type: List[GeoProperty]
-    oneof_schema_6_validator: Optional[conlist(GeoProperty)] = None
+    oneof_schema_6_validator: Optional[List[GeoProperty]] = None
     # data type: LanguageProperty
     oneof_schema_7_validator: Optional[LanguageProperty] = None
     # data type: List[LanguageProperty]
-    oneof_schema_8_validator: Optional[conlist(LanguageProperty)] = None
-    if TYPE_CHECKING:
-        actual_instance: Union[GeoProperty, LanguageProperty, List[GeoProperty], List[LanguageProperty], List[ModelProperty], List[Relationship], ModelProperty, Relationship]
-    else:
-        actual_instance: Any
-    one_of_schemas: List[str] = Field(FEATUREPROPERTIESVALUE_ONE_OF_SCHEMAS, const=True)
+    oneof_schema_8_validator: Optional[List[LanguageProperty]] = None
+    actual_instance: Optional[Union[GeoProperty, LanguageProperty, List[GeoProperty], List[LanguageProperty], List[ModelProperty], List[Relationship], ModelProperty, Relationship]] = None
+    one_of_schemas: List[str] = Literal["GeoProperty", "LanguageProperty", "List[GeoProperty]", "List[LanguageProperty]", "List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
 
-    class Config:
-        validate_assignment = True
+    model_config = {
+        "validate_assignment": True
+    }
+
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -68,9 +72,9 @@ class FeaturePropertiesValue(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @validator('actual_instance')
+    @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = FeaturePropertiesValue.construct()
+        instance = FeaturePropertiesValue.model_construct()
         error_messages = []
         match = 0
         # validate data type: ModelProperty
@@ -127,13 +131,13 @@ class FeaturePropertiesValue(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> FeaturePropertiesValue:
+    def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
-    def from_json(cls, json_str: str) -> FeaturePropertiesValue:
+    def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
-        instance = FeaturePropertiesValue.construct()
+        instance = cls.model_construct()
         error_messages = []
         match = 0
 
@@ -232,6 +236,6 @@ class FeaturePropertiesValue(BaseModel):
 
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        return pprint.pformat(self.model_dump())
 
 

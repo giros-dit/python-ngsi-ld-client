@@ -18,10 +18,15 @@ import json
 import pprint
 import re  # noqa: F401
 
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, conlist, validator
-from typing import Union, Any, List, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, Union
+from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
+from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
+from typing_extensions import Literal
 from pydantic import StrictStr, Field
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 LISTCONTEXTS200RESPONSE_ONE_OF_SCHEMAS = ["List[object]", "List[str]"]
 
@@ -30,17 +35,16 @@ class ListContexts200Response(BaseModel):
     ListContexts200Response
     """
     # data type: List[str]
-    oneof_schema_1_validator: Optional[conlist(StrictStr)] = None
+    oneof_schema_1_validator: Optional[List[StrictStr]] = None
     # data type: List[object]
-    oneof_schema_2_validator: Optional[conlist(Dict[str, Any])] = None
-    if TYPE_CHECKING:
-        actual_instance: Union[List[object], List[str]]
-    else:
-        actual_instance: Any
-    one_of_schemas: List[str] = Field(LISTCONTEXTS200RESPONSE_ONE_OF_SCHEMAS, const=True)
+    oneof_schema_2_validator: Optional[List[Union[str, Any]]] = None
+    actual_instance: Optional[Union[List[object], List[str]]] = None
+    one_of_schemas: List[str] = Literal["List[object]", "List[str]"]
 
-    class Config:
-        validate_assignment = True
+    model_config = {
+        "validate_assignment": True
+    }
+
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -52,9 +56,9 @@ class ListContexts200Response(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @validator('actual_instance')
+    @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = ListContexts200Response.construct()
+        instance = ListContexts200Response.model_construct()
         error_messages = []
         match = 0
         # validate data type: List[str]
@@ -79,13 +83,13 @@ class ListContexts200Response(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> ListContexts200Response:
+    def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
-    def from_json(cls, json_str: str) -> ListContexts200Response:
+    def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
-        instance = ListContexts200Response.construct()
+        instance = cls.model_construct()
         error_messages = []
         match = 0
 
@@ -142,6 +146,6 @@ class ListContexts200Response(BaseModel):
 
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        return pprint.pformat(self.model_dump())
 
 

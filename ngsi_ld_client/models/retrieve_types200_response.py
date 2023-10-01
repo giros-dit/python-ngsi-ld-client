@@ -19,11 +19,16 @@ import pprint
 import re  # noqa: F401
 
 from typing import Any, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, conlist, validator
+from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
 from ngsi_ld_client.models.entity_type import EntityType
 from ngsi_ld_client.models.entity_type_list import EntityTypeList
-from typing import Union, Any, List, TYPE_CHECKING
+from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
+from typing_extensions import Literal
 from pydantic import StrictStr, Field
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 RETRIEVETYPES200RESPONSE_ONE_OF_SCHEMAS = ["List[EntityTypeList]", "List[EntityType]"]
 
@@ -32,17 +37,16 @@ class RetrieveTypes200Response(BaseModel):
     RetrieveTypes200Response
     """
     # data type: List[EntityTypeList]
-    oneof_schema_1_validator: Optional[conlist(EntityTypeList)] = None
+    oneof_schema_1_validator: Optional[List[EntityTypeList]] = None
     # data type: List[EntityType]
-    oneof_schema_2_validator: Optional[conlist(EntityType)] = None
-    if TYPE_CHECKING:
-        actual_instance: Union[List[EntityTypeList], List[EntityType]]
-    else:
-        actual_instance: Any
-    one_of_schemas: List[str] = Field(RETRIEVETYPES200RESPONSE_ONE_OF_SCHEMAS, const=True)
+    oneof_schema_2_validator: Optional[List[EntityType]] = None
+    actual_instance: Optional[Union[List[EntityTypeList], List[EntityType]]] = None
+    one_of_schemas: List[str] = Literal["List[EntityTypeList]", "List[EntityType]"]
 
-    class Config:
-        validate_assignment = True
+    model_config = {
+        "validate_assignment": True
+    }
+
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -54,9 +58,9 @@ class RetrieveTypes200Response(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @validator('actual_instance')
+    @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = RetrieveTypes200Response.construct()
+        instance = RetrieveTypes200Response.model_construct()
         error_messages = []
         match = 0
         # validate data type: List[EntityTypeList]
@@ -81,13 +85,13 @@ class RetrieveTypes200Response(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> RetrieveTypes200Response:
+    def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
-    def from_json(cls, json_str: str) -> RetrieveTypes200Response:
+    def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
-        instance = RetrieveTypes200Response.construct()
+        instance = cls.model_construct()
         error_messages = []
         match = 0
 
@@ -144,6 +148,6 @@ class RetrieveTypes200Response(BaseModel):
 
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        return pprint.pformat(self.model_dump())
 
 

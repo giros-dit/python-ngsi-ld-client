@@ -16,12 +16,14 @@ import re  # noqa: F401
 import io
 import warnings
 
-from pydantic import validate_arguments, ValidationError
-from typing_extensions import Annotated
+from pydantic import validate_call, ValidationError
+from typing import Dict, List, Optional, Tuple
 
+from pydantic import Field
+from typing_extensions import Annotated
 from datetime import datetime
 
-from pydantic import Field, StrictBool, StrictStr, conlist
+from pydantic import StrictBool, StrictStr
 
 from typing import List, Optional
 
@@ -52,8 +54,8 @@ class ContextInformationProvisionApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
-    @validate_arguments
-    def append_attrs(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], options : Optional[conlist(OptionsNoOverwrite)] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be added. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def append_attrs(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], options : Optional[List[OptionsNoOverwrite]] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be added. ")] = None, **kwargs) -> None:  # noqa: E501
         """Append attributes to Entity   # noqa: E501
 
         5.6.3 Append Entity attributes.  This operation allows modifying an NGSI-LD Entity by adding new attributes (Properties or Relationships).   # noqa: E501
@@ -92,8 +94,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.append_attrs_with_http_info(entity_id, options, local, link, ngsild_tenant, entity, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def append_attrs_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], options : Optional[conlist(OptionsNoOverwrite)] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be added. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def append_attrs_with_http_info(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], options : Optional[List[OptionsNoOverwrite]] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be added. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Append attributes to Entity   # noqa: E501
 
         5.6.3 Append Entity attributes.  This operation allows modifying an NGSI-LD Entity by adding new attributes (Properties or Relationships).   # noqa: E501
@@ -172,16 +174,16 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
-        if _params['entity_id']:
+        _path_params: Dict[str, str] = {}
+        if _params['entity_id'] is not None:
             _path_params['entityId'] = _params['entity_id']
 
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('options') is not None:  # noqa: E501
             _query_params.append(('options', _params['options']))
             _collection_formats['options'] = 'csv'
@@ -191,15 +193,15 @@ class ContextInformationProvisionApi:
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['entity'] is not None:
@@ -217,9 +219,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities/{entityId}/attrs', 'POST',
@@ -238,8 +240,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def create_batch(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of entities to be created. ")] = None, **kwargs) -> List[str]:  # noqa: E501
+    @validate_call
+    def create_batch(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of entities to be created. ")] = None, **kwargs) -> List[str]:  # noqa: E501
         """Batch Entity creation   # noqa: E501
 
         5.6.7 Batch Entity Creation.  This operation allows creating a batch of NGSI-LD Entities.   # noqa: E501
@@ -274,8 +276,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.create_batch_with_http_info(local, link, ngsild_tenant, query_entity200_response_inner, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def create_batch_with_http_info(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of entities to be created. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def create_batch_with_http_info(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of entities to be created. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Batch Entity creation   # noqa: E501
 
         5.6.7 Batch Entity Creation.  This operation allows creating a batch of NGSI-LD Entities.   # noqa: E501
@@ -348,27 +350,27 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
+        _path_params: Dict[str, str] = {}
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['query_entity200_response_inner'] is not None:
@@ -386,9 +388,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {
+        _response_types_map: Dict[str, Optional[str]] = {
             '201': "List[str]",
             '207': "BatchOperationResult",
             '400': "ProblemDetails",
@@ -411,7 +413,7 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
+    @validate_call
     def create_entity(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[QueryEntity200ResponseInner], Field(description="Payload body in the request contains a JSON-LD object which represents the entity that is to be created. ")] = None, **kwargs) -> None:  # noqa: E501
         """Entity creation   # noqa: E501
 
@@ -447,7 +449,7 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.create_entity_with_http_info(local, link, ngsild_tenant, query_entity200_response_inner, **kwargs)  # noqa: E501
 
-    @validate_arguments
+    @validate_call
     def create_entity_with_http_info(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[QueryEntity200ResponseInner], Field(description="Payload body in the request contains a JSON-LD object which represents the entity that is to be created. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Entity creation   # noqa: E501
 
@@ -521,27 +523,27 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
+        _path_params: Dict[str, str] = {}
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['query_entity200_response_inner'] is not None:
@@ -559,9 +561,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities', 'POST',
@@ -580,8 +582,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def delete_attrs(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], delete_all : Annotated[Optional[StrictBool], Field(description="If true, all attribute instances are deleted. Otherwise (default) only the Attribute instance specified by the datasetId is deleted. In case neither the deleteAll flag nor a datasetId is present, the default Attribute instance is deleted. ")] = None, dataset_id : Annotated[Optional[StrictStr], Field(description="Specifies the datasetId of the dataset to be deleted. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def delete_attrs(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], delete_all : Annotated[Optional[StrictBool], Field(description="If true, all attribute instances are deleted. Otherwise (default) only the Attribute instance specified by the datasetId is deleted. In case neither the deleteAll flag nor a datasetId is present, the default Attribute instance is deleted. ")] = None, dataset_id : Annotated[Optional[StrictStr], Field(description="Specifies the datasetId of the dataset to be deleted. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
         """Attribute delete   # noqa: E501
 
         5.6.5 Delete Entity Attribute.   # noqa: E501
@@ -622,8 +624,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.delete_attrs_with_http_info(entity_id, attr_id, delete_all, dataset_id, local, link, ngsild_tenant, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def delete_attrs_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], delete_all : Annotated[Optional[StrictBool], Field(description="If true, all attribute instances are deleted. Otherwise (default) only the Attribute instance specified by the datasetId is deleted. In case neither the deleteAll flag nor a datasetId is present, the default Attribute instance is deleted. ")] = None, dataset_id : Annotated[Optional[StrictStr], Field(description="Specifies the datasetId of the dataset to be deleted. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def delete_attrs_with_http_info(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], delete_all : Annotated[Optional[StrictBool], Field(description="If true, all attribute instances are deleted. Otherwise (default) only the Attribute instance specified by the datasetId is deleted. In case neither the deleteAll flag nor a datasetId is present, the default Attribute instance is deleted. ")] = None, dataset_id : Annotated[Optional[StrictStr], Field(description="Specifies the datasetId of the dataset to be deleted. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Attribute delete   # noqa: E501
 
         5.6.5 Delete Entity Attribute.   # noqa: E501
@@ -705,19 +707,19 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
-        if _params['entity_id']:
+        _path_params: Dict[str, str] = {}
+        if _params['entity_id'] is not None:
             _path_params['entityId'] = _params['entity_id']
 
-        if _params['attr_id']:
+        if _params['attr_id'] is not None:
             _path_params['attrId'] = _params['attr_id']
 
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('delete_all') is not None:  # noqa: E501
             _query_params.append(('deleteAll', _params['delete_all']))
 
@@ -729,15 +731,15 @@ class ContextInformationProvisionApi:
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         # set the HTTP header `Accept`
@@ -745,9 +747,9 @@ class ContextInformationProvisionApi:
             ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities/{entityId}/attrs/{attrId}', 'DELETE',
@@ -766,8 +768,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def delete_batch(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of String (URIs representing Entity IDs) to be deleted. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def delete_batch(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of String (URIs representing Entity IDs) to be deleted. ")] = None, **kwargs) -> None:  # noqa: E501
         """Batch Entity delete   # noqa: E501
 
         5.6.10 Batch Entity Delete.  This operation allows deleting a batch of NGSI-LD Entities.   # noqa: E501
@@ -802,8 +804,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.delete_batch_with_http_info(local, link, ngsild_tenant, query_entity200_response_inner, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def delete_batch_with_http_info(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of String (URIs representing Entity IDs) to be deleted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def delete_batch_with_http_info(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of String (URIs representing Entity IDs) to be deleted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Batch Entity delete   # noqa: E501
 
         5.6.10 Batch Entity Delete.  This operation allows deleting a batch of NGSI-LD Entities.   # noqa: E501
@@ -876,27 +878,27 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
+        _path_params: Dict[str, str] = {}
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['query_entity200_response_inner'] is not None:
@@ -914,9 +916,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entityOperations/delete', 'POST',
@@ -935,8 +937,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def delete_entity(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def delete_entity(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> None:  # noqa: E501
         """Entity deletion by id   # noqa: E501
 
         5.6.6 Delete entity.  This operation allows deleting an NGSI-LD Entity.   # noqa: E501
@@ -971,8 +973,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.delete_entity_with_http_info(entity_id, local, link, ngsild_tenant, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def delete_entity_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def delete_entity_with_http_info(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Entity deletion by id   # noqa: E501
 
         5.6.6 Delete entity.  This operation allows deleting an NGSI-LD Entity.   # noqa: E501
@@ -1045,30 +1047,30 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
-        if _params['entity_id']:
+        _path_params: Dict[str, str] = {}
+        if _params['entity_id'] is not None:
             _path_params['entityId'] = _params['entity_id']
 
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         # set the HTTP header `Accept`
@@ -1076,9 +1078,9 @@ class ContextInformationProvisionApi:
             ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities/{entityId}', 'DELETE',
@@ -1097,8 +1099,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def merge_batch(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of Entities to be merged. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def merge_batch(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of Entities to be merged. ")] = None, **kwargs) -> None:  # noqa: E501
         """Batch Entity merge   # noqa: E501
 
         5.6.20 Batch Entity Merge.  This operation allows modification of a batch of NGSI-LD Entities according to the JSON Merge Patch processing rules defined in IETF RFC 7396 by adding new attributes (Properties or Relationships) or modifying or deleting existing attributes associated with an existing Entity.   # noqa: E501
@@ -1133,8 +1135,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.merge_batch_with_http_info(local, link, ngsild_tenant, query_entity200_response_inner, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def merge_batch_with_http_info(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of Entities to be merged. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def merge_batch_with_http_info(self, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of Entities to be merged. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Batch Entity merge   # noqa: E501
 
         5.6.20 Batch Entity Merge.  This operation allows modification of a batch of NGSI-LD Entities according to the JSON Merge Patch processing rules defined in IETF RFC 7396 by adding new attributes (Properties or Relationships) or modifying or deleting existing attributes associated with an existing Entity.   # noqa: E501
@@ -1207,27 +1209,27 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
+        _path_params: Dict[str, str] = {}
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['query_entity200_response_inner'] is not None:
@@ -1245,9 +1247,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entityOperations/merge', 'POST',
@@ -1266,8 +1268,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def merge_entity(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], options : Optional[conlist(OptionsRepresentation)] = None, observed_at : Annotated[Optional[datetime], Field(description="When a merge operation applies to a pre-existing Attribute which previously contained an \"observedAt\" sub-attribute, the value held in this query parameter shall be used if no specific \"observedAt\" sub-Attribute is found in the payload body. ")] = None, lang : Annotated[Optional[StrictStr], Field(description="It is used to reduce languageMaps to a string or string array property in a single preferred language. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be merged. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def merge_entity(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], options : Optional[List[OptionsRepresentation]] = None, observed_at : Annotated[Optional[datetime], Field(description="When a merge operation applies to a pre-existing Attribute which previously contained an \"observedAt\" sub-attribute, the value held in this query parameter shall be used if no specific \"observedAt\" sub-Attribute is found in the payload body. ")] = None, lang : Annotated[Optional[StrictStr], Field(description="It is used to reduce languageMaps to a string or string array property in a single preferred language. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be merged. ")] = None, **kwargs) -> None:  # noqa: E501
         """Entity merge by id   # noqa: E501
 
         5.6.17 Merge entity.  This operation allows modification of an existing NGSI-LD Entity aligning to the JSON Merge Patch processing rules defined in IETF RFC 7396 by adding new Attributes (Properties or Relationships) or modifying or deleting existing Attributes associated with an existing Entity.   # noqa: E501
@@ -1310,8 +1312,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.merge_entity_with_http_info(entity_id, options, observed_at, lang, local, link, ngsild_tenant, entity, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def merge_entity_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], options : Optional[conlist(OptionsRepresentation)] = None, observed_at : Annotated[Optional[datetime], Field(description="When a merge operation applies to a pre-existing Attribute which previously contained an \"observedAt\" sub-attribute, the value held in this query parameter shall be used if no specific \"observedAt\" sub-Attribute is found in the payload body. ")] = None, lang : Annotated[Optional[StrictStr], Field(description="It is used to reduce languageMaps to a string or string array property in a single preferred language. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be merged. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def merge_entity_with_http_info(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], options : Optional[List[OptionsRepresentation]] = None, observed_at : Annotated[Optional[datetime], Field(description="When a merge operation applies to a pre-existing Attribute which previously contained an \"observedAt\" sub-attribute, the value held in this query parameter shall be used if no specific \"observedAt\" sub-Attribute is found in the payload body. ")] = None, lang : Annotated[Optional[StrictStr], Field(description="It is used to reduce languageMaps to a string or string array property in a single preferred language. ")] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be merged. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Entity merge by id   # noqa: E501
 
         5.6.17 Merge entity.  This operation allows modification of an existing NGSI-LD Entity aligning to the JSON Merge Patch processing rules defined in IETF RFC 7396 by adding new Attributes (Properties or Relationships) or modifying or deleting existing Attributes associated with an existing Entity.   # noqa: E501
@@ -1396,16 +1398,16 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
-        if _params['entity_id']:
+        _path_params: Dict[str, str] = {}
+        if _params['entity_id'] is not None:
             _path_params['entityId'] = _params['entity_id']
 
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('options') is not None:  # noqa: E501
             _query_params.append(('options', _params['options']))
             _collection_formats['options'] = 'csv'
@@ -1424,15 +1426,15 @@ class ContextInformationProvisionApi:
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['entity'] is not None:
@@ -1450,9 +1452,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities/{entityId}', 'PATCH',
@@ -1471,8 +1473,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def replace_attrs(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, replace_attrs_request : Optional[ReplaceAttrsRequest] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def replace_attrs(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, replace_attrs_request : Optional[ReplaceAttrsRequest] = None, **kwargs) -> None:  # noqa: E501
         """Attribute replace   # noqa: E501
 
         5.6.19 Attribute replace.  This operation allows the replacement of a single Attribute (Property or Relationship) within an NGSI-LD Entity.   # noqa: E501
@@ -1511,8 +1513,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.replace_attrs_with_http_info(entity_id, attr_id, local, link, ngsild_tenant, replace_attrs_request, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def replace_attrs_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, replace_attrs_request : Optional[ReplaceAttrsRequest] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def replace_attrs_with_http_info(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, replace_attrs_request : Optional[ReplaceAttrsRequest] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Attribute replace   # noqa: E501
 
         5.6.19 Attribute replace.  This operation allows the replacement of a single Attribute (Property or Relationship) within an NGSI-LD Entity.   # noqa: E501
@@ -1591,33 +1593,33 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
-        if _params['entity_id']:
+        _path_params: Dict[str, str] = {}
+        if _params['entity_id'] is not None:
             _path_params['entityId'] = _params['entity_id']
 
-        if _params['attr_id']:
+        if _params['attr_id'] is not None:
             _path_params['attrId'] = _params['attr_id']
 
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['replace_attrs_request'] is not None:
@@ -1635,9 +1637,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities/{entityId}/attrs/{attrId}', 'PUT',
@@ -1656,8 +1658,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def replace_entity(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Entity to be replaced. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def replace_entity(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Entity to be replaced. ")] = None, **kwargs) -> None:  # noqa: E501
         """Entity replacement by id   # noqa: E501
 
         5.6.18 Replace entity.  This operation allows the modification of an existing NGSI-LD Entity by replacing all of the Attributes (Properties or Relationships).   # noqa: E501
@@ -1694,8 +1696,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.replace_entity_with_http_info(entity_id, local, link, ngsild_tenant, entity, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def replace_entity_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Entity to be replaced. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def replace_entity_with_http_info(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Entity to be replaced. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Entity replacement by id   # noqa: E501
 
         5.6.18 Replace entity.  This operation allows the modification of an existing NGSI-LD Entity by replacing all of the Attributes (Properties or Relationships).   # noqa: E501
@@ -1771,30 +1773,30 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
-        if _params['entity_id']:
+        _path_params: Dict[str, str] = {}
+        if _params['entity_id'] is not None:
             _path_params['entityId'] = _params['entity_id']
 
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['entity'] is not None:
@@ -1812,9 +1814,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities/{entityId}', 'PUT',
@@ -1833,8 +1835,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def update_attrs(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, replace_attrs_request : Optional[ReplaceAttrsRequest] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def update_attrs(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, replace_attrs_request : Optional[ReplaceAttrsRequest] = None, **kwargs) -> None:  # noqa: E501
         """Partial Attribute update   # noqa: E501
 
         5.6.4 Partial Attribute update.  This operation allows performing a partial update on an NGSI-LD Entity's Attribute (Property or Relationship). A partial update only changes the elements provided in an Entity Fragment, leaving the rest as they are. This operation supports the deletion of sub-Attributes but not the deletion of the whole Attribute itself.   # noqa: E501
@@ -1873,8 +1875,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.update_attrs_with_http_info(entity_id, attr_id, local, link, ngsild_tenant, replace_attrs_request, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def update_attrs_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(..., description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, replace_attrs_request : Optional[ReplaceAttrsRequest] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def update_attrs_with_http_info(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], attr_id : Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, replace_attrs_request : Optional[ReplaceAttrsRequest] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Partial Attribute update   # noqa: E501
 
         5.6.4 Partial Attribute update.  This operation allows performing a partial update on an NGSI-LD Entity's Attribute (Property or Relationship). A partial update only changes the elements provided in an Entity Fragment, leaving the rest as they are. This operation supports the deletion of sub-Attributes but not the deletion of the whole Attribute itself.   # noqa: E501
@@ -1953,33 +1955,33 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
-        if _params['entity_id']:
+        _path_params: Dict[str, str] = {}
+        if _params['entity_id'] is not None:
             _path_params['entityId'] = _params['entity_id']
 
-        if _params['attr_id']:
+        if _params['attr_id'] is not None:
             _path_params['attrId'] = _params['attr_id']
 
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['replace_attrs_request'] is not None:
@@ -1997,9 +1999,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities/{entityId}/attrs/{attrId}', 'PATCH',
@@ -2018,8 +2020,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def update_batch(self, options : Optional[conlist(OptionsNoOverwrite)] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of entities to be updated. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def update_batch(self, options : Optional[List[OptionsNoOverwrite]] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of entities to be updated. ")] = None, **kwargs) -> None:  # noqa: E501
         """Batch Entity update   # noqa: E501
 
         5.6.9 Batch Entity Update.  This operation allows updating a batch of NGSI-LD Entities.   # noqa: E501
@@ -2056,8 +2058,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.update_batch_with_http_info(options, local, link, ngsild_tenant, query_entity200_response_inner, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def update_batch_with_http_info(self, options : Optional[conlist(OptionsNoOverwrite)] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of entities to be updated. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def update_batch_with_http_info(self, options : Optional[List[OptionsNoOverwrite]] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of entities to be updated. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Batch Entity update   # noqa: E501
 
         5.6.9 Batch Entity Update.  This operation allows updating a batch of NGSI-LD Entities.   # noqa: E501
@@ -2133,13 +2135,13 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
+        _path_params: Dict[str, str] = {}
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('options') is not None:  # noqa: E501
             _query_params.append(('options', _params['options']))
             _collection_formats['options'] = 'csv'
@@ -2149,15 +2151,15 @@ class ContextInformationProvisionApi:
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['query_entity200_response_inner'] is not None:
@@ -2175,9 +2177,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entityOperations/update', 'POST',
@@ -2196,8 +2198,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def update_entity(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be updated. ")] = None, **kwargs) -> None:  # noqa: E501
+    @validate_call
+    def update_entity(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be updated. ")] = None, **kwargs) -> None:  # noqa: E501
         """Update attributes of an Entity   # noqa: E501
 
         5.6.2 Update Entity attributes.  This operation allows modifying an existing NGSI-LD Entity by updating already existing Attributes (Properties or Relationships).   # noqa: E501
@@ -2234,8 +2236,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.update_entity_with_http_info(entity_id, local, link, ngsild_tenant, entity, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def update_entity_with_http_info(self, entity_id : Annotated[StrictStr, Field(..., description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be updated. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def update_entity_with_http_info(self, entity_id : Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")], local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, entity : Annotated[Optional[Entity], Field(description="Entity Fragment containing a complete representation of the Attributes to be updated. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Update attributes of an Entity   # noqa: E501
 
         5.6.2 Update Entity attributes.  This operation allows modifying an existing NGSI-LD Entity by updating already existing Attributes (Properties or Relationships).   # noqa: E501
@@ -2311,30 +2313,30 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
-        if _params['entity_id']:
+        _path_params: Dict[str, str] = {}
+        if _params['entity_id'] is not None:
             _path_params['entityId'] = _params['entity_id']
 
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('local') is not None:  # noqa: E501
             _query_params.append(('local', _params['local']))
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['entity'] is not None:
@@ -2352,9 +2354,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {}
+        _response_types_map: Dict[str, Optional[str]] = {}
 
         return self.api_client.call_api(
             '/entities/{entityId}/attrs', 'PATCH',
@@ -2373,8 +2375,8 @@ class ContextInformationProvisionApi:
             collection_formats=_collection_formats,
             _request_auth=_params.get('_request_auth'))
 
-    @validate_arguments
-    def upsert_batch(self, options : Optional[conlist(OptionsUpsert)] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of entities to be created. ")] = None, **kwargs) -> List[str]:  # noqa: E501
+    @validate_call
+    def upsert_batch(self, options : Optional[List[OptionsUpsert]] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of entities to be created. ")] = None, **kwargs) -> List[str]:  # noqa: E501
         """Batch Entity create or update (upsert)   # noqa: E501
 
         5.6.8 Batch Entity Upsert.  This operation allows creating a batch of NGSI-LD Entities, updating each of them if they already existed. In some database jargon this kind of operation is known as \"upsert\".   # noqa: E501
@@ -2411,8 +2413,8 @@ class ContextInformationProvisionApi:
             raise ValueError(message)
         return self.upsert_batch_with_http_info(options, local, link, ngsild_tenant, query_entity200_response_inner, **kwargs)  # noqa: E501
 
-    @validate_arguments
-    def upsert_batch_with_http_info(self, options : Optional[conlist(OptionsUpsert)] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[conlist(QueryEntity200ResponseInner)], Field(description="Array of entities to be created. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    @validate_call
+    def upsert_batch_with_http_info(self, options : Optional[List[OptionsUpsert]] = None, local : Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None, link : Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None, ngsild_tenant : Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None, query_entity200_response_inner : Annotated[Optional[List[QueryEntity200ResponseInner]], Field(description="Array of entities to be created. ")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Batch Entity create or update (upsert)   # noqa: E501
 
         5.6.8 Batch Entity Upsert.  This operation allows creating a batch of NGSI-LD Entities, updating each of them if they already existed. In some database jargon this kind of operation is known as \"upsert\".   # noqa: E501
@@ -2488,13 +2490,13 @@ class ContextInformationProvisionApi:
             _params[_key] = _val
         del _params['kwargs']
 
-        _collection_formats = {}
+        _collection_formats: Dict[str, str] = {}
 
         # process the path parameters
-        _path_params = {}
+        _path_params: Dict[str, str] = {}
 
         # process the query parameters
-        _query_params = []
+        _query_params: List[Tuple[str, str]] = []
         if _params.get('options') is not None:  # noqa: E501
             _query_params.append(('options', _params['options']))
             _collection_formats['options'] = 'csv'
@@ -2504,15 +2506,15 @@ class ContextInformationProvisionApi:
 
         # process the header parameters
         _header_params = dict(_params.get('_headers', {}))
-        if _params['link']:
+        if _params['link'] is not None:
             _header_params['Link'] = _params['link']
 
-        if _params['ngsild_tenant']:
+        if _params['ngsild_tenant'] is not None:
             _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
 
         # process the form parameters
-        _form_params = []
-        _files = {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
         # process the body parameter
         _body_params = None
         if _params['query_entity200_response_inner'] is not None:
@@ -2530,9 +2532,9 @@ class ContextInformationProvisionApi:
                 _header_params['Content-Type'] = _content_types_list
 
         # authentication setting
-        _auth_settings = []  # noqa: E501
+        _auth_settings: List[str] = []  # noqa: E501
 
-        _response_types_map = {
+        _response_types_map: Dict[str, Optional[str]] = {
             '201': "List[str]",
             '204': None,
             '207': "BatchOperationResult",

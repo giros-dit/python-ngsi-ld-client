@@ -18,28 +18,34 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict, Optional
-from pydantic import BaseModel, Field, StrictStr, validator
+from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, StrictStr, field_validator
+from pydantic import Field
+from typing import Dict, Any
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 class TemporalQuery(BaseModel):
     """
-    5.2.21 This datatype represents a temporal query. 
+    5.2.21 This datatype represents a temporal query.   # noqa: E501
     """
-    timerel: StrictStr = Field(..., description="Allowed values: \"before\", \"after\" and \"between\". ")
-    time_at: datetime = Field(..., alias="timeAt", description="It shall be a DateTime. ")
-    end_time_at: Optional[datetime] = Field(None, alias="endTimeAt", description="It shall be a DateTime. Cardinality shall be 1 if timerel is equal to \"between\". ")
-    timeproperty: Optional[StrictStr] = Field(None, description="Allowed values: \"observedAt\", \"createdAt\", \"modifiedAt\" and \"deletedAt\". If not specified, the default is \"observedAt\". (See clause 4.8). ")
+    timerel: StrictStr = Field(description="Allowed values: \"before\", \"after\" and \"between\". ")
+    time_at: datetime = Field(description="It shall be a DateTime. ", alias="timeAt")
+    end_time_at: Optional[datetime] = Field(default=None, description="It shall be a DateTime. Cardinality shall be 1 if timerel is equal to \"between\". ", alias="endTimeAt")
+    timeproperty: Optional[StrictStr] = Field(default=None, description="Allowed values: \"observedAt\", \"createdAt\", \"modifiedAt\" and \"deletedAt\". If not specified, the default is \"observedAt\". (See clause 4.8). ")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["timerel", "timeAt", "endTimeAt", "timeproperty"]
+    __properties: ClassVar[List[str]] = ["timerel", "timeAt", "endTimeAt", "timeproperty"]
 
-    @validator('timerel')
+    @field_validator('timerel')
     def timerel_validate_enum(cls, value):
         """Validates the enum"""
         if value not in ('before', 'after', 'between'):
             raise ValueError("must be one of enum values ('before', 'after', 'between')")
         return value
 
-    @validator('timeproperty')
+    @field_validator('timeproperty')
     def timeproperty_validate_enum(cls, value):
         """Validates the enum"""
         if value is None:
@@ -49,27 +55,29 @@ class TemporalQuery(BaseModel):
             raise ValueError("must be one of enum values ('observedAt', 'createdAt', 'modifiedAt', 'deletedAt')")
         return value
 
-    class Config:
-        """Pydantic configuration"""
-        allow_population_by_field_name = True
-        validate_assignment = True
+    model_config = {
+        "populate_by_name": True,
+        "validate_assignment": True
+    }
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
-        return pprint.pformat(self.dict(by_alias=True))
+        return pprint.pformat(self.model_dump(by_alias=True))
 
     def to_json(self) -> str:
         """Returns the JSON representation of the model using alias"""
+        # TODO: pydantic v2: use .model_dump_json(by_alias=True, exclude_unset=True) instead
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> TemporalQuery:
+    def from_json(cls, json_str: str) -> Self:
         """Create an instance of TemporalQuery from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
+        _dict = self.model_dump(by_alias=True,
                           exclude={
                             "additional_properties"
                           },
@@ -82,18 +90,18 @@ class TemporalQuery(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> TemporalQuery:
+    def from_dict(cls, obj: dict) -> Self:
         """Create an instance of TemporalQuery from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return TemporalQuery.parse_obj(obj)
+            return cls.model_validate(obj)
 
-        _obj = TemporalQuery.parse_obj({
+        _obj = cls.model_validate({
             "timerel": obj.get("timerel"),
-            "time_at": obj.get("timeAt"),
-            "end_time_at": obj.get("endTimeAt"),
+            "timeAt": obj.get("timeAt"),
+            "endTimeAt": obj.get("endTimeAt"),
             "timeproperty": obj.get("timeproperty")
         })
         # store additional fields in additional_properties

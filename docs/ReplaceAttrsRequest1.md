@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 **previous_value** | [**PropertyPreviousValue**](PropertyPreviousValue.md) |  | [optional] 
 **object** | **str** | Relationship&#39;s target object.  | [optional] 
 **previous_object** | **str** | Previous Relationship&#39;s target object. Only used in notifications.  | [optional] [readonly] 
-**additional_properties** | [**EntityAdditionalProperties**](EntityAdditionalProperties.md) |  | [optional] 
+**additional_properties** | [**EntityValue**](EntityValue.md) |  | [optional] 
 **language_map** | **object** | String Property Values defined in multiple natural languages.  | [optional] 
 **previous_language_map** | **object** | Previous Language Property languageMap. Only used in notifications.  | [optional] [readonly] 
 **context** | [**LdContext**](LdContext.md) |  | 

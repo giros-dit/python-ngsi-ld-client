@@ -15,10 +15,10 @@
 import unittest
 import datetime
 
-from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalProperties  # noqa: E501
+from ngsi_ld_client.models.entity_value import EntityValue  # noqa: E501
 
-class TestEntityAdditionalProperties(unittest.TestCase):
-    """EntityAdditionalProperties unit test stubs"""
+class TestEntityValue(unittest.TestCase):
+    """EntityValue unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,16 +26,16 @@ class TestEntityAdditionalProperties(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> EntityAdditionalProperties:
-        """Test EntityAdditionalProperties
+    def make_instance(self, include_optional) -> EntityValue:
+        """Test EntityValue
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `EntityAdditionalProperties`
+        # uncomment below to create an instance of `EntityValue`
         """
-        model = EntityAdditionalProperties()  # noqa: E501
+        model = EntityValue()  # noqa: E501
         if include_optional:
-            return EntityAdditionalProperties(
+            return EntityValue(
                 type = 'Property',
                 value = None,
                 observed_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
@@ -51,12 +51,12 @@ class TestEntityAdditionalProperties(unittest.TestCase):
                 additional_properties = None
             )
         else:
-            return EntityAdditionalProperties(
+            return EntityValue(
         )
         """
 
-    def testEntityAdditionalProperties(self):
-        """Test EntityAdditionalProperties"""
+    def testEntityValue(self):
+        """Test EntityValue"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

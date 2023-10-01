@@ -19,13 +19,18 @@ import pprint
 import re  # noqa: F401
 
 from typing import Any, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, validator
+from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
 from ngsi_ld_client.models.geo_property import GeoProperty
 from ngsi_ld_client.models.language_property import LanguageProperty
 from ngsi_ld_client.models.model_property import ModelProperty
 from ngsi_ld_client.models.relationship import Relationship
-from typing import Union, Any, List, TYPE_CHECKING
+from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
+from typing_extensions import Literal
 from pydantic import StrictStr, Field
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 REPLACEATTRSREQUEST_ONE_OF_SCHEMAS = ["GeoProperty", "LanguageProperty", "ModelProperty", "Relationship"]
 
@@ -41,14 +46,13 @@ class ReplaceAttrsRequest(BaseModel):
     oneof_schema_3_validator: Optional[GeoProperty] = None
     # data type: LanguageProperty
     oneof_schema_4_validator: Optional[LanguageProperty] = None
-    if TYPE_CHECKING:
-        actual_instance: Union[GeoProperty, LanguageProperty, ModelProperty, Relationship]
-    else:
-        actual_instance: Any
-    one_of_schemas: List[str] = Field(REPLACEATTRSREQUEST_ONE_OF_SCHEMAS, const=True)
+    actual_instance: Optional[Union[GeoProperty, LanguageProperty, ModelProperty, Relationship]] = None
+    one_of_schemas: List[str] = Literal["GeoProperty", "LanguageProperty", "ModelProperty", "Relationship"]
 
-    class Config:
-        validate_assignment = True
+    model_config = {
+        "validate_assignment": True
+    }
+
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -60,9 +64,9 @@ class ReplaceAttrsRequest(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @validator('actual_instance')
+    @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = ReplaceAttrsRequest.construct()
+        instance = ReplaceAttrsRequest.model_construct()
         error_messages = []
         match = 0
         # validate data type: ModelProperty
@@ -95,13 +99,13 @@ class ReplaceAttrsRequest(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> ReplaceAttrsRequest:
+    def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
-    def from_json(cls, json_str: str) -> ReplaceAttrsRequest:
+    def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
-        instance = ReplaceAttrsRequest.construct()
+        instance = cls.model_construct()
         error_messages = []
         match = 0
 
@@ -164,6 +168,6 @@ class ReplaceAttrsRequest(BaseModel):
 
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        return pprint.pformat(self.model_dump())
 
 

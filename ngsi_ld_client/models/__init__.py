@@ -31,7 +31,6 @@ from ngsi_ld_client.models.csource_registration_scope import CsourceRegistration
 from ngsi_ld_client.models.date_time_value import DateTimeValue
 from ngsi_ld_client.models.endpoint import Endpoint
 from ngsi_ld_client.models.entity import Entity
-from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalProperties
 from ngsi_ld_client.models.entity_info import EntityInfo
 from ngsi_ld_client.models.entity_info_type import EntityInfoType
 from ngsi_ld_client.models.entity_scope import EntityScope
@@ -41,6 +40,7 @@ from ngsi_ld_client.models.entity_temporal_value import EntityTemporalValue
 from ngsi_ld_client.models.entity_type import EntityType
 from ngsi_ld_client.models.entity_type_info import EntityTypeInfo
 from ngsi_ld_client.models.entity_type_list import EntityTypeList
+from ngsi_ld_client.models.entity_value import EntityValue
 from ngsi_ld_client.models.feature import Feature
 from ngsi_ld_client.models.feature_collection import FeatureCollection
 from ngsi_ld_client.models.feature_properties import FeatureProperties

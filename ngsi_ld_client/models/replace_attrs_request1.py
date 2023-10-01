@@ -18,37 +18,43 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict, Optional
-from pydantic import BaseModel, Field, StrictStr, validator
-from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalProperties
+from typing import Any, ClassVar, Dict, List, Optional, Union
+from pydantic import BaseModel, StrictStr, field_validator
+from pydantic import Field
+from ngsi_ld_client.models.entity_value import EntityValue
 from ngsi_ld_client.models.geometry import Geometry
 from ngsi_ld_client.models.ld_context import LdContext
 from ngsi_ld_client.models.property_previous_value import PropertyPreviousValue
+from typing import Dict, Any
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 class ReplaceAttrsRequest1(BaseModel):
     """
     ReplaceAttrsRequest1
     """
-    type: Optional[StrictStr] = Field('LanguageProperty', description="Node type. ")
+    type: Optional[StrictStr] = Field(default='LanguageProperty', description="Node type. ")
     value: Optional[Geometry] = None
-    observed_at: Optional[datetime] = Field(None, alias="observedAt", description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ")
-    unit_code: Optional[StrictStr] = Field(None, alias="unitCode", description="Property Value's unit code. ")
-    dataset_id: Optional[StrictStr] = Field(None, alias="datasetId", description="It allows identifying a set or group of property values. ")
-    created_at: Optional[datetime] = Field(None, alias="createdAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ")
-    modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
-    deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
-    instance_id: Optional[StrictStr] = Field(None, alias="instanceId", description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ")
-    previous_value: Optional[PropertyPreviousValue] = Field(None, alias="previousValue")
-    object: Optional[StrictStr] = Field(None, description="Relationship's target object. ")
-    previous_object: Optional[StrictStr] = Field(None, alias="previousObject", description="Previous Relationship's target object. Only used in notifications. ")
-    additional_properties: Optional[EntityAdditionalProperties] = Field(None, alias="additionalProperties")
-    language_map: Optional[Dict[str, Any]] = Field(None, alias="languageMap", description="String Property Values defined in multiple natural languages. ")
-    previous_language_map: Optional[Dict[str, Any]] = Field(None, alias="previousLanguageMap", description="Previous Language Property languageMap. Only used in notifications. ")
-    context: LdContext = Field(..., alias="@context")
+    observed_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ", alias="observedAt")
+    unit_code: Optional[StrictStr] = Field(default=None, description="Property Value's unit code. ", alias="unitCode")
+    dataset_id: Optional[StrictStr] = Field(default=None, description="It allows identifying a set or group of property values. ", alias="datasetId")
+    created_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ", alias="createdAt")
+    modified_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ", alias="modifiedAt")
+    deleted_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
+    instance_id: Optional[StrictStr] = Field(default=None, description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ", alias="instanceId")
+    previous_value: Optional[PropertyPreviousValue] = Field(default=None, alias="previousValue")
+    object: Optional[StrictStr] = Field(default=None, description="Relationship's target object. ")
+    previous_object: Optional[StrictStr] = Field(default=None, description="Previous Relationship's target object. Only used in notifications. ", alias="previousObject")
+    additional_properties: Optional[EntityValue] = Field(default=None, alias="additionalProperties")
+    language_map: Optional[Union[str, Any]] = Field(default=None, description="String Property Values defined in multiple natural languages. ", alias="languageMap")
+    previous_language_map: Optional[Union[str, Any]] = Field(default=None, description="Previous Language Property languageMap. Only used in notifications. ", alias="previousLanguageMap")
+    context: LdContext = Field(alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue", "object", "previousObject", "additionalProperties", "languageMap", "previousLanguageMap", "@context"]
+    __properties: ClassVar[List[str]] = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue", "object", "previousObject", "additionalProperties", "languageMap", "previousLanguageMap", "@context"]
 
-    @validator('type')
+    @field_validator('type')
     def type_validate_enum(cls, value):
         """Validates the enum"""
         if value is None:
@@ -58,27 +64,29 @@ class ReplaceAttrsRequest1(BaseModel):
             raise ValueError("must be one of enum values ('LanguageProperty')")
         return value
 
-    class Config:
-        """Pydantic configuration"""
-        allow_population_by_field_name = True
-        validate_assignment = True
+    model_config = {
+        "populate_by_name": True,
+        "validate_assignment": True
+    }
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
-        return pprint.pformat(self.dict(by_alias=True))
+        return pprint.pformat(self.model_dump(by_alias=True))
 
     def to_json(self) -> str:
         """Returns the JSON representation of the model using alias"""
+        # TODO: pydantic v2: use .model_dump_json(by_alias=True, exclude_unset=True) instead
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> ReplaceAttrsRequest1:
+    def from_json(cls, json_str: str) -> Self:
         """Create an instance of ReplaceAttrsRequest1 from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
+        _dict = self.model_dump(by_alias=True,
                           exclude={
                             "created_at",
                             "modified_at",
@@ -109,31 +117,31 @@ class ReplaceAttrsRequest1(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> ReplaceAttrsRequest1:
+    def from_dict(cls, obj: dict) -> Self:
         """Create an instance of ReplaceAttrsRequest1 from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return ReplaceAttrsRequest1.parse_obj(obj)
+            return cls.model_validate(obj)
 
-        _obj = ReplaceAttrsRequest1.parse_obj({
+        _obj = cls.model_validate({
             "type": obj.get("type") if obj.get("type") is not None else 'LanguageProperty',
             "value": Geometry.from_dict(obj.get("value")) if obj.get("value") is not None else None,
-            "observed_at": obj.get("observedAt"),
-            "unit_code": obj.get("unitCode"),
-            "dataset_id": obj.get("datasetId"),
-            "created_at": obj.get("createdAt"),
-            "modified_at": obj.get("modifiedAt"),
-            "deleted_at": obj.get("deletedAt"),
-            "instance_id": obj.get("instanceId"),
-            "previous_value": PropertyPreviousValue.from_dict(obj.get("previousValue")) if obj.get("previousValue") is not None else None,
+            "observedAt": obj.get("observedAt"),
+            "unitCode": obj.get("unitCode"),
+            "datasetId": obj.get("datasetId"),
+            "createdAt": obj.get("createdAt"),
+            "modifiedAt": obj.get("modifiedAt"),
+            "deletedAt": obj.get("deletedAt"),
+            "instanceId": obj.get("instanceId"),
+            "previousValue": PropertyPreviousValue.from_dict(obj.get("previousValue")) if obj.get("previousValue") is not None else None,
             "object": obj.get("object"),
-            "previous_object": obj.get("previousObject"),
-            "additional_properties": EntityAdditionalProperties.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None,
-            "language_map": obj.get("languageMap"),
-            "previous_language_map": obj.get("previousLanguageMap"),
-            "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
+            "previousObject": obj.get("previousObject"),
+            "additionalProperties": EntityValue.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None,
+            "languageMap": obj.get("languageMap"),
+            "previousLanguageMap": obj.get("previousLanguageMap"),
+            "@context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

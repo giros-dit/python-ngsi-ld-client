@@ -19,15 +19,20 @@ import pprint
 import re  # noqa: F401
 
 from typing import Any, List, Optional
-from pydantic import BaseModel, Field, StrictStr, ValidationError, validator
+from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
 from ngsi_ld_client.models.geometry_line_string import GeometryLineString
 from ngsi_ld_client.models.geometry_multi_line_string import GeometryMultiLineString
 from ngsi_ld_client.models.geometry_multi_point import GeometryMultiPoint
 from ngsi_ld_client.models.geometry_multi_polygon import GeometryMultiPolygon
 from ngsi_ld_client.models.geometry_point import GeometryPoint
 from ngsi_ld_client.models.geometry_polygon import GeometryPolygon
-from typing import Union, Any, List, TYPE_CHECKING
+from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
+from typing_extensions import Literal
 from pydantic import StrictStr, Field
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 
 GEOMETRY_ONE_OF_SCHEMAS = ["GeometryLineString", "GeometryMultiLineString", "GeometryMultiPoint", "GeometryMultiPolygon", "GeometryPoint", "GeometryPolygon"]
 
@@ -47,14 +52,13 @@ class Geometry(BaseModel):
     oneof_schema_5_validator: Optional[GeometryMultiLineString] = None
     # data type: GeometryMultiPolygon
     oneof_schema_6_validator: Optional[GeometryMultiPolygon] = None
-    if TYPE_CHECKING:
-        actual_instance: Union[GeometryLineString, GeometryMultiLineString, GeometryMultiPoint, GeometryMultiPolygon, GeometryPoint, GeometryPolygon]
-    else:
-        actual_instance: Any
-    one_of_schemas: List[str] = Field(GEOMETRY_ONE_OF_SCHEMAS, const=True)
+    actual_instance: Optional[Union[GeometryLineString, GeometryMultiLineString, GeometryMultiPoint, GeometryMultiPolygon, GeometryPoint, GeometryPolygon]] = None
+    one_of_schemas: List[str] = Literal["GeometryLineString", "GeometryMultiLineString", "GeometryMultiPoint", "GeometryMultiPolygon", "GeometryPoint", "GeometryPolygon"]
 
-    class Config:
-        validate_assignment = True
+    model_config = {
+        "validate_assignment": True
+    }
+
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -66,9 +70,9 @@ class Geometry(BaseModel):
         else:
             super().__init__(**kwargs)
 
-    @validator('actual_instance')
+    @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = Geometry.construct()
+        instance = Geometry.model_construct()
         error_messages = []
         match = 0
         # validate data type: GeometryPoint
@@ -111,13 +115,13 @@ class Geometry(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Geometry:
+    def from_dict(cls, obj: dict) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
-    def from_json(cls, json_str: str) -> Geometry:
+    def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
-        instance = Geometry.construct()
+        instance = cls.model_construct()
         error_messages = []
         match = 0
 
@@ -192,6 +196,6 @@ class Geometry(BaseModel):
 
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
-        return pprint.pformat(self.dict())
+        return pprint.pformat(self.model_dump())
 
 

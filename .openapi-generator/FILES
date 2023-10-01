@@ -27,7 +27,6 @@ docs/CsourceRegistrationScope.md
 docs/DateTimeValue.md
 docs/Endpoint.md
 docs/Entity.md
-docs/EntityAdditionalProperties.md
 docs/EntityInfo.md
 docs/EntityInfoType.md
 docs/EntityScope.md
@@ -37,6 +36,7 @@ docs/EntityTemporalValue.md
 docs/EntityType.md
 docs/EntityTypeInfo.md
 docs/EntityTypeList.md
+docs/EntityValue.md
 docs/Feature.md
 docs/FeatureCollection.md
 docs/FeatureProperties.md
@@ -146,7 +146,6 @@ ngsi_ld_client/models/csource_registration_scope.py
 ngsi_ld_client/models/date_time_value.py
 ngsi_ld_client/models/endpoint.py
 ngsi_ld_client/models/entity.py
-ngsi_ld_client/models/entity_additional_properties.py
 ngsi_ld_client/models/entity_info.py
 ngsi_ld_client/models/entity_info_type.py
 ngsi_ld_client/models/entity_scope.py
@@ -156,6 +155,7 @@ ngsi_ld_client/models/entity_temporal_value.py
 ngsi_ld_client/models/entity_type.py
 ngsi_ld_client/models/entity_type_info.py
 ngsi_ld_client/models/entity_type_list.py
+ngsi_ld_client/models/entity_value.py
 ngsi_ld_client/models/feature.py
 ngsi_ld_client/models/feature_collection.py
 ngsi_ld_client/models/feature_properties.py
@@ -259,7 +259,6 @@ test/test_csource_registration_scope.py
 test/test_date_time_value.py
 test/test_endpoint.py
 test/test_entity.py
-test/test_entity_additional_properties.py
 test/test_entity_info.py
 test/test_entity_info_type.py
 test/test_entity_scope.py
@@ -269,6 +268,7 @@ test/test_entity_temporal_value.py
 test/test_entity_type.py
 test/test_entity_type_info.py
 test/test_entity_type_list.py
+test/test_entity_value.py
 test/test_feature.py
 test/test_feature_collection.py
 test/test_feature_properties.py
