@@ -159,7 +159,6 @@ Class | Method | HTTP request | Description
  - [CreateBatchRequest](docs/CreateBatchRequest.md)
  - [CreateCSRRequest](docs/CreateCSRRequest.md)
  - [CreateCSRRequest1](docs/CreateCSRRequest1.md)
- - [CreateEntityRequest](docs/CreateEntityRequest.md)
  - [CreateSubscriptionRequest](docs/CreateSubscriptionRequest.md)
  - [CreateSubscriptionRequest1](docs/CreateSubscriptionRequest1.md)
  - [CsourceNotification](docs/CsourceNotification.md)

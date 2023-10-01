@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import Any, Dict, Optional
+from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 from ngsi_ld_client.models.feature_properties import FeatureProperties
 from ngsi_ld_client.models.geometry import Geometry
@@ -33,7 +33,6 @@ class Feature(BaseModel):
     geometry: Geometry = Field(...)
     properties: FeatureProperties = Field(...)
     context: Optional[LdContext] = Field(None, alias="@context")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "geometry", "properties", "@context"]
 
     @validator('type')
@@ -65,7 +64,6 @@ class Feature(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of geometry
@@ -77,11 +75,6 @@ class Feature(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -100,11 +93,6 @@ class Feature(BaseModel):
             "properties": FeatureProperties.from_dict(obj.get("properties")) if obj.get("properties") is not None else None,
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

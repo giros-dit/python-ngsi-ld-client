@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 from pydantic import BaseModel, Field, StrictBool, StrictStr, confloat, conint, conlist, validator
 from ngsi_ld_client.models.entity_selector import EntitySelector
 from ngsi_ld_client.models.geo_query import GeoQuery
@@ -51,7 +51,6 @@ class CreateSubscriptionRequest(BaseModel):
     watched_attributes: Optional[conlist(StrictStr, min_items=1)] = Field(None, alias="watchedAttributes", description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ")
     throttling: Optional[Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)]] = Field(None, description="Minimal period of time in seconds which shall elapse between two consecutive notifications. ")
     time_interval: Union[confloat(ge=1, strict=True), conint(ge=1, strict=True)] = Field(..., alias="timeInterval", description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "createdAt", "modifiedAt", "deletedAt", "status", "watchedAttributes", "throttling", "timeInterval"]
 
     @validator('type')
@@ -108,7 +107,6 @@ class CreateSubscriptionRequest(BaseModel):
                             "modified_at",
                             "deleted_at",
                             "status",
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -127,11 +125,6 @@ class CreateSubscriptionRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of temporal_q
         if self.temporal_q:
             _dict['temporalQ'] = self.temporal_q.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -167,11 +160,6 @@ class CreateSubscriptionRequest(BaseModel):
             "throttling": obj.get("throttling"),
             "time_interval": obj.get("timeInterval")
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

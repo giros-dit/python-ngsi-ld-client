@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import Any, Dict
+
 from pydantic import BaseModel, Field
 from ngsi_ld_client.models.feature_properties_type import FeaturePropertiesType
 

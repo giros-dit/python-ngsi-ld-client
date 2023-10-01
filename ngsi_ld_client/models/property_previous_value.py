@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict
+
 from pydantic import BaseModel, Field, StrictStr, validator
 
 class PropertyPreviousValue(BaseModel):
@@ -27,7 +27,6 @@ class PropertyPreviousValue(BaseModel):
     """
     type: StrictStr = Field(..., alias="@type")
     value: datetime = Field(..., alias="@value")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["@type", "@value"]
 
     @validator('type')
@@ -59,14 +58,8 @@ class PropertyPreviousValue(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "additional_properties"
                           },
                           exclude_none=True)
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -82,11 +75,6 @@ class PropertyPreviousValue(BaseModel):
             "type": obj.get("@type") if obj.get("@type") is not None else 'DateTime',
             "value": obj.get("@value")
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

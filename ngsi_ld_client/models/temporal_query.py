@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 
 class TemporalQuery(BaseModel):
@@ -29,7 +29,6 @@ class TemporalQuery(BaseModel):
     time_at: datetime = Field(..., alias="timeAt", description="It shall be a DateTime. ")
     end_time_at: Optional[datetime] = Field(None, alias="endTimeAt", description="It shall be a DateTime. Cardinality shall be 1 if timerel is equal to \"between\". ")
     timeproperty: Optional[StrictStr] = Field(None, description="Allowed values: \"observedAt\", \"createdAt\", \"modifiedAt\" and \"deletedAt\". If not specified, the default is \"observedAt\". (See clause 4.8). ")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["timerel", "timeAt", "endTimeAt", "timeproperty"]
 
     @validator('timerel')
@@ -71,14 +70,8 @@ class TemporalQuery(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "additional_properties"
                           },
                           exclude_none=True)
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -96,11 +89,6 @@ class TemporalQuery(BaseModel):
             "end_time_at": obj.get("endTimeAt"),
             "timeproperty": obj.get("timeproperty")
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

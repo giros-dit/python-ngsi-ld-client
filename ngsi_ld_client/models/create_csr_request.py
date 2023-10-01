@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 from pydantic import BaseModel, Field, StrictStr, confloat, conint, conlist, constr, validator
 from ngsi_ld_client.models.csource_registration_scope import CsourceRegistrationScope
 from ngsi_ld_client.models.geometry import Geometry
@@ -58,7 +58,6 @@ class CreateCSRRequest(BaseModel):
     times_failed: Optional[Union[confloat(ge=0, strict=True), conint(ge=0, strict=True)]] = Field(None, alias="timesFailed", description="Number of times that the registration triggered a distributed operation request that failed.")
     last_success: Optional[datetime] = Field(None, alias="lastSuccess", description="Timestamp corresponding to the instant when the last successfully distributed operation was sent. Created on first successful operation. ")
     last_failure: Optional[datetime] = Field(None, alias="lastFailure", description="Timestamp corresponding to the instant when the last distributed operation resulting in a failure (for instance, in the HTTP binding, an HTTP response code other than 2xx) was returned. ")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "registrationName", "description", "information", "tenant", "observationInterval", "managementInterval", "location", "observationSpace", "operationSpace", "expiresAt", "endpoint", "contextSourceInfo", "scope", "mode", "operations", "refreshRate", "management", "createdAt", "modifiedAt", "deletedAt", "status", "timesSent", "timesFailed", "lastSuccess", "lastFailure"]
 
     @validator('type')
@@ -118,7 +117,6 @@ class CreateCSRRequest(BaseModel):
                             "times_failed",
                             "last_success",
                             "last_failure",
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in information (list)
@@ -156,11 +154,6 @@ class CreateCSRRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of management
         if self.management:
             _dict['management'] = self.management.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -201,11 +194,6 @@ class CreateCSRRequest(BaseModel):
             "last_success": obj.get("lastSuccess"),
             "last_failure": obj.get("lastFailure")
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import Any, Dict, List, Union
+from typing import List, Union
 from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, conlist, validator
 from ngsi_ld_client.models.attribute import Attribute
 from ngsi_ld_client.models.ld_context import LdContext
@@ -33,7 +33,6 @@ class RetrieveTypeInfo200Response(BaseModel):
     entity_count: Union[StrictFloat, StrictInt] = Field(..., alias="entityCount", description="Number of entity instances of this entity type. ")
     attribute_details: conlist(Attribute) = Field(..., alias="attributeDetails", description="List of attributes that entity instances with the specified entity type can have. ")
     context: LdContext = Field(..., alias="@context")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "typeName", "entityCount", "attributeDetails", "@context"]
 
     @validator('type')
@@ -65,7 +64,6 @@ class RetrieveTypeInfo200Response(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in attribute_details (list)
@@ -78,11 +76,6 @@ class RetrieveTypeInfo200Response(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -102,11 +95,6 @@ class RetrieveTypeInfo200Response(BaseModel):
             "attribute_details": [Attribute.from_dict(_item) for _item in obj.get("attributeDetails")] if obj.get("attributeDetails") is not None else None,
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

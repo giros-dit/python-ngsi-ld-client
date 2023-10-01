@@ -45,7 +45,6 @@ class ReplaceAttrsRequest1(BaseModel):
     language_map: Optional[Dict[str, Any]] = Field(None, alias="languageMap", description="String Property Values defined in multiple natural languages. ")
     previous_language_map: Optional[Dict[str, Any]] = Field(None, alias="previousLanguageMap", description="Previous Language Property languageMap. Only used in notifications. ")
     context: LdContext = Field(..., alias="@context")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue", "object", "previousObject", "additionalProperties", "languageMap", "previousLanguageMap", "@context"]
 
     @validator('type')
@@ -86,7 +85,6 @@ class ReplaceAttrsRequest1(BaseModel):
                             "instance_id",
                             "previous_object",
                             "previous_language_map",
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of value
@@ -101,11 +99,6 @@ class ReplaceAttrsRequest1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -135,11 +128,6 @@ class ReplaceAttrsRequest1(BaseModel):
             "previous_language_map": obj.get("previousLanguageMap"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

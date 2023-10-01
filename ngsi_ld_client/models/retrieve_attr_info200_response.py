@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, conlist, validator
 from ngsi_ld_client.models.ld_context import LdContext
 
@@ -33,7 +33,6 @@ class RetrieveAttrInfo200Response(BaseModel):
     attribute_types: Optional[conlist(StrictStr)] = Field(None, alias="attributeTypes", description="List of attribute types (e.g. Property, Relationship, GeoProperty) for which entity instances exist, which contain an attribute with this name. ")
     type_names: Optional[conlist(StrictStr)] = Field(None, alias="typeNames", description="List of entity type names for which entity instances exist containing attributes that have the respective name. ")
     context: LdContext = Field(..., alias="@context")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "attributeName", "attributeCount", "attributeTypes", "typeNames", "@context"]
 
     @validator('type')
@@ -65,17 +64,11 @@ class RetrieveAttrInfo200Response(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -96,11 +89,6 @@ class RetrieveAttrInfo200Response(BaseModel):
             "type_names": obj.get("typeNames"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

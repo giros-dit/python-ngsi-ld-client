@@ -48,7 +48,6 @@ from ngsi_ld_client.models.create_batch201_response import CreateBatch201Respons
 from ngsi_ld_client.models.create_batch_request import CreateBatchRequest
 from ngsi_ld_client.models.create_csr_request import CreateCSRRequest
 from ngsi_ld_client.models.create_csr_request1 import CreateCSRRequest1
-from ngsi_ld_client.models.create_entity_request import CreateEntityRequest
 from ngsi_ld_client.models.create_subscription_request import CreateSubscriptionRequest
 from ngsi_ld_client.models.create_subscription_request1 import CreateSubscriptionRequest1
 from ngsi_ld_client.models.csource_notification import CsourceNotification

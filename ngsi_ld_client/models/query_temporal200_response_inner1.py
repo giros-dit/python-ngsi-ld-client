@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Optional
 from pydantic import BaseModel, Field
 from ngsi_ld_client.models.geo_property import GeoProperty
 from ngsi_ld_client.models.ld_context import LdContext
@@ -34,7 +34,6 @@ class QueryTemporal200ResponseInner1(BaseModel):
     modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
     deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
     context: LdContext = Field(..., alias="@context")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["location", "observationSpace", "operationSpace", "createdAt", "modifiedAt", "deletedAt", "@context"]
 
     class Config:
@@ -62,7 +61,6 @@ class QueryTemporal200ResponseInner1(BaseModel):
                             "created_at",
                             "modified_at",
                             "deleted_at",
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of location
@@ -77,11 +75,6 @@ class QueryTemporal200ResponseInner1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -102,11 +95,6 @@ class QueryTemporal200ResponseInner1(BaseModel):
             "deleted_at": obj.get("deletedAt"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

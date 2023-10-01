@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 from pydantic import BaseModel, Field, StrictStr, confloat, conint, conlist, constr, validator
 from ngsi_ld_client.models.csource_registration_scope import CsourceRegistrationScope
 from ngsi_ld_client.models.geometry import Geometry

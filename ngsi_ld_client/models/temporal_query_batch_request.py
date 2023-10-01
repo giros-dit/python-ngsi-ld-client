@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 from pydantic import BaseModel, Field, StrictStr, conlist, validator
 from ngsi_ld_client.models.entity_selector import EntitySelector
 from ngsi_ld_client.models.geo_query import GeoQuery
@@ -39,7 +39,6 @@ class TemporalQueryBatchRequest(BaseModel):
     scope_q: Optional[StrictStr] = Field(None, alias="scopeQ", description="Scope query.")
     lang: Optional[StrictStr] = Field(None, description="Language filter to be applied to the query (clause 4.15).")
     context: LdContext = Field(..., alias="@context")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "entities", "attrs", "q", "geoQ", "csf", "temporalQ", "scopeQ", "lang", "@context"]
 
     @validator('type')
@@ -71,7 +70,6 @@ class TemporalQueryBatchRequest(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -90,11 +88,6 @@ class TemporalQueryBatchRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -118,11 +111,6 @@ class TemporalQueryBatchRequest(BaseModel):
             "lang": obj.get("lang"),
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

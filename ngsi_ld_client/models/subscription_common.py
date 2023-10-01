@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 from pydantic import BaseModel, Field, StrictBool, StrictStr, conlist, validator
 from ngsi_ld_client.models.entity_selector import EntitySelector
 from ngsi_ld_client.models.geo_query import GeoQuery
@@ -48,7 +48,6 @@ class SubscriptionCommon(BaseModel):
     modified_at: Optional[datetime] = Field(None, alias="modifiedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ")
     deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
     status: Optional[StrictStr] = Field(None, description="Read-only. Provided by the system when querying the details of a subscription. ")
-    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "createdAt", "modifiedAt", "deletedAt", "status"]
 
     @validator('type')
@@ -108,7 +107,6 @@ class SubscriptionCommon(BaseModel):
                             "modified_at",
                             "deleted_at",
                             "status",
-                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -127,11 +125,6 @@ class SubscriptionCommon(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of temporal_q
         if self.temporal_q:
             _dict['temporalQ'] = self.temporal_q.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -164,11 +157,6 @@ class SubscriptionCommon(BaseModel):
             "deleted_at": obj.get("deletedAt"),
             "status": obj.get("status")
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 
