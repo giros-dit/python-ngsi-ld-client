@@ -40,9 +40,8 @@ class Relationship(BaseModel):
     deleted_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     instance_id: Optional[StrictStr] = Field(default=None, description="A URI uniquely identifying a Relationship instance (see clause 4.5.8). System generated. ", alias="instanceId")
     previous_object: Optional[StrictStr] = Field(default=None, description="Previous Relationship's target object. Only used in notifications. ", alias="previousObject")
-    additional_properties: Optional[EntityValue] = Field(default=None, alias="additionalProperties")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["type", "object", "observedAt", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousObject", "additionalProperties"]
+    __properties: ClassVar[List[str]] = ["type", "object", "observedAt", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousObject"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -86,9 +85,6 @@ class Relationship(BaseModel):
                             "additional_properties"
                           },
                           exclude_none=True)
-        # override the default output from pydantic by calling `to_dict()` of additional_properties
-        if self.additional_properties:
-            _dict['additionalProperties'] = self.additional_properties.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -114,8 +110,7 @@ class Relationship(BaseModel):
             "modifiedAt": obj.get("modifiedAt"),
             "deletedAt": obj.get("deletedAt"),
             "instanceId": obj.get("instanceId"),
-            "previousObject": obj.get("previousObject"),
-            "additionalProperties": EntityValue.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None
+            "previousObject": obj.get("previousObject")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():
@@ -124,10 +119,4 @@ class Relationship(BaseModel):
 
         return _obj
 
-from ngsi_ld_client.models.entity_value import EntityValue
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    # TODO: pydantic v2
-    # Relationship.model_rebuild()
-    pass
 

@@ -21,6 +21,7 @@ import re  # noqa: F401
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
 from ngsi_ld_client.models.model_property import ModelProperty
+from ngsi_ld_client.models.relationship import Relationship
 from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
 from typing_extensions import Literal
 from pydantic import StrictStr, Field
@@ -175,9 +176,4 @@ class EntityValue(BaseModel):
         """Returns the string representation of the actual instance"""
         return pprint.pformat(self.model_dump())
 
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from ngsi_ld_client.models.relationship import Relationship
-    # TODO: pydantic v2
-    # EntityValue.model_rebuild()
 

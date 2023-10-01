@@ -48,7 +48,6 @@ class TestReplaceAttrsRequest(unittest.TestCase):
                 previous_value = None,
                 object = '',
                 previous_object = '',
-                additional_properties = None,
                 language_map = None,
                 previous_language_map = None
             )

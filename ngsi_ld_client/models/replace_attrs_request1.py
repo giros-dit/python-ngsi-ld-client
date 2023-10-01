@@ -21,7 +21,6 @@ from datetime import datetime
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from pydantic import BaseModel, StrictStr, field_validator
 from pydantic import Field
-from ngsi_ld_client.models.entity_value import EntityValue
 from ngsi_ld_client.models.geometry import Geometry
 from ngsi_ld_client.models.ld_context import LdContext
 from ngsi_ld_client.models.property_previous_value import PropertyPreviousValue
@@ -47,12 +46,11 @@ class ReplaceAttrsRequest1(BaseModel):
     previous_value: Optional[PropertyPreviousValue] = Field(default=None, alias="previousValue")
     object: Optional[StrictStr] = Field(default=None, description="Relationship's target object. ")
     previous_object: Optional[StrictStr] = Field(default=None, description="Previous Relationship's target object. Only used in notifications. ", alias="previousObject")
-    additional_properties: Optional[EntityValue] = Field(default=None, alias="additionalProperties")
     language_map: Optional[Union[str, Any]] = Field(default=None, description="String Property Values defined in multiple natural languages. ", alias="languageMap")
     previous_language_map: Optional[Union[str, Any]] = Field(default=None, description="Previous Language Property languageMap. Only used in notifications. ", alias="previousLanguageMap")
     context: LdContext = Field(alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue", "object", "previousObject", "additionalProperties", "languageMap", "previousLanguageMap", "@context"]
+    __properties: ClassVar[List[str]] = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue", "object", "previousObject", "languageMap", "previousLanguageMap", "@context"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -103,9 +101,6 @@ class ReplaceAttrsRequest1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of previous_value
         if self.previous_value:
             _dict['previousValue'] = self.previous_value.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of additional_properties
-        if self.additional_properties:
-            _dict['additionalProperties'] = self.additional_properties.to_dict()
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
@@ -138,7 +133,6 @@ class ReplaceAttrsRequest1(BaseModel):
             "previousValue": PropertyPreviousValue.from_dict(obj.get("previousValue")) if obj.get("previousValue") is not None else None,
             "object": obj.get("object"),
             "previousObject": obj.get("previousObject"),
-            "additionalProperties": EntityValue.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None,
             "languageMap": obj.get("languageMap"),
             "previousLanguageMap": obj.get("previousLanguageMap"),
             "@context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None

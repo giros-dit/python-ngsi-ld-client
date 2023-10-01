@@ -16,7 +16,6 @@ Name | Type | Description | Notes
 **previous_value** | [**PropertyPreviousValue**](PropertyPreviousValue.md) |  | [optional] 
 **object** | **str** | Relationship&#39;s target object.  | [optional] 
 **previous_object** | **str** | Previous Relationship&#39;s target object. Only used in notifications.  | [optional] [readonly] 
-**additional_properties** | [**EntityValue**](EntityValue.md) |  | [optional] 
 
 ## Example
 

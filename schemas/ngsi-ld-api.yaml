@@ -4877,16 +4877,16 @@ components:
           type: string
           format: uri
           readOnly: true
-        additionalProperties:
-          oneOf:
-            - $ref: '#/components/schemas/Property'
-            - type: array
-              items:
-                $ref: '#/components/schemas/Property'
-            - $ref: '#/components/schemas/Relationship'
-            - type: array
-              items:
-                $ref: '#/components/schemas/Relationship'
+      additionalProperties:
+        oneOf:
+          - $ref: '#/components/schemas/Property'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/Relationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
     Subscription:
       oneOf:
         - $ref: '#/components/schemas/Subscription.OnChange'

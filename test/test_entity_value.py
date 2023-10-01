@@ -47,8 +47,7 @@ class TestEntityValue(unittest.TestCase):
                 instance_id = '',
                 previous_value = None,
                 object = '',
-                previous_object = '',
-                additional_properties = None
+                previous_object = ''
             )
         else:
             return EntityValue(
