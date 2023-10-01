@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import Optional
+from typing import Any, Dict, Optional
 from pydantic import BaseModel, Field, StrictStr
 from ngsi_ld_client.models.problem_details import ProblemDetails
 
@@ -29,6 +29,7 @@ class BatchEntityError(BaseModel):
     entity_id: StrictStr = Field(..., alias="entityId", description="Entity Id corresponding to the Entity in error. ")
     registration_id: Optional[StrictStr] = Field(None, alias="registrationId", description="Registration Id corresponding to a failed distributed operation (optional). ")
     error: ProblemDetails = Field(...)
+    additional_properties: Dict[str, Any] = {}
     __properties = ["entityId", "registrationId", "error"]
 
     class Config:
@@ -53,11 +54,17 @@ class BatchEntityError(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of error
         if self.error:
             _dict['error'] = self.error.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -74,6 +81,11 @@ class BatchEntityError(BaseModel):
             "registration_id": obj.get("registrationId"),
             "error": ProblemDetails.from_dict(obj.get("error")) if obj.get("error") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field, StrictBool, StrictStr, confloat, conint, conlist, validator
 from ngsi_ld_client.models.endpoint import Endpoint
 
@@ -37,6 +37,7 @@ class NotificationParams(BaseModel):
     last_notification: Optional[datetime] = Field(None, alias="lastNotification", description="Timestamp corresponding to the instant when the last notification has been sent. Provided by the system when querying the details of a subscription. ")
     last_failure: Optional[datetime] = Field(None, alias="lastFailure", description="Timestamp corresponding to the instant when the last notification resulting in failure (for instance, in the HTTP binding, an HTTP response code different than 200) has been sent. Provided by the system when querying the details of a subscription. ")
     last_success: Optional[datetime] = Field(None, alias="lastSuccess", description="Timestamp corresponding to the instant when the last successful (200 OK response) notification has been sent. Provided by the system when querying the details of a subscription. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["attributes", "sysAttrs", "format", "showChanges", "endpoint", "status", "timesSent", "timesFailed", "lastNotification", "lastFailure", "lastSuccess"]
 
     @validator('format')
@@ -81,11 +82,17 @@ class NotificationParams(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of endpoint
         if self.endpoint:
             _dict['endpoint'] = self.endpoint.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -110,6 +117,11 @@ class NotificationParams(BaseModel):
             "last_failure": obj.get("lastFailure"),
             "last_success": obj.get("lastSuccess")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

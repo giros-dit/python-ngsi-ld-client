@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, conlist, validator
 
 class GeometryPoint(BaseModel):
@@ -27,6 +27,7 @@ class GeometryPoint(BaseModel):
     """
     type: Optional[StrictStr] = None
     coordinates: Optional[conlist(Union[StrictFloat, StrictInt], max_items=2, min_items=2)] = Field(None, description="A single position. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "coordinates"]
 
     @validator('type')
@@ -61,8 +62,14 @@ class GeometryPoint(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -78,6 +85,11 @@ class GeometryPoint(BaseModel):
             "type": obj.get("type"),
             "coordinates": obj.get("coordinates")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

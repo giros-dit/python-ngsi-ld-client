@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Optional
+from typing import Any, Dict, Optional
 from pydantic import BaseModel, Field, StrictStr, validator
 
 class Relationship(BaseModel):
@@ -35,6 +35,7 @@ class Relationship(BaseModel):
     instance_id: Optional[StrictStr] = Field(None, alias="instanceId", description="A URI uniquely identifying a Relationship instance (see clause 4.5.8). System generated. ")
     previous_object: Optional[StrictStr] = Field(None, alias="previousObject", description="Previous Relationship's target object. Only used in notifications. ")
     additional_properties: Optional[EntityAdditionalProperties] = Field(None, alias="additionalProperties")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "object", "observedAt", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousObject", "additionalProperties"]
 
     @validator('type')
@@ -74,11 +75,17 @@ class Relationship(BaseModel):
                             "deleted_at",
                             "instance_id",
                             "previous_object",
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of additional_properties
         if self.additional_properties:
             _dict['additionalProperties'] = self.additional_properties.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -102,6 +109,11 @@ class Relationship(BaseModel):
             "previous_object": obj.get("previousObject"),
             "additional_properties": EntityAdditionalProperties.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalProperties

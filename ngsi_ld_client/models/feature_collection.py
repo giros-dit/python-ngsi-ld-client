@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, StrictStr, conlist, validator
 from ngsi_ld_client.models.feature import Feature
 from ngsi_ld_client.models.ld_context import LdContext
@@ -30,6 +30,7 @@ class FeatureCollection(BaseModel):
     type: StrictStr = Field(..., description="GeoJSON Type. ")
     features: Optional[conlist(Feature)] = Field(None, description="In the case that no matches are found, \"features\" will be an empty array. ")
     context: Optional[LdContext] = Field(None, alias="@context")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["type", "features", "@context"]
 
     @validator('type')
@@ -61,6 +62,7 @@ class FeatureCollection(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in features (list)
@@ -73,6 +75,11 @@ class FeatureCollection(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -89,6 +96,11 @@ class FeatureCollection(BaseModel):
             "features": [Feature.from_dict(_item) for _item in obj.get("features")] if obj.get("features") is not None else None,
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

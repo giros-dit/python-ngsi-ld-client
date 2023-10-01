@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, conlist, validator
 
 class Attribute(BaseModel):
@@ -31,6 +31,7 @@ class Attribute(BaseModel):
     attribute_count: Optional[Union[StrictFloat, StrictInt]] = Field(None, alias="attributeCount", description="Number of attribute instances with this attribute name. ")
     attribute_types: Optional[conlist(StrictStr)] = Field(None, alias="attributeTypes", description="List of attribute types (e.g. Property, Relationship, GeoProperty) for which entity instances exist, which contain an attribute with this name. ")
     type_names: Optional[conlist(StrictStr)] = Field(None, alias="typeNames", description="List of entity type names for which entity instances exist containing attributes that have the respective name. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "attributeName", "attributeCount", "attributeTypes", "typeNames"]
 
     @validator('type')
@@ -62,8 +63,14 @@ class Attribute(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -83,6 +90,11 @@ class Attribute(BaseModel):
             "attribute_types": obj.get("attributeTypes"),
             "type_names": obj.get("typeNames")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

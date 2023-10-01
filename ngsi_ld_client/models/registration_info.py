@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, StrictStr, conlist
 from ngsi_ld_client.models.entity_info import EntityInfo
 
@@ -29,6 +29,7 @@ class RegistrationInfo(BaseModel):
     entities: Optional[conlist(EntityInfo, min_items=1)] = Field(None, description="Describes the entities for which the CSource may be able to provide information. ")
     property_names: Optional[conlist(StrictStr, min_items=1)] = Field(None, alias="propertyNames", description="Describes the Properties that the CSource may be able to provide. ")
     relationship_names: Optional[conlist(StrictStr, min_items=1)] = Field(None, alias="relationshipNames", description="Describes the Relationships that the CSource may be able to provide. ")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["entities", "propertyNames", "relationshipNames"]
 
     class Config:
@@ -53,6 +54,7 @@ class RegistrationInfo(BaseModel):
         """Returns the dictionary representation of the model using alias"""
         _dict = self.dict(by_alias=True,
                           exclude={
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -62,6 +64,11 @@ class RegistrationInfo(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['entities'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -78,6 +85,11 @@ class RegistrationInfo(BaseModel):
             "property_names": obj.get("propertyNames"),
             "relationship_names": obj.get("relationshipNames")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Optional
+from typing import Any, Dict, Optional
 from pydantic import BaseModel, Field, StrictStr
 from ngsi_ld_client.models.entity_additional_properties import EntityAdditionalProperties
 from ngsi_ld_client.models.entity_scope import EntityScope
@@ -41,6 +41,7 @@ class QueryEntity200ResponseInner1(BaseModel):
     deleted_at: Optional[datetime] = Field(None, alias="deletedAt", description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ")
     additional_properties: Optional[EntityAdditionalProperties] = Field(None, alias="additionalProperties")
     context: LdContext = Field(..., alias="@context")
+    additional_properties: Dict[str, Any] = {}
     __properties = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "createdAt", "modifiedAt", "deletedAt", "additionalProperties", "@context"]
 
     class Config:
@@ -68,6 +69,7 @@ class QueryEntity200ResponseInner1(BaseModel):
                             "created_at",
                             "modified_at",
                             "deleted_at",
+                            "additional_properties"
                           },
                           exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of type
@@ -91,6 +93,11 @@ class QueryEntity200ResponseInner1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -115,6 +122,11 @@ class QueryEntity200ResponseInner1(BaseModel):
             "additional_properties": EntityAdditionalProperties.from_dict(obj.get("additionalProperties")) if obj.get("additionalProperties") is not None else None,
             "context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 
