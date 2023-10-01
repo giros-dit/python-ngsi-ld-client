@@ -67,7 +67,7 @@ class Configuration:
                  ) -> None:
         """Constructor
         """
-        self._base_path = "https://localhost/ngsi-ld/v1" if host is None else host
+        self._base_path = "https://localhost:443/ngsi-ld/v1" if host is None else host
         """Default Base url
         """
         self.server_index = 0 if server_index is None and host is None else server_index
@@ -378,8 +378,26 @@ class Configuration:
         """
         return [
             {
-                'url': "https://localhost/ngsi-ld/v1",
+                'url': "{protocol}://{hostname}:{port}/ngsi-ld/v1",
                 'description': "No description provided",
+                'variables': {
+                    'protocol': {
+                        'description': "No description provided",
+                        'default_value': "https",
+                        'enum_values': [
+                            "http",
+                            "https"
+                        ]
+                        },
+                    'hostname': {
+                        'description': "No description provided",
+                        'default_value': "localhost",
+                        },
+                    'port': {
+                        'description': "No description provided",
+                        'default_value': "443",
+                        }
+                    }
             }
         ]
 

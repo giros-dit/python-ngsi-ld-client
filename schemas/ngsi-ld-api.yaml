@@ -14,7 +14,17 @@ externalDocs:
   url: https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.06.01_60/gs_CIM009v010601p.pdf
 
 servers:
-  - url: https://localhost/ngsi-ld/v1
+  - url: '{protocol}://{hostname}:{port}/ngsi-ld/v1'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost
+      port:
+        default: '443'
 
 paths:
   /entities:

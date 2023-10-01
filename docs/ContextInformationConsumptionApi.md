@@ -1,6 +1,6 @@
 # ngsi_ld_client.ContextInformationConsumptionApi
 
-All URIs are relative to *https://localhost/ngsi-ld/v1*
+All URIs are relative to *https://localhost:443/ngsi-ld/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -33,10 +33,10 @@ from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200R
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -108,10 +108,10 @@ from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEnti
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -213,10 +213,10 @@ from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubs
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -291,10 +291,10 @@ from ngsi_ld_client.models.attribute import Attribute
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -366,10 +366,10 @@ from ngsi_ld_client.models.retrieve_attributes200_response import RetrieveAttrib
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -441,10 +441,10 @@ from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEnti
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -524,10 +524,10 @@ from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubs
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -599,10 +599,10 @@ from ngsi_ld_client.models.entity_type_info import EntityTypeInfo
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -674,10 +674,10 @@ from ngsi_ld_client.models.retrieve_types200_response import RetrieveTypes200Res
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 

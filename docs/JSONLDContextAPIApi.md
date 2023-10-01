@@ -1,6 +1,6 @@
 # ngsi_ld_client.JSONLDContextAPIApi
 
-All URIs are relative to *https://localhost/ngsi-ld/v1*
+All URIs are relative to *https://localhost:443/ngsi-ld/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -26,10 +26,10 @@ import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -91,10 +91,10 @@ import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -167,10 +167,10 @@ from ngsi_ld_client.models.list_contexts200_response import ListContexts200Respo
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -242,10 +242,10 @@ import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 

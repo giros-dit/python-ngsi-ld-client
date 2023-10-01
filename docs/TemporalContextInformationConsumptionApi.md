@@ -1,6 +1,6 @@
 # ngsi_ld_client.TemporalContextInformationConsumptionApi
 
-All URIs are relative to *https://localhost/ngsi-ld/v1*
+All URIs are relative to *https://localhost:443/ngsi-ld/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -27,10 +27,10 @@ from ngsi_ld_client.models.query_temporal200_response_inner import QueryTemporal
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -142,10 +142,10 @@ from ngsi_ld_client.models.query_temporal200_response_inner import QueryTemporal
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
@@ -242,10 +242,10 @@ from ngsi_ld_client.models.query_temporal200_response_inner import QueryTemporal
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://localhost/ngsi-ld/v1
+# Defining the host is optional and defaults to https://localhost:443/ngsi-ld/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ngsi_ld_client.Configuration(
-    host = "https://localhost/ngsi-ld/v1"
+    host = "https://localhost:443/ngsi-ld/v1"
 )
 
 
