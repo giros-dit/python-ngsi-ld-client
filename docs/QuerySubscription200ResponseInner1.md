@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **type** | **str** | JSON-LD @type.  | 
 **subscription_name** | **str** | A (short) name given to this Subscription.  | [optional] 
 **description** | **str** | Subscription description.  | [optional] 
-**entities** | [**List[EntitySelector]**](EntitySelector.md) | Entities subscribed.  | 
+**entities** | [**List[EntitySelector]**](EntitySelector.md) | Entities subscribed.  | [optional] 
 **notification_trigger** | **List[str]** | The notification triggers listed indicate what kind of changes shall trigger a notification. If not present, the default is the combination attributeCreated and attributeUpdated. entityUpdated is equivalent to the combination attributeCreated, attributeUpdated and attributeDeleted.  | [optional] 
 **q** | **str** | Query that shall be met by subscribed entities in order to trigger the notification.  | [optional] 
 **geo_q** | [**GeoQuery**](GeoQuery.md) |  | [optional] 
@@ -25,7 +25,6 @@ Name | Type | Description | Notes
 **status** | **str** | Read-only. Provided by the system when querying the details of a subscription.  | [optional] [readonly] 
 **watched_attributes** | **List[str]** | Watched Attributes (Properties or Relationships). If not defined it means any Attribute.  | [optional] 
 **throttling** | **float** | Minimal period of time in seconds which shall elapse between two consecutive notifications.  | [optional] 
-**time_interval** | **float** | Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached.  | 
 **context** | [**LdContext**](LdContext.md) |  | 
 
 ## Example

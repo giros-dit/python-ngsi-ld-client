@@ -21,7 +21,6 @@ import re  # noqa: F401
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
 from ngsi_ld_client.models.subscription_on_change import SubscriptionOnChange
-from ngsi_ld_client.models.subscription_periodic import SubscriptionPeriodic
 from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
 from typing_extensions import Literal
 from pydantic import StrictStr, Field
@@ -30,7 +29,7 @@ try:
 except ImportError:
     from typing_extensions import Self
 
-SUBSCRIPTION_ONE_OF_SCHEMAS = ["SubscriptionOnChange", "SubscriptionPeriodic"]
+SUBSCRIPTION_ONE_OF_SCHEMAS = ["SubscriptionOnChange"]
 
 class Subscription(BaseModel):
     """
@@ -38,10 +37,8 @@ class Subscription(BaseModel):
     """
     # data type: SubscriptionOnChange
     oneof_schema_1_validator: Optional[SubscriptionOnChange] = None
-    # data type: SubscriptionPeriodic
-    oneof_schema_2_validator: Optional[SubscriptionPeriodic] = None
-    actual_instance: Optional[Union[SubscriptionOnChange, SubscriptionPeriodic]] = None
-    one_of_schemas: List[str] = Literal["SubscriptionOnChange", "SubscriptionPeriodic"]
+    actual_instance: Optional[Union[SubscriptionOnChange]] = None
+    one_of_schemas: List[str] = Literal["SubscriptionOnChange"]
 
     model_config = {
         "validate_assignment": True
@@ -68,17 +65,12 @@ class Subscription(BaseModel):
             error_messages.append(f"Error! Input type `{type(v)}` is not `SubscriptionOnChange`")
         else:
             match += 1
-        # validate data type: SubscriptionPeriodic
-        if not isinstance(v, SubscriptionPeriodic):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `SubscriptionPeriodic`")
-        else:
-            match += 1
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in Subscription with oneOf schemas: SubscriptionOnChange, SubscriptionPeriodic. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in Subscription with oneOf schemas: SubscriptionOnChange. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in Subscription with oneOf schemas: SubscriptionOnChange, SubscriptionPeriodic. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in Subscription with oneOf schemas: SubscriptionOnChange. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -99,19 +91,13 @@ class Subscription(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into SubscriptionPeriodic
-        try:
-            instance.actual_instance = SubscriptionPeriodic.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into Subscription with oneOf schemas: SubscriptionOnChange, SubscriptionPeriodic. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into Subscription with oneOf schemas: SubscriptionOnChange. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into Subscription with oneOf schemas: SubscriptionOnChange, SubscriptionPeriodic. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into Subscription with oneOf schemas: SubscriptionOnChange. Details: " + ", ".join(error_messages))
         else:
             return instance
 

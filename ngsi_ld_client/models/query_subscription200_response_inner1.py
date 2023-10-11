@@ -41,7 +41,7 @@ class QuerySubscription200ResponseInner1(BaseModel):
     type: StrictStr = Field(description="JSON-LD @type. ")
     subscription_name: Optional[StrictStr] = Field(default=None, description="A (short) name given to this Subscription. ", alias="subscriptionName")
     description: Optional[StrictStr] = Field(default=None, description="Subscription description. ")
-    entities: Annotated[List[EntitySelector], Field(min_length=1)] = Field(description="Entities subscribed. ")
+    entities: Optional[Annotated[List[EntitySelector], Field(min_length=1)]] = Field(default=None, description="Entities subscribed. ")
     notification_trigger: Optional[List[StrictStr]] = Field(default=None, description="The notification triggers listed indicate what kind of changes shall trigger a notification. If not present, the default is the combination attributeCreated and attributeUpdated. entityUpdated is equivalent to the combination attributeCreated, attributeUpdated and attributeDeleted. ", alias="notificationTrigger")
     q: Optional[StrictStr] = Field(default=None, description="Query that shall be met by subscribed entities in order to trigger the notification. ")
     geo_q: Optional[GeoQuery] = Field(default=None, alias="geoQ")
@@ -58,10 +58,9 @@ class QuerySubscription200ResponseInner1(BaseModel):
     status: Optional[StrictStr] = Field(default=None, description="Read-only. Provided by the system when querying the details of a subscription. ")
     watched_attributes: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ", alias="watchedAttributes")
     throttling: Optional[Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Minimal period of time in seconds which shall elapse between two consecutive notifications. ")
-    time_interval: Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]] = Field(description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ", alias="timeInterval")
     context: LdContext = Field(alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "createdAt", "modifiedAt", "deletedAt", "status", "watchedAttributes", "throttling", "timeInterval", "@context"]
+    __properties: ClassVar[List[str]] = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "createdAt", "modifiedAt", "deletedAt", "status", "watchedAttributes", "throttling", "@context"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -179,7 +178,6 @@ class QuerySubscription200ResponseInner1(BaseModel):
             "status": obj.get("status"),
             "watchedAttributes": obj.get("watchedAttributes"),
             "throttling": obj.get("throttling"),
-            "timeInterval": obj.get("timeInterval"),
             "@context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties

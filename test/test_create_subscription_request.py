@@ -100,19 +100,11 @@ class TestCreateSubscriptionRequest(unittest.TestCase):
                 watched_attributes = [
                     ''
                     ],
-                throttling = 1,
-                time_interval = 1
+                throttling = 1
             )
         else:
             return CreateSubscriptionRequest(
                 type = 'Subscription',
-                entities = [
-                    ngsi_ld_client.models.entity_selector.EntitySelector(
-                        id = '', 
-                        id_pattern = '', 
-                        type = '', )
-                    ],
-                time_interval = 1,
         )
         """
 

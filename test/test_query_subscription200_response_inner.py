@@ -100,19 +100,12 @@ class TestQuerySubscription200ResponseInner(unittest.TestCase):
                 watched_attributes = [
                     ''
                     ],
-                throttling = 1,
-                time_interval = 1
+                throttling = 1
             )
         else:
             return QuerySubscription200ResponseInner(
                 id = '',
                 type = 'Subscription',
-                entities = [
-                    ngsi_ld_client.models.entity_selector.EntitySelector(
-                        id = '', 
-                        id_pattern = '', 
-                        type = '', )
-                    ],
                 notification = ngsi_ld_client.models.notification_params.NotificationParams(
                     attributes = [
                         ''
@@ -141,7 +134,6 @@ class TestQuerySubscription200ResponseInner(unittest.TestCase):
                     last_notification = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     last_failure = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     last_success = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ),
-                time_interval = 1,
         )
         """
 

@@ -4890,7 +4890,7 @@ components:
     Subscription:
       oneOf:
         - $ref: '#/components/schemas/Subscription.OnChange'
-        - $ref: '#/components/schemas/Subscription.Periodic'
+       # - $ref: '#/components/schemas/Subscription.Periodic'
     Subscription.Common:
       description: |
         5.2.12 represents a Context Subscription.
