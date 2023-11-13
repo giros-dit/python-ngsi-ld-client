@@ -113,7 +113,6 @@ class TestCreateSubscriptionRequest1(unittest.TestCase):
                         id_pattern = '', 
                         type = '', )
                     ],
-                time_interval = 1,
                 context = None,
         )
         """

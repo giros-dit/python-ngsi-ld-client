@@ -58,7 +58,7 @@ class QuerySubscription200ResponseInner1(BaseModel):
     status: Optional[StrictStr] = Field(default=None, description="Read-only. Provided by the system when querying the details of a subscription. ")
     watched_attributes: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ", alias="watchedAttributes")
     throttling: Optional[Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Minimal period of time in seconds which shall elapse between two consecutive notifications. ")
-    time_interval: Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]] = Field(description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ", alias="timeInterval")
+    time_interval: Optional[Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ", alias="timeInterval")
     context: LdContext = Field(alias="@context")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "createdAt", "modifiedAt", "deletedAt", "status", "watchedAttributes", "throttling", "timeInterval", "@context"]
@@ -111,17 +111,32 @@ class QuerySubscription200ResponseInner1(BaseModel):
         """Create an instance of QuerySubscription200ResponseInner1 from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self):
-        """Returns the dictionary representation of the model using alias"""
-        _dict = self.model_dump(by_alias=True,
-                          exclude={
-                            "created_at",
-                            "modified_at",
-                            "deleted_at",
-                            "status",
-                            "additional_properties"
-                          },
-                          exclude_none=True)
+    def to_dict(self) -> Dict[str, Any]:
+        """Return the dictionary representation of the model using alias.
+
+        This has the following differences from calling pydantic's
+        `self.model_dump(by_alias=True)`:
+
+        * `None` is only added to the output dict for nullable fields that
+          were set at model initialization. Other fields with value `None`
+          are ignored.
+        * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
+        * Fields in `self.additional_properties` are added to the output dict.
+        """
+        _dict = self.model_dump(
+            by_alias=True,
+            exclude={
+                "created_at",
+                "modified_at",
+                "deleted_at",
+                "status",
+                "additional_properties",
+            },
+            exclude_none=True,
+        )
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
         _items = []
         if self.entities:

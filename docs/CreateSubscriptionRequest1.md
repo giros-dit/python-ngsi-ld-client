@@ -25,7 +25,7 @@ Name | Type | Description | Notes
 **status** | **str** | Read-only. Provided by the system when querying the details of a subscription.  | [optional] [readonly] 
 **watched_attributes** | **List[str]** | Watched Attributes (Properties or Relationships). If not defined it means any Attribute.  | [optional] 
 **throttling** | **float** | Minimal period of time in seconds which shall elapse between two consecutive notifications.  | [optional] 
-**time_interval** | **float** | Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached.  | 
+**time_interval** | **float** | Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached.  | [optional] 
 **context** | [**LdContext**](LdContext.md) |  | 
 
 ## Example
