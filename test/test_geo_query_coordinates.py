@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geo_query_coordinates import GeoQueryCoordinates  # noqa: E501
+from ngsi_ld_client.models.geo_query_coordinates import GeoQueryCoordinates
 
 class TestGeoQueryCoordinates(unittest.TestCase):
     """GeoQueryCoordinates unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeoQueryCoordinates(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeoQueryCoordinates`
         """
-        model = GeoQueryCoordinates()  # noqa: E501
+        model = GeoQueryCoordinates()
         if include_optional:
             return GeoQueryCoordinates(
             )

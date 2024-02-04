@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.query_csr200_response_inner import QueryCSR200ResponseInner  # noqa: E501
+from ngsi_ld_client.models.query_csr200_response_inner import QueryCSR200ResponseInner
 
 class TestQueryCSR200ResponseInner(unittest.TestCase):
     """QueryCSR200ResponseInner unit test stubs"""
@@ -33,7 +32,7 @@ class TestQueryCSR200ResponseInner(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `QueryCSR200ResponseInner`
         """
-        model = QueryCSR200ResponseInner()  # noqa: E501
+        model = QueryCSR200ResponseInner()
         if include_optional:
             return QueryCSR200ResponseInner(
                 id = '',

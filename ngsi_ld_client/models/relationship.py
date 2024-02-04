@@ -18,19 +18,15 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr, field_validator
-from pydantic import Field
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class Relationship(BaseModel):
     """
-    5.2.6 NGSI-LD Relationship.   # noqa: E501
-    """
+    5.2.6 NGSI-LD Relationship. 
+    """ # noqa: E501
     type: Optional[StrictStr] = Field(default='Relationship', description="Node type. ")
     object: Optional[StrictStr] = Field(default=None, description="Relationship's target object. ")
     observed_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ", alias="observedAt")
@@ -55,7 +51,8 @@ class Relationship(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -69,7 +66,7 @@ class Relationship(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Relationship from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -89,16 +86,18 @@ class Relationship(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "instance_id",
+            "previous_object",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "instance_id",
-                "previous_object",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # puts key-value pairs in additional_properties in the top level
@@ -109,7 +108,7 @@ class Relationship(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Relationship from a dict"""
         if obj is None:
             return None

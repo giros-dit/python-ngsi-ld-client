@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.date_time_value import DateTimeValue  # noqa: E501
+from ngsi_ld_client.models.date_time_value import DateTimeValue
 
 class TestDateTimeValue(unittest.TestCase):
     """DateTimeValue unit test stubs"""
@@ -33,7 +32,7 @@ class TestDateTimeValue(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `DateTimeValue`
         """
-        model = DateTimeValue()  # noqa: E501
+        model = DateTimeValue()
         if include_optional:
             return DateTimeValue(
                 type = 'DateTime',

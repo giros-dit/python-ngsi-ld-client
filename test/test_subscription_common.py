@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.subscription_common import SubscriptionCommon  # noqa: E501
+from ngsi_ld_client.models.subscription_common import SubscriptionCommon
 
 class TestSubscriptionCommon(unittest.TestCase):
     """SubscriptionCommon unit test stubs"""
@@ -33,7 +32,7 @@ class TestSubscriptionCommon(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `SubscriptionCommon`
         """
-        model = SubscriptionCommon()  # noqa: E501
+        model = SubscriptionCommon()
         if include_optional:
             return SubscriptionCommon(
                 id = '',

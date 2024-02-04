@@ -18,21 +18,17 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictBool, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
-from pydantic import BaseModel, StrictBool, StrictStr, field_validator
-from pydantic import Field
 from typing_extensions import Annotated
 from ngsi_ld_client.models.endpoint import Endpoint
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class NotificationParams(BaseModel):
     """
-    5.2.14 represents the parameters that allow to convey the details of a notification.   # noqa: E501
-    """
+    5.2.14 represents the parameters that allow to convey the details of a notification. 
+    """ # noqa: E501
     attributes: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, description="Entity Attribute Names (Properties or Relationships) to be included in the notification payload body. If undefined it will mean all Attributes. ")
     sys_attrs: Optional[StrictBool] = Field(default=None, description="If true, the system generated attributes createdAt and modifiedAt are included in the response payload body, in the case of a deletion also deletedAt. ", alias="sysAttrs")
     format: Optional[StrictStr] = Field(default=None, description="Conveys the representation format of the entities delivered at notification time. By default, it will be in the normalized format. ")
@@ -69,7 +65,8 @@ class NotificationParams(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -83,7 +80,7 @@ class NotificationParams(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of NotificationParams from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -98,11 +95,13 @@ class NotificationParams(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of endpoint
@@ -116,7 +115,7 @@ class NotificationParams(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of NotificationParams from a dict"""
         if obj is None:
             return None
@@ -129,7 +128,7 @@ class NotificationParams(BaseModel):
             "sysAttrs": obj.get("sysAttrs"),
             "format": obj.get("format"),
             "showChanges": obj.get("showChanges"),
-            "endpoint": Endpoint.from_dict(obj.get("endpoint")) if obj.get("endpoint") is not None else None,
+            "endpoint": Endpoint.from_dict(obj["endpoint"]) if obj.get("endpoint") is not None else None,
             "status": obj.get("status"),
             "timesSent": obj.get("timesSent"),
             "timesFailed": obj.get("timesFailed"),

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.query_entity_georel_parameter import QueryEntityGeorelParameter  # noqa: E501
+from ngsi_ld_client.models.query_entity_georel_parameter import QueryEntityGeorelParameter
 
 class TestQueryEntityGeorelParameter(unittest.TestCase):
     """QueryEntityGeorelParameter unit test stubs"""
@@ -33,7 +32,7 @@ class TestQueryEntityGeorelParameter(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `QueryEntityGeorelParameter`
         """
-        model = QueryEntityGeorelParameter()  # noqa: E501
+        model = QueryEntityGeorelParameter()
         if include_optional:
             return QueryEntityGeorelParameter(
             )

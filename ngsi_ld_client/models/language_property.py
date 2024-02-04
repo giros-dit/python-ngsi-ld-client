@@ -18,28 +18,24 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, ClassVar, Dict, List, Optional, Union
-from pydantic import BaseModel, StrictStr, field_validator
-from pydantic import Field
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from pydantic import BaseModel, Field, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional
+from typing import Optional, Set
+from typing_extensions import Self
 
 class LanguageProperty(BaseModel):
     """
-    5.2.32 NGSI-LD LanguageProperty.   # noqa: E501
-    """
+    5.2.32 NGSI-LD LanguageProperty. 
+    """ # noqa: E501
     type: Optional[StrictStr] = Field(default='LanguageProperty', description="Node type. ")
-    language_map: Optional[Union[str, Any]] = Field(default=None, description="String Property Values defined in multiple natural languages. ", alias="languageMap")
+    language_map: Optional[Dict[str, Any]] = Field(default=None, description="String Property Values defined in multiple natural languages. ", alias="languageMap")
     observed_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ", alias="observedAt")
     dataset_id: Optional[StrictStr] = Field(default=None, description="It allows identifying a set or group of property values. ", alias="datasetId")
     created_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system. ", alias="createdAt")
     modified_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value. ", alias="modifiedAt")
     deleted_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     instance_id: Optional[StrictStr] = Field(default=None, description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ", alias="instanceId")
-    previous_language_map: Optional[Union[str, Any]] = Field(default=None, description="Previous Language Property languageMap. Only used in notifications. ", alias="previousLanguageMap")
+    previous_language_map: Optional[Dict[str, Any]] = Field(default=None, description="Previous Language Property languageMap. Only used in notifications. ", alias="previousLanguageMap")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["type", "languageMap", "observedAt", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousLanguageMap"]
 
@@ -55,7 +51,8 @@ class LanguageProperty(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -69,7 +66,7 @@ class LanguageProperty(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of LanguageProperty from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -89,16 +86,18 @@ class LanguageProperty(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "instance_id",
+            "previous_language_map",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "instance_id",
-                "previous_language_map",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # puts key-value pairs in additional_properties in the top level
@@ -109,7 +108,7 @@ class LanguageProperty(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of LanguageProperty from a dict"""
         if obj is None:
             return None

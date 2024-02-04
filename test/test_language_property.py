@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.language_property import LanguageProperty  # noqa: E501
+from ngsi_ld_client.models.language_property import LanguageProperty
 
 class TestLanguageProperty(unittest.TestCase):
     """LanguageProperty unit test stubs"""
@@ -33,7 +32,7 @@ class TestLanguageProperty(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `LanguageProperty`
         """
-        model = LanguageProperty()  # noqa: E501
+        model = LanguageProperty()
         if include_optional:
             return LanguageProperty(
                 type = 'LanguageProperty',

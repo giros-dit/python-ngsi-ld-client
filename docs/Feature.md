@@ -3,6 +3,7 @@
 5.2.29 This data type represents a spatially bounded Entity in GeoJSON format, as mandated by IETF RFC 7946. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity id.  | 

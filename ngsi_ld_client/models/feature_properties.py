@@ -17,27 +17,24 @@ import pprint
 import re  # noqa: F401
 import json
 
-
-from typing import Any, ClassVar, Dict, List
 from pydantic import BaseModel
+from typing import Any, ClassVar, Dict, List
 from ngsi_ld_client.models.feature_properties_type import FeaturePropertiesType
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class FeatureProperties(BaseModel):
     """
-    5.2.31 This data type represents the type and the associated attributes (Properties and Relationships) of an Entity in GeoJSON format.   # noqa: E501
-    """
+    5.2.31 This data type represents the type and the associated attributes (Properties and Relationships) of an Entity in GeoJSON format. 
+    """ # noqa: E501
     type: FeaturePropertiesType
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["type"]
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -51,7 +48,7 @@ class FeatureProperties(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of FeatureProperties from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -66,11 +63,13 @@ class FeatureProperties(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of type
@@ -84,7 +83,7 @@ class FeatureProperties(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of FeatureProperties from a dict"""
         if obj is None:
             return None
@@ -93,7 +92,7 @@ class FeatureProperties(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "type": FeaturePropertiesType.from_dict(obj.get("type")) if obj.get("type") is not None else None
+            "type": FeaturePropertiesType.from_dict(obj["type"]) if obj.get("type") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

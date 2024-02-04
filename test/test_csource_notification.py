@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.csource_notification import CsourceNotification  # noqa: E501
+from ngsi_ld_client.models.csource_notification import CsourceNotification
 
 class TestCsourceNotification(unittest.TestCase):
     """CsourceNotification unit test stubs"""
@@ -33,7 +32,7 @@ class TestCsourceNotification(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `CsourceNotification`
         """
-        model = CsourceNotification()  # noqa: E501
+        model = CsourceNotification()
         if include_optional:
             return CsourceNotification(
                 id = '',

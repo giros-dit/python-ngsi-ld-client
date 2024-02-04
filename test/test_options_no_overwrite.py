@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.options_no_overwrite import OptionsNoOverwrite  # noqa: E501
+from ngsi_ld_client.models.options_no_overwrite import OptionsNoOverwrite
 
 class TestOptionsNoOverwrite(unittest.TestCase):
     """OptionsNoOverwrite unit test stubs"""

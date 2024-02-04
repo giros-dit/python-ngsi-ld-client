@@ -17,21 +17,16 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Union
-from pydantic import BaseModel, StrictFloat, StrictInt, StrictStr, field_validator
-from pydantic import Field
 from ngsi_ld_client.models.attribute import Attribute
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class EntityTypeInfo(BaseModel):
     """
-    5.2.26 This type represents the data needed to define the detailed entity type information representation as mandated by clause 4.5.12.   # noqa: E501
-    """
+    5.2.26 This type represents the data needed to define the detailed entity type information representation as mandated by clause 4.5.12. 
+    """ # noqa: E501
     id: StrictStr = Field(description="Fully Qualified Name (FQN) of the entity type being described. ")
     type: StrictStr = Field(description="JSON-LD @type. ")
     type_name: StrictStr = Field(description="Name of the entity type, short name if contained in @context. ", alias="typeName")
@@ -49,7 +44,8 @@ class EntityTypeInfo(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -63,7 +59,7 @@ class EntityTypeInfo(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of EntityTypeInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -78,11 +74,13 @@ class EntityTypeInfo(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in attribute_details (list)
@@ -100,7 +98,7 @@ class EntityTypeInfo(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of EntityTypeInfo from a dict"""
         if obj is None:
             return None
@@ -113,7 +111,7 @@ class EntityTypeInfo(BaseModel):
             "type": obj.get("type"),
             "typeName": obj.get("typeName"),
             "entityCount": obj.get("entityCount"),
-            "attributeDetails": [Attribute.from_dict(_item) for _item in obj.get("attributeDetails")] if obj.get("attributeDetails") is not None else None
+            "attributeDetails": [Attribute.from_dict(_item) for _item in obj["attributeDetails"]] if obj.get("attributeDetails") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

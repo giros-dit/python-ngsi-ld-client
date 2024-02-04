@@ -59,7 +59,6 @@ Please follow the [installation procedure](#installation--usage) and then run th
 
 ```python
 
-import time
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint

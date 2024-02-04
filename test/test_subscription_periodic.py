@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.subscription_periodic import SubscriptionPeriodic  # noqa: E501
+from ngsi_ld_client.models.subscription_periodic import SubscriptionPeriodic
 
 class TestSubscriptionPeriodic(unittest.TestCase):
     """SubscriptionPeriodic unit test stubs"""
@@ -33,7 +32,7 @@ class TestSubscriptionPeriodic(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `SubscriptionPeriodic`
         """
-        model = SubscriptionPeriodic()  # noqa: E501
+        model = SubscriptionPeriodic()
         if include_optional:
             return SubscriptionPeriodic(
                 id = '',

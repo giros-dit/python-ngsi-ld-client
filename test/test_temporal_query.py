@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.temporal_query import TemporalQuery  # noqa: E501
+from ngsi_ld_client.models.temporal_query import TemporalQuery
 
 class TestTemporalQuery(unittest.TestCase):
     """TemporalQuery unit test stubs"""
@@ -33,7 +32,7 @@ class TestTemporalQuery(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `TemporalQuery`
         """
-        model = TemporalQuery()  # noqa: E501
+        model = TemporalQuery()
         if include_optional:
             return TemporalQuery(
                 timerel = 'before',

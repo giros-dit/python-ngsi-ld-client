@@ -17,21 +17,16 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from pydantic import Field
 from ngsi_ld_client.models.problem_details import ProblemDetails
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class BatchEntityError(BaseModel):
     """
-    5.2.17 represents an error raised (associated to a particular Entity) during the execution of a batch or distributed operation.   # noqa: E501
-    """
+    5.2.17 represents an error raised (associated to a particular Entity) during the execution of a batch or distributed operation. 
+    """ # noqa: E501
     entity_id: StrictStr = Field(description="Entity Id corresponding to the Entity in error. ", alias="entityId")
     registration_id: Optional[StrictStr] = Field(default=None, description="Registration Id corresponding to a failed distributed operation (optional). ", alias="registrationId")
     error: ProblemDetails
@@ -40,7 +35,8 @@ class BatchEntityError(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -54,7 +50,7 @@ class BatchEntityError(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of BatchEntityError from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -69,11 +65,13 @@ class BatchEntityError(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of error
@@ -87,7 +85,7 @@ class BatchEntityError(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of BatchEntityError from a dict"""
         if obj is None:
             return None
@@ -98,7 +96,7 @@ class BatchEntityError(BaseModel):
         _obj = cls.model_validate({
             "entityId": obj.get("entityId"),
             "registrationId": obj.get("registrationId"),
-            "error": ProblemDetails.from_dict(obj.get("error")) if obj.get("error") is not None else None
+            "error": ProblemDetails.from_dict(obj["error"]) if obj.get("error") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

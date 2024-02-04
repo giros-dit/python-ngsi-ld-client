@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geometry_linear_ring import GeometryLinearRing  # noqa: E501
+from ngsi_ld_client.models.geometry_linear_ring import GeometryLinearRing
 
 class TestGeometryLinearRing(unittest.TestCase):
     """GeometryLinearRing unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeometryLinearRing(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeometryLinearRing`
         """
-        model = GeometryLinearRing()  # noqa: E501
+        model = GeometryLinearRing()
         if include_optional:
             return GeometryLinearRing(
             )

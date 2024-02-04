@@ -14,14 +14,14 @@
 
 import unittest
 
-from ngsi_ld_client.api.context_information_provision_api import ContextInformationProvisionApi  # noqa: E501
+from ngsi_ld_client.api.context_information_provision_api import ContextInformationProvisionApi
 
 
 class TestContextInformationProvisionApi(unittest.TestCase):
     """ContextInformationProvisionApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = ContextInformationProvisionApi()  # noqa: E501
+        self.api = ContextInformationProvisionApi()
 
     def tearDown(self) -> None:
         pass
@@ -29,98 +29,98 @@ class TestContextInformationProvisionApi(unittest.TestCase):
     def test_append_attrs(self) -> None:
         """Test case for append_attrs
 
-        Append attributes to Entity   # noqa: E501
+        Append attributes to Entity 
         """
         pass
 
     def test_create_batch(self) -> None:
         """Test case for create_batch
 
-        Batch Entity creation   # noqa: E501
+        Batch Entity creation 
         """
         pass
 
     def test_create_entity(self) -> None:
         """Test case for create_entity
 
-        Entity creation   # noqa: E501
+        Entity creation 
         """
         pass
 
     def test_delete_attrs(self) -> None:
         """Test case for delete_attrs
 
-        Attribute delete   # noqa: E501
+        Attribute delete 
         """
         pass
 
     def test_delete_batch(self) -> None:
         """Test case for delete_batch
 
-        Batch Entity delete   # noqa: E501
+        Batch Entity delete 
         """
         pass
 
     def test_delete_entity(self) -> None:
         """Test case for delete_entity
 
-        Entity deletion by id   # noqa: E501
+        Entity deletion by id 
         """
         pass
 
     def test_merge_batch(self) -> None:
         """Test case for merge_batch
 
-        Batch Entity merge   # noqa: E501
+        Batch Entity merge 
         """
         pass
 
     def test_merge_entity(self) -> None:
         """Test case for merge_entity
 
-        Entity merge by id   # noqa: E501
+        Entity merge by id 
         """
         pass
 
     def test_replace_attrs(self) -> None:
         """Test case for replace_attrs
 
-        Attribute replace   # noqa: E501
+        Attribute replace 
         """
         pass
 
     def test_replace_entity(self) -> None:
         """Test case for replace_entity
 
-        Entity replacement by id   # noqa: E501
+        Entity replacement by id 
         """
         pass
 
     def test_update_attrs(self) -> None:
         """Test case for update_attrs
 
-        Partial Attribute update   # noqa: E501
+        Partial Attribute update 
         """
         pass
 
     def test_update_batch(self) -> None:
         """Test case for update_batch
 
-        Batch Entity update   # noqa: E501
+        Batch Entity update 
         """
         pass
 
     def test_update_entity(self) -> None:
         """Test case for update_entity
 
-        Update attributes of an Entity   # noqa: E501
+        Update attributes of an Entity 
         """
         pass
 
     def test_upsert_batch(self) -> None:
         """Test case for upsert_batch
 
-        Batch Entity create or update (upsert)   # noqa: E501
+        Batch Entity create or update (upsert) 
         """
         pass
 

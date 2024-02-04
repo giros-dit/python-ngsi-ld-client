@@ -19,9 +19,8 @@ Create subscription to Csource registration
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.create_subscription_request import CreateSubscriptionRequest
 from ngsi_ld_client.rest import ApiException
@@ -54,6 +53,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -75,6 +75,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | The HTTP response shall include a \&quot;Location\&quot; HTTP header that contains the resource URI of the created context source registration subscription resource.  |  * NGSILD-Tenant -  <br>  * Location -  <br>  |
@@ -93,9 +94,8 @@ Retrieval of list of subscriptions to Csource registrations
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
 from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
@@ -133,6 +133,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **options** | [**List[OptionsSysAttrs]**](OptionsSysAttrs.md)|  | [optional] 
@@ -156,6 +157,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing a list of context source registration subscriptions.  |  * NGSILD-Tenant -  <br>  * NGSILD-Results-Count -  <br>  |
@@ -172,9 +174,8 @@ Retrieval of subscription to Csource registration by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
 from ngsi_ld_client.rest import ApiException
@@ -209,6 +210,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **subscription_id** | **str**| Id (URI) of the concerned subscription. | 
@@ -230,6 +232,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD representation of the target context source registration subscription.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
@@ -247,9 +250,8 @@ Csource registration subscription update by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.subscription import Subscription
 from ngsi_ld_client.rest import ApiException
@@ -283,6 +285,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **subscription_id** | **str**| Id (URI) of the concerned subscription. | 
@@ -305,6 +308,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The context source registration subscription was successfully updated.  |  * NGSILD-Tenant -  <br>  |

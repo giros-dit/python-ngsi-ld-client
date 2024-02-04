@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.entity_type_info import EntityTypeInfo  # noqa: E501
+from ngsi_ld_client.models.entity_type_info import EntityTypeInfo
 
 class TestEntityTypeInfo(unittest.TestCase):
     """EntityTypeInfo unit test stubs"""
@@ -33,7 +32,7 @@ class TestEntityTypeInfo(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `EntityTypeInfo`
         """
-        model = EntityTypeInfo()  # noqa: E501
+        model = EntityTypeInfo()
         if include_optional:
             return EntityTypeInfo(
                 id = '',

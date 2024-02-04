@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.registration_management_info import RegistrationManagementInfo  # noqa: E501
+from ngsi_ld_client.models.registration_management_info import RegistrationManagementInfo
 
 class TestRegistrationManagementInfo(unittest.TestCase):
     """RegistrationManagementInfo unit test stubs"""
@@ -33,7 +32,7 @@ class TestRegistrationManagementInfo(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `RegistrationManagementInfo`
         """
-        model = RegistrationManagementInfo()  # noqa: E501
+        model = RegistrationManagementInfo()
         if include_optional:
             return RegistrationManagementInfo(
                 local_only = True,

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geometry_multi_point import GeometryMultiPoint  # noqa: E501
+from ngsi_ld_client.models.geometry_multi_point import GeometryMultiPoint
 
 class TestGeometryMultiPoint(unittest.TestCase):
     """GeometryMultiPoint unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeometryMultiPoint(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeometryMultiPoint`
         """
-        model = GeometryMultiPoint()  # noqa: E501
+        model = GeometryMultiPoint()
         if include_optional:
             return GeometryMultiPoint(
                 type = 'MultiPoint',

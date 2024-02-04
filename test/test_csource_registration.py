@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.csource_registration import CsourceRegistration  # noqa: E501
+from ngsi_ld_client.models.csource_registration import CsourceRegistration
 
 class TestCsourceRegistration(unittest.TestCase):
     """CsourceRegistration unit test stubs"""
@@ -33,7 +32,7 @@ class TestCsourceRegistration(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `CsourceRegistration`
         """
-        model = CsourceRegistration()  # noqa: E501
+        model = CsourceRegistration()
         if include_optional:
             return CsourceRegistration(
                 id = '',

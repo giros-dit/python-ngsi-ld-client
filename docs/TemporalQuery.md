@@ -3,6 +3,7 @@
 5.2.21 This datatype represents a temporal query. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **timerel** | **str** | Allowed values: \&quot;before\&quot;, \&quot;after\&quot; and \&quot;between\&quot;.  | 

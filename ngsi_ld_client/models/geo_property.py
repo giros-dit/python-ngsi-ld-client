@@ -18,20 +18,16 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr, field_validator
-from pydantic import Field
 from ngsi_ld_client.models.geometry import Geometry
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class GeoProperty(BaseModel):
     """
-    5.2.7 NGSI-LD GeoProperty.   # noqa: E501
-    """
+    5.2.7 NGSI-LD GeoProperty. 
+    """ # noqa: E501
     type: Optional[StrictStr] = Field(default='GeoProperty', description="Node type. ")
     value: Optional[Geometry] = None
     observed_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ", alias="observedAt")
@@ -55,7 +51,8 @@ class GeoProperty(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -69,7 +66,7 @@ class GeoProperty(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of GeoProperty from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -88,15 +85,17 @@ class GeoProperty(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "instance_id",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "instance_id",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of value
@@ -110,7 +109,7 @@ class GeoProperty(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of GeoProperty from a dict"""
         if obj is None:
             return None
@@ -120,7 +119,7 @@ class GeoProperty(BaseModel):
 
         _obj = cls.model_validate({
             "type": obj.get("type") if obj.get("type") is not None else 'GeoProperty',
-            "value": Geometry.from_dict(obj.get("value")) if obj.get("value") is not None else None,
+            "value": Geometry.from_dict(obj["value"]) if obj.get("value") is not None else None,
             "observedAt": obj.get("observedAt"),
             "datasetId": obj.get("datasetId"),
             "createdAt": obj.get("createdAt"),

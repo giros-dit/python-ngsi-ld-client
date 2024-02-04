@@ -17,21 +17,16 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
-from pydantic import BaseModel, StrictBool, StrictStr
-from pydantic import Field
 from typing_extensions import Annotated
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class RegistrationManagementInfo(BaseModel):
     """
-    5.2.34 This type represents the data to alter the default behaviour of a Context Broker when making a distributed operation request to a registered Context Source.   # noqa: E501
-    """
+    5.2.34 This type represents the data to alter the default behaviour of a Context Broker when making a distributed operation request to a registered Context Source. 
+    """ # noqa: E501
     local_only: Optional[StrictBool] = Field(default=None, description="If localOnly=true then distributed operations associated to this Context Source Registration will act only on data held directly by the registered Context Source itself (see clause 4.3.6.4). ", alias="localOnly")
     cache_duration: Optional[StrictStr] = Field(default=None, description="Minimal period of time which shall elapse between two consecutive context information consumption operations (as defined in clause 5.7) related to the same context data will occur. If the cacheDuration latency period has not been reached, a cached value for the entity or its attributes shall be returned where available. ", alias="cacheDuration")
     timeout: Optional[Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Maximum period of time in milliseconds which may elapse before a forwarded request is assumed to have failed. ")
@@ -41,7 +36,8 @@ class RegistrationManagementInfo(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -55,7 +51,7 @@ class RegistrationManagementInfo(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of RegistrationManagementInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -70,11 +66,13 @@ class RegistrationManagementInfo(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # puts key-value pairs in additional_properties in the top level
@@ -85,7 +83,7 @@ class RegistrationManagementInfo(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of RegistrationManagementInfo from a dict"""
         if obj is None:
             return None

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs  # noqa: E501
+from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
 
 class TestOptionsSysAttrs(unittest.TestCase):
     """OptionsSysAttrs unit test stubs"""

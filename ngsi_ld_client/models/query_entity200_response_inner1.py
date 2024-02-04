@@ -18,23 +18,19 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from pydantic import Field
 from ngsi_ld_client.models.entity_scope import EntityScope
 from ngsi_ld_client.models.entity_type import EntityType
 from ngsi_ld_client.models.geo_property import GeoProperty
 from ngsi_ld_client.models.ld_context import LdContext
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class QueryEntity200ResponseInner1(BaseModel):
     """
     QueryEntity200ResponseInner1
-    """
+    """ # noqa: E501
     id: StrictStr = Field(description="Entity id. ")
     type: EntityType
     scope: Optional[EntityScope] = None
@@ -50,7 +46,8 @@ class QueryEntity200ResponseInner1(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -64,7 +61,7 @@ class QueryEntity200ResponseInner1(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of QueryEntity200ResponseInner1 from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -82,14 +79,16 @@ class QueryEntity200ResponseInner1(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of type
@@ -118,7 +117,7 @@ class QueryEntity200ResponseInner1(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of QueryEntity200ResponseInner1 from a dict"""
         if obj is None:
             return None
@@ -128,15 +127,15 @@ class QueryEntity200ResponseInner1(BaseModel):
 
         _obj = cls.model_validate({
             "id": obj.get("id"),
-            "type": EntityType.from_dict(obj.get("type")) if obj.get("type") is not None else None,
-            "scope": EntityScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
-            "location": GeoProperty.from_dict(obj.get("location")) if obj.get("location") is not None else None,
-            "observationSpace": GeoProperty.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
-            "operationSpace": GeoProperty.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
+            "type": EntityType.from_dict(obj["type"]) if obj.get("type") is not None else None,
+            "scope": EntityScope.from_dict(obj["scope"]) if obj.get("scope") is not None else None,
+            "location": GeoProperty.from_dict(obj["location"]) if obj.get("location") is not None else None,
+            "observationSpace": GeoProperty.from_dict(obj["observationSpace"]) if obj.get("observationSpace") is not None else None,
+            "operationSpace": GeoProperty.from_dict(obj["operationSpace"]) if obj.get("operationSpace") is not None else None,
             "createdAt": obj.get("createdAt"),
             "modifiedAt": obj.get("modifiedAt"),
             "deletedAt": obj.get("deletedAt"),
-            "@context": LdContext.from_dict(obj.get("@context")) if obj.get("@context") is not None else None
+            "@context": LdContext.from_dict(obj["@context"]) if obj.get("@context") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

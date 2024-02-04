@@ -3,6 +3,7 @@
 5.2.15 represents the parameters that are required in order to define an endpoint for notifications. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **uri** | **str** | URI which conveys the endpoint which will receive the notification.  | 

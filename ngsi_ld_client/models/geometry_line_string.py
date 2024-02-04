@@ -17,19 +17,15 @@ import pprint
 import re  # noqa: F401
 import json
 
-
-from typing import Any, ClassVar, Dict, List, Optional
 from pydantic import BaseModel, StrictStr, field_validator
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Any, ClassVar, Dict, List, Optional
+from typing import Optional, Set
+from typing_extensions import Self
 
 class GeometryLineString(BaseModel):
     """
     GeometryLineString
-    """
+    """ # noqa: E501
     type: Optional[StrictStr] = None
     coordinates: Optional[GeometryLineString] = None
     additional_properties: Dict[str, Any] = {}
@@ -47,7 +43,8 @@ class GeometryLineString(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -61,7 +58,7 @@ class GeometryLineString(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of GeometryLineString from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -76,11 +73,13 @@ class GeometryLineString(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of coordinates
@@ -94,7 +93,7 @@ class GeometryLineString(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of GeometryLineString from a dict"""
         if obj is None:
             return None
@@ -104,7 +103,7 @@ class GeometryLineString(BaseModel):
 
         _obj = cls.model_validate({
             "type": obj.get("type"),
-            "coordinates": GeometryLineString.from_dict(obj.get("coordinates")) if obj.get("coordinates") is not None else None
+            "coordinates": GeometryLineString.from_dict(obj["coordinates"]) if obj.get("coordinates") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():
@@ -113,9 +112,6 @@ class GeometryLineString(BaseModel):
 
         return _obj
 
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    # TODO: pydantic v2
-    # GeometryLineString.model_rebuild()
-    pass
+# TODO: Rewrite to not use raise_errors
+GeometryLineString.model_rebuild(raise_errors=False)
 

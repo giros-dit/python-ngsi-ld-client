@@ -3,6 +3,7 @@
 5.2.14 represents the parameters that allow to convey the details of a notification. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attributes** | **List[str]** | Entity Attribute Names (Properties or Relationships) to be included in the notification payload body. If undefined it will mean all Attributes.  | [optional] 

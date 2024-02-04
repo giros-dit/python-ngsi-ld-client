@@ -19,9 +19,8 @@ Add a user @context to the internal cache
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -50,6 +49,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | **object**| Payload body in the request contains a JSON object that has a root node named @context, which represents a JSON-LD \&quot;local\&quot; context.  | 
@@ -68,6 +68,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | The HTTP response shall include a \&quot;Location\&quot; HTTP header that contains the local URI of the added @context.  |  * NGSILD-Tenant -  <br>  * Location -  <br>  |
@@ -84,9 +85,8 @@ Delete one specific @context from internal cache, possibly re-inserting a freshl
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -119,6 +119,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **context_id** | **str**| Local identifier of the @context to be managed (served or deleted). For @contexts of kind \&quot;Cached\&quot; this can also be the original URL the Broker downloaded the @context from.  | 
@@ -141,6 +142,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content.  |  * NGSILD-Tenant -  <br>  |
@@ -159,9 +161,8 @@ List all cached @contexts
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.list_contexts200_response import ListContexts200Response
 from ngsi_ld_client.rest import ApiException
@@ -197,6 +198,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **details** | **bool**| Whether a list of URLs or a more detailed list of JSON Objects is requested. | [optional] 
@@ -219,6 +221,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing a list of URLs or a list of JSON Objects, as defined in clause 5.13.3.5, representing metadata about stored @contexts.  |  * NGSILD-Tenant -  <br>  |
@@ -235,9 +238,8 @@ Serve one specific user @context
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -272,6 +274,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **context_id** | **str**| Local identifier of the @context to be managed (served or deleted). For @contexts of kind \&quot;Cached\&quot; this can also be the original URL the Broker downloaded the @context from.  | 
@@ -294,6 +297,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | If the parameter details is False or missing, response body contains a JSON object that has a root node named @context, which represents a JSON-LD \&quot;local context\&quot;. If the parameter details is True, response body contains a JSON object as defined in clause 5.13.4.5, which metadata of a JSON-LD \&quot;local context\&quot;.  |  * NGSILD-Tenant -  <br>  |

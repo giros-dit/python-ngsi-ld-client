@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.create_batch_request import CreateBatchRequest  # noqa: E501
+from ngsi_ld_client.models.create_batch_request import CreateBatchRequest
 
 class TestCreateBatchRequest(unittest.TestCase):
     """CreateBatchRequest unit test stubs"""
@@ -33,7 +32,7 @@ class TestCreateBatchRequest(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `CreateBatchRequest`
         """
-        model = CreateBatchRequest()  # noqa: E501
+        model = CreateBatchRequest()
         if include_optional:
             return CreateBatchRequest(
                 context = None

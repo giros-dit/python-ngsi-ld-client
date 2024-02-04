@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.replace_entity_request import ReplaceEntityRequest  # noqa: E501
+from ngsi_ld_client.models.replace_entity_request import ReplaceEntityRequest
 
 class TestReplaceEntityRequest(unittest.TestCase):
     """ReplaceEntityRequest unit test stubs"""
@@ -33,7 +32,7 @@ class TestReplaceEntityRequest(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `ReplaceEntityRequest`
         """
-        model = ReplaceEntityRequest()  # noqa: E501
+        model = ReplaceEntityRequest()
         if include_optional:
             return ReplaceEntityRequest(
                 id = '',

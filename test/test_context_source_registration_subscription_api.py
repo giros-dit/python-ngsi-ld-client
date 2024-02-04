@@ -14,14 +14,14 @@
 
 import unittest
 
-from ngsi_ld_client.api.context_source_registration_subscription_api import ContextSourceRegistrationSubscriptionApi  # noqa: E501
+from ngsi_ld_client.api.context_source_registration_subscription_api import ContextSourceRegistrationSubscriptionApi
 
 
 class TestContextSourceRegistrationSubscriptionApi(unittest.TestCase):
     """ContextSourceRegistrationSubscriptionApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = ContextSourceRegistrationSubscriptionApi()  # noqa: E501
+        self.api = ContextSourceRegistrationSubscriptionApi()
 
     def tearDown(self) -> None:
         pass
@@ -29,28 +29,28 @@ class TestContextSourceRegistrationSubscriptionApi(unittest.TestCase):
     def test_create_csr_subscription(self) -> None:
         """Test case for create_csr_subscription
 
-        Create subscription to Csource registration   # noqa: E501
+        Create subscription to Csource registration 
         """
         pass
 
     def test_query_csr_subscription(self) -> None:
         """Test case for query_csr_subscription
 
-        Retrieval of list of subscriptions to Csource registrations   # noqa: E501
+        Retrieval of list of subscriptions to Csource registrations 
         """
         pass
 
     def test_retrieve_csr_subscription(self) -> None:
         """Test case for retrieve_csr_subscription
 
-        Retrieval of subscription to Csource registration by id   # noqa: E501
+        Retrieval of subscription to Csource registration by id 
         """
         pass
 
     def test_update_csr_subscription(self) -> None:
         """Test case for update_csr_subscription
 
-        Csource registration subscription update by id   # noqa: E501
+        Csource registration subscription update by id 
         """
         pass
 

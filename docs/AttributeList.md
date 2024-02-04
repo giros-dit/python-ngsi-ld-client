@@ -3,6 +3,7 @@
 5.2.27 This type represents the data needed to define the attribute list representation as mandated by clause 4.5.13. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Unique identifier for the attribute list.  | 

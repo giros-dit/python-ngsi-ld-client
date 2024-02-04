@@ -14,14 +14,14 @@
 
 import unittest
 
-from ngsi_ld_client.api.context_source_discovery_api import ContextSourceDiscoveryApi  # noqa: E501
+from ngsi_ld_client.api.context_source_discovery_api import ContextSourceDiscoveryApi
 
 
 class TestContextSourceDiscoveryApi(unittest.TestCase):
     """ContextSourceDiscoveryApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = ContextSourceDiscoveryApi()  # noqa: E501
+        self.api = ContextSourceDiscoveryApi()
 
     def tearDown(self) -> None:
         pass
@@ -29,14 +29,14 @@ class TestContextSourceDiscoveryApi(unittest.TestCase):
     def test_query_csr(self) -> None:
         """Test case for query_csr
 
-        Discover Csource registrations   # noqa: E501
+        Discover Csource registrations 
         """
         pass
 
     def test_retrieve_csr(self) -> None:
         """Test case for retrieve_csr
 
-        Csource registration retrieval by id   # noqa: E501
+        Csource registration retrieval by id 
         """
         pass
 

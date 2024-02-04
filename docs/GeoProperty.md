@@ -3,6 +3,7 @@
 5.2.7 NGSI-LD GeoProperty. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Node type.  | [optional] [default to 'GeoProperty']

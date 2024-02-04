@@ -3,6 +3,7 @@
 5.2.32 NGSI-LD LanguageProperty. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Node type.  | [optional] [default to 'LanguageProperty']

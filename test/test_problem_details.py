@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.problem_details import ProblemDetails  # noqa: E501
+from ngsi_ld_client.models.problem_details import ProblemDetails
 
 class TestProblemDetails(unittest.TestCase):
     """ProblemDetails unit test stubs"""
@@ -33,7 +32,7 @@ class TestProblemDetails(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `ProblemDetails`
         """
-        model = ProblemDetails()  # noqa: E501
+        model = ProblemDetails()
         if include_optional:
             return ProblemDetails(
                 type = '',

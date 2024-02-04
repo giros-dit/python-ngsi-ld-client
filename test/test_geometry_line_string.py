@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geometry_line_string import GeometryLineString  # noqa: E501
+from ngsi_ld_client.models.geometry_line_string import GeometryLineString
 
 class TestGeometryLineString(unittest.TestCase):
     """GeometryLineString unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeometryLineString(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeometryLineString`
         """
-        model = GeometryLineString()  # noqa: E501
+        model = GeometryLineString()
         if include_optional:
             return GeometryLineString(
                 type = 'LineString',

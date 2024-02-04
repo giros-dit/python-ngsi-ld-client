@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.query_temporal200_response_inner1 import QueryTemporal200ResponseInner1  # noqa: E501
+from ngsi_ld_client.models.query_temporal200_response_inner1 import QueryTemporal200ResponseInner1
 
 class TestQueryTemporal200ResponseInner1(unittest.TestCase):
     """QueryTemporal200ResponseInner1 unit test stubs"""
@@ -33,7 +32,7 @@ class TestQueryTemporal200ResponseInner1(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `QueryTemporal200ResponseInner1`
         """
-        model = QueryTemporal200ResponseInner1()  # noqa: E501
+        model = QueryTemporal200ResponseInner1()
         if include_optional:
             return QueryTemporal200ResponseInner1(
                 location = {

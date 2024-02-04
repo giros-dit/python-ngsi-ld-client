@@ -3,6 +3,7 @@
 A valid GeoJSON geometry object. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** |  | [optional] 

@@ -3,6 +3,7 @@
 5.2.18 represents the result of Attribute update (append or update) operations in the NGSI-LD API regardless of whether local or distributed. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **updated** | **List[str]** | List of Attributes (represented by their Name) that were appended or updated.  | 

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geometry_polygon import GeometryPolygon  # noqa: E501
+from ngsi_ld_client.models.geometry_polygon import GeometryPolygon
 
 class TestGeometryPolygon(unittest.TestCase):
     """GeometryPolygon unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeometryPolygon(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeometryPolygon`
         """
-        model = GeometryPolygon()  # noqa: E501
+        model = GeometryPolygon()
         if include_optional:
             return GeometryPolygon(
                 type = 'Polygon',

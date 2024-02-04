@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.entity_temporal import EntityTemporal  # noqa: E501
+from ngsi_ld_client.models.entity_temporal import EntityTemporal
 
 class TestEntityTemporal(unittest.TestCase):
     """EntityTemporal unit test stubs"""
@@ -33,7 +32,7 @@ class TestEntityTemporal(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `EntityTemporal`
         """
-        model = EntityTemporal()  # noqa: E501
+        model = EntityTemporal()
         if include_optional:
             return EntityTemporal(
                 location = {

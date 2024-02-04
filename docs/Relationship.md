@@ -3,6 +3,7 @@
 5.2.6 NGSI-LD Relationship. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Node type.  | [optional] [default to 'Relationship']

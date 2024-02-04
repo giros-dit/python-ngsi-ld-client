@@ -3,6 +3,7 @@
 5.2.19 represents additional information provided by an implementation when an Attribute update did not happen. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attribute_name** | **str** | Attribute name.  | 

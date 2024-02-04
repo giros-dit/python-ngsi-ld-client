@@ -3,6 +3,7 @@
 5.2.16 represents the result of a batch operation. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **success** | **List[str]** | Array of Entity Ids corresponding to the Entities that were successfully treated by the concerned operation.  | 

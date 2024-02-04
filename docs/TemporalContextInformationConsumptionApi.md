@@ -18,9 +18,8 @@ Query temporal evolution of Entities
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_temporal import OptionsTemporal
 from ngsi_ld_client.models.query_temporal200_response_inner import QueryTemporal200ResponseInner
@@ -76,6 +75,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | [**List[str]**](str.md)| List of entity ids to be retrieved. | [optional] 
@@ -117,6 +117,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the query result as a list of temporal representation of Entities.  |  * NGSILD-Tenant -  <br>  |
@@ -133,9 +134,8 @@ Temporal Representation of Entity retrieval by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_temporal import OptionsTemporal
 from ngsi_ld_client.models.query_temporal200_response_inner import QueryTemporal200ResponseInner
@@ -183,6 +183,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -216,6 +217,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD temporal representation of the target entity containing the selected Attributes.  |  * NGSILD-Tenant -  <br>  |
@@ -233,9 +235,8 @@ Temporal Representation of Entity Query based on POST
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_temporal import QueryTemporal
 from ngsi_ld_client.models.query_temporal200_response_inner import QueryTemporal200ResponseInner
@@ -271,6 +272,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -292,6 +294,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the query result as a list of Entities.  |  * NGSILD-Tenant -  <br>  |

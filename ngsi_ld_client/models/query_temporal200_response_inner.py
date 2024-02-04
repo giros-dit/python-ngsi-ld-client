@@ -18,20 +18,16 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel
-from pydantic import Field
 from ngsi_ld_client.models.geo_property import GeoProperty
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class QueryTemporal200ResponseInner(BaseModel):
     """
     QueryTemporal200ResponseInner
-    """
+    """ # noqa: E501
     location: Optional[GeoProperty] = None
     observation_space: Optional[GeoProperty] = Field(default=None, alias="observationSpace")
     operation_space: Optional[GeoProperty] = Field(default=None, alias="operationSpace")
@@ -43,7 +39,8 @@ class QueryTemporal200ResponseInner(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -57,7 +54,7 @@ class QueryTemporal200ResponseInner(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of QueryTemporal200ResponseInner from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -75,14 +72,16 @@ class QueryTemporal200ResponseInner(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of location
@@ -102,7 +101,7 @@ class QueryTemporal200ResponseInner(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of QueryTemporal200ResponseInner from a dict"""
         if obj is None:
             return None
@@ -111,9 +110,9 @@ class QueryTemporal200ResponseInner(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "location": GeoProperty.from_dict(obj.get("location")) if obj.get("location") is not None else None,
-            "observationSpace": GeoProperty.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
-            "operationSpace": GeoProperty.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
+            "location": GeoProperty.from_dict(obj["location"]) if obj.get("location") is not None else None,
+            "observationSpace": GeoProperty.from_dict(obj["observationSpace"]) if obj.get("observationSpace") is not None else None,
+            "operationSpace": GeoProperty.from_dict(obj["operationSpace"]) if obj.get("operationSpace") is not None else None,
             "createdAt": obj.get("createdAt"),
             "modifiedAt": obj.get("modifiedAt"),
             "deletedAt": obj.get("deletedAt")

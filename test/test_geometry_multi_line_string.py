@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geometry_multi_line_string import GeometryMultiLineString  # noqa: E501
+from ngsi_ld_client.models.geometry_multi_line_string import GeometryMultiLineString
 
 class TestGeometryMultiLineString(unittest.TestCase):
     """GeometryMultiLineString unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeometryMultiLineString(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeometryMultiLineString`
         """
-        model = GeometryMultiLineString()  # noqa: E501
+        model = GeometryMultiLineString()
         if include_optional:
             return GeometryMultiLineString(
                 type = 'MultiLineString',

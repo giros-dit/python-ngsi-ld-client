@@ -3,6 +3,7 @@
 5.2.34 This type represents the data to alter the default behaviour of a Context Broker when making a distributed operation request to a registered Context Source. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **local_only** | **bool** | If localOnly&#x3D;true then distributed operations associated to this Context Source Registration will act only on data held directly by the registered Context Source itself (see clause 4.3.6.4).  | [optional] 

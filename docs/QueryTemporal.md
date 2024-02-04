@@ -3,6 +3,7 @@
 5.2.23 This datatype represents the information that is required in order to convey a query when a \"Query Temporal Evolution of Entities\" operation is to be performed (as pe clause 5.7.4). 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | JSON-LD @type.  | 

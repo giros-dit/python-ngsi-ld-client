@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.batch_operation_result import BatchOperationResult  # noqa: E501
+from ngsi_ld_client.models.batch_operation_result import BatchOperationResult
 
 class TestBatchOperationResult(unittest.TestCase):
     """BatchOperationResult unit test stubs"""
@@ -33,7 +32,7 @@ class TestBatchOperationResult(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `BatchOperationResult`
         """
-        model = BatchOperationResult()  # noqa: E501
+        model = BatchOperationResult()
         if include_optional:
             return BatchOperationResult(
                 success = [

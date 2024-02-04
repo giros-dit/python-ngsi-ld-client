@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.query_batch_request import QueryBatchRequest  # noqa: E501
+from ngsi_ld_client.models.query_batch_request import QueryBatchRequest
 
 class TestQueryBatchRequest(unittest.TestCase):
     """QueryBatchRequest unit test stubs"""
@@ -33,7 +32,7 @@ class TestQueryBatchRequest(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `QueryBatchRequest`
         """
-        model = QueryBatchRequest()  # noqa: E501
+        model = QueryBatchRequest()
         if include_optional:
             return QueryBatchRequest(
                 type = 'Query',

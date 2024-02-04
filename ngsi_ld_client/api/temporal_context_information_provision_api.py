@@ -11,28 +11,19 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
-import re  # noqa: F401
-import io
 import warnings
-
-from pydantic import validate_call, ValidationError
-from typing import Dict, List, Optional, Tuple
-
-from pydantic import Field
+from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
+from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
-from pydantic import StrictBool, StrictStr
 
+from pydantic import Field, StrictBool, StrictStr
 from typing import Optional
-
+from typing_extensions import Annotated
 from ngsi_ld_client.models.entity_temporal import EntityTemporal
 
-from ngsi_ld_client.api_client import ApiClient
+from ngsi_ld_client.api_client import ApiClient, RequestSerialized
 from ngsi_ld_client.api_response import ApiResponse
-from ngsi_ld_client.exceptions import (  # noqa: F401
-    ApiTypeError,
-    ApiValueError
-)
+from ngsi_ld_client.rest import RESTResponseType
 
 
 class TemporalContextInformationProvisionApi:
@@ -47,6 +38,7 @@ class TemporalContextInformationProvisionApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
+
     @validate_call
     def append_attrs_temporal(
         self,
@@ -55,16 +47,22 @@ class TemporalContextInformationProvisionApi:
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
         entity_temporal: Optional[EntityTemporal] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> None:
-        """Temporal Representation of Entity Attribute instance addition   # noqa: E501
+        """Temporal Representation of Entity Attribute instance addition 
 
-        5.6.12 Append Entity Attributes.  This operation allows modifying a Temporal Representation of an Entity by adding new Attribute instances.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.append_attrs_temporal(entity_id, local, link, ngsild_tenant, entity_temporal, async_req=True)
-        >>> result = thread.get()
+        5.6.12 Append Entity Attributes.  This operation allows modifying a Temporal Representation of an Entity by adding new Attribute instances. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -76,30 +74,55 @@ class TemporalContextInformationProvisionApi:
         :type ngsild_tenant: str
         :param entity_temporal:
         :type entity_temporal: EntityTemporal
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the append_attrs_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.append_attrs_temporal_with_http_info.raw_function(
-            entity_id,
-            local,
-            link,
-            ngsild_tenant,
-            entity_temporal,
-            **kwargs,
+        _param = self._append_attrs_temporal_serialize(
+            entity_id=entity_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def append_attrs_temporal_with_http_info(
@@ -109,16 +132,22 @@ class TemporalContextInformationProvisionApi:
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
         entity_temporal: Optional[EntityTemporal] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Temporal Representation of Entity Attribute instance addition   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Temporal Representation of Entity Attribute instance addition 
 
-        5.6.12 Append Entity Attributes.  This operation allows modifying a Temporal Representation of an Entity by adding new Attribute instances.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.append_attrs_temporal_with_http_info(entity_id, local, link, ngsild_tenant, entity_temporal, async_req=True)
-        >>> result = thread.get()
+        5.6.12 Append Entity Attributes.  This operation allows modifying a Temporal Representation of an Entity by adding new Attribute instances. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -130,123 +159,226 @@ class TemporalContextInformationProvisionApi:
         :type ngsild_tenant: str
         :param entity_temporal:
         :type entity_temporal: EntityTemporal
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'entity_id',
-            'local',
-            'link',
-            'ngsild_tenant',
-            'entity_temporal'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._append_attrs_temporal_serialize(
+            entity_id=entity_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
 
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method append_attrs_temporal" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        _collection_formats: Dict[str, str] = {}
 
-        # process the path parameters
+    @validate_call
+    def append_attrs_temporal_without_preload_content(
+        self,
+        entity_id: Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")],
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        entity_temporal: Optional[EntityTemporal] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Temporal Representation of Entity Attribute instance addition 
+
+        5.6.12 Append Entity Attributes.  This operation allows modifying a Temporal Representation of an Entity by adding new Attribute instances. 
+
+        :param entity_id: Id (URI) of the entity to be retrieved. (required)
+        :type entity_id: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param entity_temporal:
+        :type entity_temporal: EntityTemporal
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._append_attrs_temporal_serialize(
+            entity_id=entity_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _append_attrs_temporal_serialize(
+        self,
+        entity_id,
+        local,
+        link,
+        ngsild_tenant,
+        entity_temporal,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
         _path_params: Dict[str, str] = {}
-        if _params['entity_id'] is not None:
-            _path_params['entityId'] = _params['entity_id']
-
-
-        # process the query parameters
         _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
+        _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
         _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if entity_id is not None:
+            _path_params['entityId'] = entity_id
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
         # process the body parameter
-        _body_params = None
-        if _params['entity_temporal'] is not None:
-            _body_params = _params['entity_temporal']
+        if entity_temporal is not None:
+            _body_params = entity_temporal
+
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
 
         # set the HTTP header `Content-Type`
-        _content_types_list = _params.get('_content_type',
-            self.api_client.select_header_content_type(
-                ['application/json', 'application/json+ld']))
-        if _content_types_list:
-                _header_params['Content-Type'] = _content_types_list
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json', 
+                        'application/json+ld'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
+        _auth_settings: List[str] = [
+        ]
 
-        _response_types_map: Dict[str, Optional[str]] = {}
-
-        return self.api_client.call_api(
-            '/temporal/entities/{entityId}/attrs', 'POST',
-            _path_params,
-            _query_params,
-            _header_params,
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/temporal/entities/{entityId}/attrs',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def delete_attr_instance_temporal(
@@ -257,16 +389,22 @@ class TemporalContextInformationProvisionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> None:
-        """Attribute Instance deletion by instance id   # noqa: E501
+        """Attribute Instance deletion by instance id 
 
-        5.6.15 Delete Attribute Instance from Temporal Representation of an Entity.  This operation allows deleting one Attribute instance (Property or Relationship), identified by its instanceId, of a Temporal Representation of an Entity. The Attribute itself and all its child elements shall be deleted. This operation enables the removal of individual Attribute instances that could have been previously added to the Temporal Representation of an Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.delete_attr_instance_temporal(entity_id, attr_id, instance_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.6.15 Delete Attribute Instance from Temporal Representation of an Entity.  This operation allows deleting one Attribute instance (Property or Relationship), identified by its instanceId, of a Temporal Representation of an Entity. The Attribute itself and all its child elements shall be deleted. This operation enables the removal of individual Attribute instances that could have been previously added to the Temporal Representation of an Entity. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -280,31 +418,56 @@ class TemporalContextInformationProvisionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the delete_attr_instance_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.delete_attr_instance_temporal_with_http_info.raw_function(
-            entity_id,
-            attr_id,
-            instance_id,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._delete_attr_instance_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            instance_id=instance_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def delete_attr_instance_temporal_with_http_info(
@@ -315,16 +478,22 @@ class TemporalContextInformationProvisionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Attribute Instance deletion by instance id   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Attribute Instance deletion by instance id 
 
-        5.6.15 Delete Attribute Instance from Temporal Representation of an Entity.  This operation allows deleting one Attribute instance (Property or Relationship), identified by its instanceId, of a Temporal Representation of an Entity. The Attribute itself and all its child elements shall be deleted. This operation enables the removal of individual Attribute instances that could have been previously added to the Temporal Representation of an Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.delete_attr_instance_temporal_with_http_info(entity_id, attr_id, instance_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.6.15 Delete Attribute Instance from Temporal Representation of an Entity.  This operation allows deleting one Attribute instance (Property or Relationship), identified by its instanceId, of a Temporal Representation of an Entity. The Attribute itself and all its child elements shall be deleted. This operation enables the removal of individual Attribute instances that could have been previously added to the Temporal Representation of an Entity. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -338,120 +507,220 @@ class TemporalContextInformationProvisionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
+        """ # noqa: E501
 
-        _params = locals()
+        _param = self._delete_attr_instance_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            instance_id=instance_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
-        _all_params = [
-            'entity_id',
-            'attr_id',
-            'instance_id',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def delete_attr_instance_temporal_without_preload_content(
+        self,
+        entity_id: Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")],
+        attr_id: Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")],
+        instance_id: Annotated[StrictStr, Field(description="Id (URI) identifying a particular Attribute instance.")],
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Attribute Instance deletion by instance id 
+
+        5.6.15 Delete Attribute Instance from Temporal Representation of an Entity.  This operation allows deleting one Attribute instance (Property or Relationship), identified by its instanceId, of a Temporal Representation of an Entity. The Attribute itself and all its child elements shall be deleted. This operation enables the removal of individual Attribute instances that could have been previously added to the Temporal Representation of an Entity. 
+
+        :param entity_id: Id (URI) of the entity to be retrieved. (required)
+        :type entity_id: str
+        :param attr_id: Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
+        :type attr_id: str
+        :param instance_id: Id (URI) identifying a particular Attribute instance. (required)
+        :type instance_id: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._delete_attr_instance_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            instance_id=instance_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _delete_attr_instance_temporal_serialize(
+        self,
+        entity_id,
+        attr_id,
+        instance_id,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if entity_id is not None:
+            _path_params['entityId'] = entity_id
+        if attr_id is not None:
+            _path_params['attrId'] = attr_id
+        if instance_id is not None:
+            _path_params['instanceId'] = instance_id
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
             ]
         )
 
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method delete_attr_instance_temporal" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-        if _params['entity_id'] is not None:
-            _path_params['entityId'] = _params['entity_id']
-
-        if _params['attr_id'] is not None:
-            _path_params['attrId'] = _params['attr_id']
-
-        if _params['instance_id'] is not None:
-            _path_params['instanceId'] = _params['instance_id']
-
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
+        _auth_settings: List[str] = [
+        ]
 
-        _response_types_map: Dict[str, Optional[str]] = {}
-
-        return self.api_client.call_api(
-            '/temporal/entities/{entityId}/attrs/{attrId}/{instanceId}', 'DELETE',
-            _path_params,
-            _query_params,
-            _header_params,
+        return self.api_client.param_serialize(
+            method='DELETE',
+            resource_path='/temporal/entities/{entityId}/attrs/{attrId}/{instanceId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def delete_attrs_temporal(
@@ -463,16 +732,22 @@ class TemporalContextInformationProvisionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> None:
-        """Attribute from Temporal Representation of Entity deletion   # noqa: E501
+        """Attribute from Temporal Representation of Entity deletion 
 
-        5.6.13 Delete Attributes from Temporal Representation of an Entity.  This operation allows deleting an NGSI-LD Entity's Attribute (Property or Relationship). The Attribute itself and all its children shall be deleted.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.delete_attrs_temporal(entity_id, attr_id, delete_all, dataset_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.6.13 Delete Attributes from Temporal Representation of an Entity.  This operation allows deleting an NGSI-LD Entity's Attribute (Property or Relationship). The Attribute itself and all its children shall be deleted. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -488,32 +763,57 @@ class TemporalContextInformationProvisionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the delete_attrs_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.delete_attrs_temporal_with_http_info.raw_function(
-            entity_id,
-            attr_id,
-            delete_all,
-            dataset_id,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._delete_attrs_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            delete_all=delete_all,
+            dataset_id=dataset_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def delete_attrs_temporal_with_http_info(
@@ -525,16 +825,22 @@ class TemporalContextInformationProvisionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Attribute from Temporal Representation of Entity deletion   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Attribute from Temporal Representation of Entity deletion 
 
-        5.6.13 Delete Attributes from Temporal Representation of an Entity.  This operation allows deleting an NGSI-LD Entity's Attribute (Property or Relationship). The Attribute itself and all its children shall be deleted.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.delete_attrs_temporal_with_http_info(entity_id, attr_id, delete_all, dataset_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.6.13 Delete Attributes from Temporal Representation of an Entity.  This operation allows deleting an NGSI-LD Entity's Attribute (Property or Relationship). The Attribute itself and all its children shall be deleted. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -550,124 +856,232 @@ class TemporalContextInformationProvisionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
+        """ # noqa: E501
 
-        _params = locals()
+        _param = self._delete_attrs_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            delete_all=delete_all,
+            dataset_id=dataset_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
-        _all_params = [
-            'entity_id',
-            'attr_id',
-            'delete_all',
-            'dataset_id',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def delete_attrs_temporal_without_preload_content(
+        self,
+        entity_id: Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")],
+        attr_id: Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")],
+        delete_all: Annotated[Optional[StrictBool], Field(description="If true, all attribute instances are deleted. Otherwise (default) only the Attribute instance specified by the datasetId is deleted. In case neither the deleteAll flag nor a datasetId is present, the default Attribute instance is deleted. ")] = None,
+        dataset_id: Annotated[Optional[StrictStr], Field(description="Specifies the datasetId of the dataset to be deleted. ")] = None,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Attribute from Temporal Representation of Entity deletion 
+
+        5.6.13 Delete Attributes from Temporal Representation of an Entity.  This operation allows deleting an NGSI-LD Entity's Attribute (Property or Relationship). The Attribute itself and all its children shall be deleted. 
+
+        :param entity_id: Id (URI) of the entity to be retrieved. (required)
+        :type entity_id: str
+        :param attr_id: Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
+        :type attr_id: str
+        :param delete_all: If true, all attribute instances are deleted. Otherwise (default) only the Attribute instance specified by the datasetId is deleted. In case neither the deleteAll flag nor a datasetId is present, the default Attribute instance is deleted. 
+        :type delete_all: bool
+        :param dataset_id: Specifies the datasetId of the dataset to be deleted. 
+        :type dataset_id: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._delete_attrs_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            delete_all=delete_all,
+            dataset_id=dataset_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _delete_attrs_temporal_serialize(
+        self,
+        entity_id,
+        attr_id,
+        delete_all,
+        dataset_id,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if entity_id is not None:
+            _path_params['entityId'] = entity_id
+        if attr_id is not None:
+            _path_params['attrId'] = attr_id
+        # process the query parameters
+        if delete_all is not None:
+            
+            _query_params.append(('deleteAll', delete_all))
+            
+        if dataset_id is not None:
+            
+            _query_params.append(('datasetId', dataset_id))
+            
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
             ]
         )
 
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method delete_attrs_temporal" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-        if _params['entity_id'] is not None:
-            _path_params['entityId'] = _params['entity_id']
-
-        if _params['attr_id'] is not None:
-            _path_params['attrId'] = _params['attr_id']
-
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('delete_all') is not None:  # noqa: E501
-            _query_params.append(('deleteAll', _params['delete_all']))
-
-        if _params.get('dataset_id') is not None:  # noqa: E501
-            _query_params.append(('datasetId', _params['dataset_id']))
-
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
+        _auth_settings: List[str] = [
+        ]
 
-        _response_types_map: Dict[str, Optional[str]] = {}
-
-        return self.api_client.call_api(
-            '/temporal/entities/{entityId}/attrs/{attrId}', 'DELETE',
-            _path_params,
-            _query_params,
-            _header_params,
+        return self.api_client.param_serialize(
+            method='DELETE',
+            resource_path='/temporal/entities/{entityId}/attrs/{attrId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def delete_temporal(
@@ -676,16 +1090,22 @@ class TemporalContextInformationProvisionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> None:
-        """Temporal Representation of Entity deletion by id   # noqa: E501
+        """Temporal Representation of Entity deletion by id 
 
-        5.6.16 Delete Temporal Representation of an Entity.  This operation allows deleting the Temporal Representation of an Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.delete_temporal(entity_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.6.16 Delete Temporal Representation of an Entity.  This operation allows deleting the Temporal Representation of an Entity. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -695,29 +1115,54 @@ class TemporalContextInformationProvisionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the delete_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.delete_temporal_with_http_info.raw_function(
-            entity_id,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._delete_temporal_serialize(
+            entity_id=entity_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def delete_temporal_with_http_info(
@@ -726,16 +1171,22 @@ class TemporalContextInformationProvisionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Temporal Representation of Entity deletion by id   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Temporal Representation of Entity deletion by id 
 
-        5.6.16 Delete Temporal Representation of an Entity.  This operation allows deleting the Temporal Representation of an Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.delete_temporal_with_http_info(entity_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.6.16 Delete Temporal Representation of an Entity.  This operation allows deleting the Temporal Representation of an Entity. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -745,112 +1196,204 @@ class TemporalContextInformationProvisionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
+        """ # noqa: E501
 
-        _params = locals()
+        _param = self._delete_temporal_serialize(
+            entity_id=entity_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
-        _all_params = [
-            'entity_id',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def delete_temporal_without_preload_content(
+        self,
+        entity_id: Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")],
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Temporal Representation of Entity deletion by id 
+
+        5.6.16 Delete Temporal Representation of an Entity.  This operation allows deleting the Temporal Representation of an Entity. 
+
+        :param entity_id: Id (URI) of the entity to be retrieved. (required)
+        :type entity_id: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._delete_temporal_serialize(
+            entity_id=entity_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _delete_temporal_serialize(
+        self,
+        entity_id,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if entity_id is not None:
+            _path_params['entityId'] = entity_id
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
             ]
         )
 
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method delete_temporal" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-        if _params['entity_id'] is not None:
-            _path_params['entityId'] = _params['entity_id']
-
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
 
         # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
+        _auth_settings: List[str] = [
+        ]
 
-        _response_types_map: Dict[str, Optional[str]] = {}
-
-        return self.api_client.call_api(
-            '/temporal/entities/{entityId}', 'DELETE',
-            _path_params,
-            _query_params,
-            _header_params,
+        return self.api_client.param_serialize(
+            method='DELETE',
+            resource_path='/temporal/entities/{entityId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def update_attrs_temporal(
@@ -862,16 +1405,22 @@ class TemporalContextInformationProvisionApi:
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
         entity_temporal: Optional[EntityTemporal] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> None:
-        """Attribute Instance update   # noqa: E501
+        """Attribute Instance update 
 
-        5.6.14 Partial Update Attribute instance in Temporal Representation of an Entity.  This operation allows modifying a specific Attribute (Property or Relationship) instance, identified by its instanceId, of a Temporal Representation of an Entity.  This operation enables the correction of wrong information that could have been previously added to the Temporal Representation of an Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.update_attrs_temporal(entity_id, attr_id, instance_id, local, link, ngsild_tenant, entity_temporal, async_req=True)
-        >>> result = thread.get()
+        5.6.14 Partial Update Attribute instance in Temporal Representation of an Entity.  This operation allows modifying a specific Attribute (Property or Relationship) instance, identified by its instanceId, of a Temporal Representation of an Entity.  This operation enables the correction of wrong information that could have been previously added to the Temporal Representation of an Entity. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -887,32 +1436,57 @@ class TemporalContextInformationProvisionApi:
         :type ngsild_tenant: str
         :param entity_temporal:
         :type entity_temporal: EntityTemporal
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the update_attrs_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.update_attrs_temporal_with_http_info.raw_function(
-            entity_id,
-            attr_id,
-            instance_id,
-            local,
-            link,
-            ngsild_tenant,
-            entity_temporal,
-            **kwargs,
+        _param = self._update_attrs_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            instance_id=instance_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def update_attrs_temporal_with_http_info(
@@ -924,16 +1498,22 @@ class TemporalContextInformationProvisionApi:
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
         entity_temporal: Optional[EntityTemporal] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Attribute Instance update   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Attribute Instance update 
 
-        5.6.14 Partial Update Attribute instance in Temporal Representation of an Entity.  This operation allows modifying a specific Attribute (Property or Relationship) instance, identified by its instanceId, of a Temporal Representation of an Entity.  This operation enables the correction of wrong information that could have been previously added to the Temporal Representation of an Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.update_attrs_temporal_with_http_info(entity_id, attr_id, instance_id, local, link, ngsild_tenant, entity_temporal, async_req=True)
-        >>> result = thread.get()
+        5.6.14 Partial Update Attribute instance in Temporal Representation of an Entity.  This operation allows modifying a specific Attribute (Property or Relationship) instance, identified by its instanceId, of a Temporal Representation of an Entity.  This operation enables the correction of wrong information that could have been previously added to the Temporal Representation of an Entity. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -949,131 +1529,242 @@ class TemporalContextInformationProvisionApi:
         :type ngsild_tenant: str
         :param entity_temporal:
         :type entity_temporal: EntityTemporal
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'entity_id',
-            'attr_id',
-            'instance_id',
-            'local',
-            'link',
-            'ngsild_tenant',
-            'entity_temporal'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._update_attrs_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            instance_id=instance_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
 
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method update_attrs_temporal" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        _collection_formats: Dict[str, str] = {}
 
-        # process the path parameters
+    @validate_call
+    def update_attrs_temporal_without_preload_content(
+        self,
+        entity_id: Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")],
+        attr_id: Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")],
+        instance_id: Annotated[StrictStr, Field(description="Id (URI) identifying a particular Attribute instance.")],
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        entity_temporal: Optional[EntityTemporal] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Attribute Instance update 
+
+        5.6.14 Partial Update Attribute instance in Temporal Representation of an Entity.  This operation allows modifying a specific Attribute (Property or Relationship) instance, identified by its instanceId, of a Temporal Representation of an Entity.  This operation enables the correction of wrong information that could have been previously added to the Temporal Representation of an Entity. 
+
+        :param entity_id: Id (URI) of the entity to be retrieved. (required)
+        :type entity_id: str
+        :param attr_id: Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
+        :type attr_id: str
+        :param instance_id: Id (URI) identifying a particular Attribute instance. (required)
+        :type instance_id: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param entity_temporal:
+        :type entity_temporal: EntityTemporal
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_attrs_temporal_serialize(
+            entity_id=entity_id,
+            attr_id=attr_id,
+            instance_id=instance_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _update_attrs_temporal_serialize(
+        self,
+        entity_id,
+        attr_id,
+        instance_id,
+        local,
+        link,
+        ngsild_tenant,
+        entity_temporal,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
         _path_params: Dict[str, str] = {}
-        if _params['entity_id'] is not None:
-            _path_params['entityId'] = _params['entity_id']
-
-        if _params['attr_id'] is not None:
-            _path_params['attrId'] = _params['attr_id']
-
-        if _params['instance_id'] is not None:
-            _path_params['instanceId'] = _params['instance_id']
-
-
-        # process the query parameters
         _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
+        _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
         _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if entity_id is not None:
+            _path_params['entityId'] = entity_id
+        if attr_id is not None:
+            _path_params['attrId'] = attr_id
+        if instance_id is not None:
+            _path_params['instanceId'] = instance_id
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
         # process the body parameter
-        _body_params = None
-        if _params['entity_temporal'] is not None:
-            _body_params = _params['entity_temporal']
+        if entity_temporal is not None:
+            _body_params = entity_temporal
+
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
 
         # set the HTTP header `Content-Type`
-        _content_types_list = _params.get('_content_type',
-            self.api_client.select_header_content_type(
-                ['application/json', 'application/json+ld']))
-        if _content_types_list:
-                _header_params['Content-Type'] = _content_types_list
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json', 
+                        'application/json+ld'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
+        _auth_settings: List[str] = [
+        ]
 
-        _response_types_map: Dict[str, Optional[str]] = {}
-
-        return self.api_client.call_api(
-            '/temporal/entities/{entityId}/attrs/{attrId}/{instanceId}', 'PATCH',
-            _path_params,
-            _query_params,
-            _header_params,
+        return self.api_client.param_serialize(
+            method='PATCH',
+            resource_path='/temporal/entities/{entityId}/attrs/{attrId}/{instanceId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def upsert_temporal(
@@ -1082,16 +1773,22 @@ class TemporalContextInformationProvisionApi:
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
         entity_temporal: Optional[EntityTemporal] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> None:
-        """Temporal Representation of Entity creation   # noqa: E501
+        """Temporal Representation of Entity creation 
 
-        5.6.11 Upsert Temporal Representation.  This operation allows creating or updating (by adding new Attribute instances) a Temporal Representation of an Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.upsert_temporal(local, link, ngsild_tenant, entity_temporal, async_req=True)
-        >>> result = thread.get()
+        5.6.11 Upsert Temporal Representation.  This operation allows creating or updating (by adding new Attribute instances) a Temporal Representation of an Entity. 
 
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
@@ -1101,29 +1798,55 @@ class TemporalContextInformationProvisionApi:
         :type ngsild_tenant: str
         :param entity_temporal:
         :type entity_temporal: EntityTemporal
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the upsert_temporal_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.upsert_temporal_with_http_info.raw_function(
-            local,
-            link,
-            ngsild_tenant,
-            entity_temporal,
-            **kwargs,
+        _param = self._upsert_temporal_serialize(
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '204': None,
+            '400': "ProblemDetails",
+            '422': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def upsert_temporal_with_http_info(
@@ -1132,16 +1855,22 @@ class TemporalContextInformationProvisionApi:
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
         entity_temporal: Optional[EntityTemporal] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Temporal Representation of Entity creation   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Temporal Representation of Entity creation 
 
-        5.6.11 Upsert Temporal Representation.  This operation allows creating or updating (by adding new Attribute instances) a Temporal Representation of an Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.upsert_temporal_with_http_info(local, link, ngsild_tenant, entity_temporal, async_req=True)
-        >>> result = thread.get()
+        5.6.11 Upsert Temporal Representation.  This operation allows creating or updating (by adding new Attribute instances) a Temporal Representation of an Entity. 
 
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
@@ -1151,116 +1880,216 @@ class TemporalContextInformationProvisionApi:
         :type ngsild_tenant: str
         :param entity_temporal:
         :type entity_temporal: EntityTemporal
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: None
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'local',
-            'link',
-            'ngsild_tenant',
-            'entity_temporal'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._upsert_temporal_serialize(
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
 
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method upsert_temporal" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '204': None,
+            '400': "ProblemDetails",
+            '422': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        _collection_formats: Dict[str, str] = {}
 
-        # process the path parameters
+    @validate_call
+    def upsert_temporal_without_preload_content(
+        self,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        entity_temporal: Optional[EntityTemporal] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Temporal Representation of Entity creation 
+
+        5.6.11 Upsert Temporal Representation.  This operation allows creating or updating (by adding new Attribute instances) a Temporal Representation of an Entity. 
+
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param entity_temporal:
+        :type entity_temporal: EntityTemporal
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._upsert_temporal_serialize(
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            entity_temporal=entity_temporal,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '204': None,
+            '400': "ProblemDetails",
+            '422': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _upsert_temporal_serialize(
+        self,
+        local,
+        link,
+        ngsild_tenant,
+        entity_temporal,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
         _path_params: Dict[str, str] = {}
-
-        # process the query parameters
         _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
+        _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
         _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
         # process the body parameter
-        _body_params = None
-        if _params['entity_temporal'] is not None:
-            _body_params = _params['entity_temporal']
+        if entity_temporal is not None:
+            _body_params = entity_temporal
+
 
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
 
         # set the HTTP header `Content-Type`
-        _content_types_list = _params.get('_content_type',
-            self.api_client.select_header_content_type(
-                ['application/json', 'application/json+ld']))
-        if _content_types_list:
-                _header_params['Content-Type'] = _content_types_list
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json', 
+                        'application/json+ld'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
+        _auth_settings: List[str] = [
+        ]
 
-        _response_types_map: Dict[str, Optional[str]] = {}
-
-        return self.api_client.call_api(
-            '/temporal/entities', 'POST',
-            _path_params,
-            _query_params,
-            _header_params,
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/temporal/entities',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+

@@ -3,6 +3,7 @@
 5.2.24 This type represents the data needed to define the entity type list representation as mandated by clause 4.5.10. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Unique identifier for the entity type list.  | 

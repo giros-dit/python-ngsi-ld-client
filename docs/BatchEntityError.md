@@ -3,6 +3,7 @@
 5.2.17 represents an error raised (associated to a particular Entity) during the execution of a batch or distributed operation. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **entity_id** | **str** | Entity Id corresponding to the Entity in error.  | 

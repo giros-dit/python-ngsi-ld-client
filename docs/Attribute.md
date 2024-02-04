@@ -3,6 +3,7 @@
 5.2.28 This type represents the data needed to define the attribute information. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Full URI of attribute name.  | 

@@ -17,22 +17,17 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from pydantic import Field
 from typing_extensions import Annotated
 from ngsi_ld_client.models.entity_info import EntityInfo
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class RegistrationInfo(BaseModel):
     """
-    5.2.10 RegistrationInfo.   # noqa: E501
-    """
+    5.2.10 RegistrationInfo. 
+    """ # noqa: E501
     entities: Optional[Annotated[List[EntityInfo], Field(min_length=1)]] = Field(default=None, description="Describes the entities for which the CSource may be able to provide information. ")
     property_names: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, description="Describes the Properties that the CSource may be able to provide. ", alias="propertyNames")
     relationship_names: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, description="Describes the Relationships that the CSource may be able to provide. ", alias="relationshipNames")
@@ -41,7 +36,8 @@ class RegistrationInfo(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -55,7 +51,7 @@ class RegistrationInfo(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of RegistrationInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -70,11 +66,13 @@ class RegistrationInfo(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -92,7 +90,7 @@ class RegistrationInfo(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of RegistrationInfo from a dict"""
         if obj is None:
             return None
@@ -101,7 +99,7 @@ class RegistrationInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "entities": [EntityInfo.from_dict(_item) for _item in obj.get("entities")] if obj.get("entities") is not None else None,
+            "entities": [EntityInfo.from_dict(_item) for _item in obj["entities"]] if obj.get("entities") is not None else None,
             "propertyNames": obj.get("propertyNames"),
             "relationshipNames": obj.get("relationshipNames")
         })

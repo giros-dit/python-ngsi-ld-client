@@ -3,6 +3,7 @@
 5.2.10 RegistrationInfo. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **entities** | [**List[EntityInfo]**](EntityInfo.md) | Describes the entities for which the CSource may be able to provide information.  | [optional] 

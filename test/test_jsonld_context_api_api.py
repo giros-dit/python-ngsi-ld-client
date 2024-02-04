@@ -14,14 +14,14 @@
 
 import unittest
 
-from ngsi_ld_client.api.jsonld_context_api_api import JSONLDContextAPIApi  # noqa: E501
+from ngsi_ld_client.api.jsonld_context_api_api import JSONLDContextAPIApi
 
 
 class TestJSONLDContextAPIApi(unittest.TestCase):
     """JSONLDContextAPIApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = JSONLDContextAPIApi()  # noqa: E501
+        self.api = JSONLDContextAPIApi()
 
     def tearDown(self) -> None:
         pass
@@ -29,28 +29,28 @@ class TestJSONLDContextAPIApi(unittest.TestCase):
     def test_create_context(self) -> None:
         """Test case for create_context
 
-        Add a user @context to the internal cache   # noqa: E501
+        Add a user @context to the internal cache 
         """
         pass
 
     def test_delete_context(self) -> None:
         """Test case for delete_context
 
-        Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it   # noqa: E501
+        Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it 
         """
         pass
 
     def test_list_contexts(self) -> None:
         """Test case for list_contexts
 
-        List all cached @contexts   # noqa: E501
+        List all cached @contexts 
         """
         pass
 
     def test_retrieve_context(self) -> None:
         """Test case for retrieve_context
 
-        Serve one specific user @context   # noqa: E501
+        Serve one specific user @context 
         """
         pass
 

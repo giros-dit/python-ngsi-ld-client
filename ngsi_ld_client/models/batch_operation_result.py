@@ -17,21 +17,16 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from pydantic import Field
 from ngsi_ld_client.models.batch_entity_error import BatchEntityError
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class BatchOperationResult(BaseModel):
     """
-    5.2.16 represents the result of a batch operation.   # noqa: E501
-    """
+    5.2.16 represents the result of a batch operation. 
+    """ # noqa: E501
     success: List[StrictStr] = Field(description="Array of Entity Ids corresponding to the Entities that were successfully treated by the concerned operation. ")
     errors: Optional[List[BatchEntityError]] = Field(default=None, description="One array item per Entity in error. ")
     additional_properties: Dict[str, Any] = {}
@@ -39,7 +34,8 @@ class BatchOperationResult(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -53,7 +49,7 @@ class BatchOperationResult(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of BatchOperationResult from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -68,11 +64,13 @@ class BatchOperationResult(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in errors (list)
@@ -90,7 +88,7 @@ class BatchOperationResult(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of BatchOperationResult from a dict"""
         if obj is None:
             return None
@@ -100,7 +98,7 @@ class BatchOperationResult(BaseModel):
 
         _obj = cls.model_validate({
             "success": obj.get("success"),
-            "errors": [BatchEntityError.from_dict(_item) for _item in obj.get("errors")] if obj.get("errors") is not None else None
+            "errors": [BatchEntityError.from_dict(_item) for _item in obj["errors"]] if obj.get("errors") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.model_property import ModelProperty  # noqa: E501
+from ngsi_ld_client.models.model_property import ModelProperty
 
 class TestModelProperty(unittest.TestCase):
     """ModelProperty unit test stubs"""
@@ -33,7 +32,7 @@ class TestModelProperty(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `ModelProperty`
         """
-        model = ModelProperty()  # noqa: E501
+        model = ModelProperty()
         if include_optional:
             return ModelProperty(
                 type = 'Property',

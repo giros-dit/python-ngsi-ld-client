@@ -3,6 +3,7 @@
 5.2.13 represents a geoquery used for Subscriptions. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **geometry** | **str** | Type of the reference geometry.  | 

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.append_attrs_temporal_request import AppendAttrsTemporalRequest  # noqa: E501
+from ngsi_ld_client.models.append_attrs_temporal_request import AppendAttrsTemporalRequest
 
 class TestAppendAttrsTemporalRequest(unittest.TestCase):
     """AppendAttrsTemporalRequest unit test stubs"""
@@ -33,7 +32,7 @@ class TestAppendAttrsTemporalRequest(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `AppendAttrsTemporalRequest`
         """
-        model = AppendAttrsTemporalRequest()  # noqa: E501
+        model = AppendAttrsTemporalRequest()
         if include_optional:
             return AppendAttrsTemporalRequest(
                 location = {

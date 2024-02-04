@@ -3,6 +3,7 @@
 An array of four positions where the first equals the last. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 

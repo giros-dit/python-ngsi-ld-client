@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.create_subscription_request import CreateSubscriptionRequest  # noqa: E501
+from ngsi_ld_client.models.create_subscription_request import CreateSubscriptionRequest
 
 class TestCreateSubscriptionRequest(unittest.TestCase):
     """CreateSubscriptionRequest unit test stubs"""
@@ -33,7 +32,7 @@ class TestCreateSubscriptionRequest(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `CreateSubscriptionRequest`
         """
-        model = CreateSubscriptionRequest()  # noqa: E501
+        model = CreateSubscriptionRequest()
         if include_optional:
             return CreateSubscriptionRequest(
                 id = '',

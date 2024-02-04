@@ -11,20 +11,14 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
-import re  # noqa: F401
-import io
 import warnings
-
-from pydantic import validate_call, ValidationError
-from typing import Dict, List, Optional, Tuple
-
-from pydantic import Field
+from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
+from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
-from pydantic import StrictBool, StrictStr, field_validator
 
+from pydantic import Field, StrictBool, StrictStr, field_validator
 from typing import Any, List, Optional
-
+from typing_extensions import Annotated
 from ngsi_ld_client.models.attribute import Attribute
 from ngsi_ld_client.models.entity_type_info import EntityTypeInfo
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
@@ -35,12 +29,9 @@ from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubs
 from ngsi_ld_client.models.retrieve_attributes200_response import RetrieveAttributes200Response
 from ngsi_ld_client.models.retrieve_types200_response import RetrieveTypes200Response
 
-from ngsi_ld_client.api_client import ApiClient
+from ngsi_ld_client.api_client import ApiClient, RequestSerialized
 from ngsi_ld_client.api_response import ApiResponse
-from ngsi_ld_client.exceptions import (  # noqa: F401
-    ApiTypeError,
-    ApiValueError
-)
+from ngsi_ld_client.rest import RESTResponseType
 
 
 class ContextInformationConsumptionApi:
@@ -55,6 +46,7 @@ class ContextInformationConsumptionApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
+
     @validate_call
     def query_batch(
         self,
@@ -62,16 +54,22 @@ class ContextInformationConsumptionApi:
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
         query: Optional[Query] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> List[QueryEntity200ResponseInner]:
-        """Query entities based on POST   # noqa: E501
+        """Query entities based on POST 
 
-        5.7.2 Query Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.query_batch(local, link, ngsild_tenant, query, async_req=True)
-        >>> result = thread.get()
+        5.7.2 Query Entity. 
 
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
@@ -81,29 +79,53 @@ class ContextInformationConsumptionApi:
         :type ngsild_tenant: str
         :param query:
         :type query: Query
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: List[QueryEntity200ResponseInner]
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the query_batch_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.query_batch_with_http_info.raw_function(
-            local,
-            link,
-            ngsild_tenant,
-            query,
-            **kwargs,
+        _param = self._query_batch_serialize(
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            query=query,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[QueryEntity200ResponseInner]",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def query_batch_with_http_info(
@@ -112,16 +134,22 @@ class ContextInformationConsumptionApi:
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
         query: Optional[Query] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Query entities based on POST   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[QueryEntity200ResponseInner]]:
+        """Query entities based on POST 
 
-        5.7.2 Query Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.query_batch_with_http_info(local, link, ngsild_tenant, query, async_req=True)
-        >>> result = thread.get()
+        5.7.2 Query Entity. 
 
         :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
         :type local: bool
@@ -131,122 +159,216 @@ class ContextInformationConsumptionApi:
         :type ngsild_tenant: str
         :param query:
         :type query: Query
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(List[QueryEntity200ResponseInner], status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'local',
-            'link',
-            'ngsild_tenant',
-            'query'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._query_batch_serialize(
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            query=query,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method query_batch" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        if _params['query'] is not None:
-            _body_params = _params['query']
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # set the HTTP header `Content-Type`
-        _content_types_list = _params.get('_content_type',
-            self.api_client.select_header_content_type(
-                ['application/json', 'application/json+ld']))
-        if _content_types_list:
-                _header_params['Content-Type'] = _content_types_list
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[QueryEntity200ResponseInner]",
             '400': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/entityOperations/query', 'POST',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def query_batch_without_preload_content(
+        self,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        query: Optional[Query] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Query entities based on POST 
+
+        5.7.2 Query Entity. 
+
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param query:
+        :type query: Query
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._query_batch_serialize(
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            query=query,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[QueryEntity200ResponseInner]",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _query_batch_serialize(
+        self,
+        local,
+        link,
+        ngsild_tenant,
+        query,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+        if query is not None:
+            _body_params = query
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json', 
+                        'application/json+ld'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/entityOperations/query',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def query_entity(
@@ -270,16 +392,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> List[QueryEntity200ResponseInner]:
-        """Query entities   # noqa: E501
+        """Query entities 
 
-        5.7.2 Query Entities (excluding batch entity queries).  This operation allows querying an NGSI-LD system.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.query_entity(id, type, id_pattern, attrs, q, csf, geometry, georel, coordinates, geoproperty, geometry_property, lang, scope_q, limit, count, options, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.2 Query Entities (excluding batch entity queries).  This operation allows querying an NGSI-LD system. 
 
         :param id: List of entity ids to be retrieved.
         :type id: List[str]
@@ -319,44 +447,68 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: List[QueryEntity200ResponseInner]
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the query_entity_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.query_entity_with_http_info.raw_function(
-            id,
-            type,
-            id_pattern,
-            attrs,
-            q,
-            csf,
-            geometry,
-            georel,
-            coordinates,
-            geoproperty,
-            geometry_property,
-            lang,
-            scope_q,
-            limit,
-            count,
-            options,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._query_entity_serialize(
+            id=id,
+            type=type,
+            id_pattern=id_pattern,
+            attrs=attrs,
+            q=q,
+            csf=csf,
+            geometry=geometry,
+            georel=georel,
+            coordinates=coordinates,
+            geoproperty=geoproperty,
+            geometry_property=geometry_property,
+            lang=lang,
+            scope_q=scope_q,
+            limit=limit,
+            count=count,
+            options=options,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[QueryEntity200ResponseInner]",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def query_entity_with_http_info(
@@ -380,16 +532,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Query entities   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[QueryEntity200ResponseInner]]:
+        """Query entities 
 
-        5.7.2 Query Entities (excluding batch entity queries).  This operation allows querying an NGSI-LD system.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.query_entity_with_http_info(id, type, id_pattern, attrs, q, csf, geometry, georel, coordinates, geoproperty, geometry_property, lang, scope_q, limit, count, options, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.2 Query Entities (excluding batch entity queries).  This operation allows querying an NGSI-LD system. 
 
         :param id: List of entity ids to be retrieved.
         :type id: List[str]
@@ -429,178 +587,358 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(List[QueryEntity200ResponseInner], status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'id',
-            'type',
-            'id_pattern',
-            'attrs',
-            'q',
-            'csf',
-            'geometry',
-            'georel',
-            'coordinates',
-            'geoproperty',
-            'geometry_property',
-            'lang',
-            'scope_q',
-            'limit',
-            'count',
-            'options',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._query_entity_serialize(
+            id=id,
+            type=type,
+            id_pattern=id_pattern,
+            attrs=attrs,
+            q=q,
+            csf=csf,
+            geometry=geometry,
+            georel=georel,
+            coordinates=coordinates,
+            geoproperty=geoproperty,
+            geometry_property=geometry_property,
+            lang=lang,
+            scope_q=scope_q,
+            limit=limit,
+            count=count,
+            options=options,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method query_entity" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('id') is not None:  # noqa: E501
-            _query_params.append(('id', _params['id']))
-            _collection_formats['id'] = 'csv'
-
-        if _params.get('type') is not None:  # noqa: E501
-            _query_params.append(('type', _params['type']))
-
-        if _params.get('id_pattern') is not None:  # noqa: E501
-            _query_params.append(('idPattern', _params['id_pattern']))
-
-        if _params.get('attrs') is not None:  # noqa: E501
-            _query_params.append(('attrs', _params['attrs']))
-            _collection_formats['attrs'] = 'csv'
-
-        if _params.get('q') is not None:  # noqa: E501
-            _query_params.append(('q', _params['q']))
-
-        if _params.get('csf') is not None:  # noqa: E501
-            _query_params.append(('csf', _params['csf']))
-
-        if _params.get('geometry') is not None:  # noqa: E501
-            _query_params.append(('geometry', _params['geometry']))
-
-        if _params.get('georel') is not None:  # noqa: E501
-            _query_params.append(('georel', _params['georel']))
-
-        if _params.get('coordinates') is not None:  # noqa: E501
-            _query_params.append(('coordinates', _params['coordinates']))
-
-        if _params.get('geoproperty') is not None:  # noqa: E501
-            _query_params.append(('geoproperty', _params['geoproperty']))
-
-        if _params.get('geometry_property') is not None:  # noqa: E501
-            _query_params.append(('geometryProperty', _params['geometry_property']))
-
-        if _params.get('lang') is not None:  # noqa: E501
-            _query_params.append(('lang', _params['lang']))
-
-        if _params.get('scope_q') is not None:  # noqa: E501
-            _query_params.append(('scopeQ', _params['scope_q']))
-
-        if _params.get('limit') is not None:  # noqa: E501
-            _query_params.append(('limit', _params['limit']))
-
-        if _params.get('count') is not None:  # noqa: E501
-            _query_params.append(('count', _params['count']))
-
-        if _params.get('options') is not None:  # noqa: E501
-            _query_params.append(('options', _params['options']))
-            _collection_formats['options'] = 'csv'
-
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo+json', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[QueryEntity200ResponseInner]",
             '400': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/entities', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def query_entity_without_preload_content(
+        self,
+        id: Annotated[Optional[List[StrictStr]], Field(description="List of entity ids to be retrieved.")] = None,
+        type: Annotated[Optional[StrictStr], Field(description="Selection of Entity Types as per clause 4.17. ")] = None,
+        id_pattern: Annotated[Optional[StrictStr], Field(description="Regular expression that shall be matched by entity ids.")] = None,
+        attrs: Annotated[Optional[List[StrictStr]], Field(description="List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved. ")] = None,
+        q: Annotated[Optional[StrictStr], Field(description="Query as per clause 4.9. ")] = None,
+        csf: Annotated[Optional[StrictStr], Field(description="Context Source filter as per clause 4.9.")] = None,
+        geometry: Annotated[Optional[StrictStr], Field(description="Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. ")] = None,
+        georel: Annotated[Optional[Any], Field(description="Geo relationship as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. ")] = None,
+        coordinates: Annotated[Optional[Any], Field(description="Coordinates serialized as a string as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. ")] = None,
+        geoproperty: Annotated[Optional[StrictStr], Field(description="The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present. ")] = None,
+        geometry_property: Annotated[Optional[StrictStr], Field(description="In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field. ")] = None,
+        lang: Annotated[Optional[StrictStr], Field(description="It is used to reduce languageMaps to a string or string array property in a single preferred language. ")] = None,
+        scope_q: Annotated[Optional[StrictStr], Field(description="Scope query (see clause 4.19). ")] = None,
+        limit: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter. ")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned. ")] = None,
+        options: Optional[List[QueryEntityOptionsParameterInner]] = None,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Query entities 
+
+        5.7.2 Query Entities (excluding batch entity queries).  This operation allows querying an NGSI-LD system. 
+
+        :param id: List of entity ids to be retrieved.
+        :type id: List[str]
+        :param type: Selection of Entity Types as per clause 4.17. 
+        :type type: str
+        :param id_pattern: Regular expression that shall be matched by entity ids.
+        :type id_pattern: str
+        :param attrs: List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved. 
+        :type attrs: List[str]
+        :param q: Query as per clause 4.9. 
+        :type q: str
+        :param csf: Context Source filter as per clause 4.9.
+        :type csf: str
+        :param geometry: Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. 
+        :type geometry: str
+        :param georel: Geo relationship as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. 
+        :type georel: QueryEntityGeorelParameter
+        :param coordinates: Coordinates serialized as a string as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. 
+        :type coordinates: QueryEntityCoordinatesParameter
+        :param geoproperty: The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present. 
+        :type geoproperty: str
+        :param geometry_property: In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field. 
+        :type geometry_property: str
+        :param lang: It is used to reduce languageMaps to a string or string array property in a single preferred language. 
+        :type lang: str
+        :param scope_q: Scope query (see clause 4.19). 
+        :type scope_q: str
+        :param limit: 6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter. 
+        :type limit: int
+        :param count: 6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned. 
+        :type count: bool
+        :param options:
+        :type options: List[QueryEntityOptionsParameterInner]
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._query_entity_serialize(
+            id=id,
+            type=type,
+            id_pattern=id_pattern,
+            attrs=attrs,
+            q=q,
+            csf=csf,
+            geometry=geometry,
+            georel=georel,
+            coordinates=coordinates,
+            geoproperty=geoproperty,
+            geometry_property=geometry_property,
+            lang=lang,
+            scope_q=scope_q,
+            limit=limit,
+            count=count,
+            options=options,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[QueryEntity200ResponseInner]",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _query_entity_serialize(
+        self,
+        id,
+        type,
+        id_pattern,
+        attrs,
+        q,
+        csf,
+        geometry,
+        georel,
+        coordinates,
+        geoproperty,
+        geometry_property,
+        lang,
+        scope_q,
+        limit,
+        count,
+        options,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+            'id': 'csv',
+            'attrs': 'csv',
+            'options': 'csv',
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if id is not None:
+            
+            _query_params.append(('id', id))
+            
+        if type is not None:
+            
+            _query_params.append(('type', type))
+            
+        if id_pattern is not None:
+            
+            _query_params.append(('idPattern', id_pattern))
+            
+        if attrs is not None:
+            
+            _query_params.append(('attrs', attrs))
+            
+        if q is not None:
+            
+            _query_params.append(('q', q))
+            
+        if csf is not None:
+            
+            _query_params.append(('csf', csf))
+            
+        if geometry is not None:
+            
+            _query_params.append(('geometry', geometry))
+            
+        if georel is not None:
+            
+            _query_params.append(('georel', georel))
+            
+        if coordinates is not None:
+            
+            _query_params.append(('coordinates', coordinates))
+            
+        if geoproperty is not None:
+            
+            _query_params.append(('geoproperty', geoproperty))
+            
+        if geometry_property is not None:
+            
+            _query_params.append(('geometryProperty', geometry_property))
+            
+        if lang is not None:
+            
+            _query_params.append(('lang', lang))
+            
+        if scope_q is not None:
+            
+            _query_params.append(('scopeQ', scope_q))
+            
+        if limit is not None:
+            
+            _query_params.append(('limit', limit))
+            
+        if count is not None:
+            
+            _query_params.append(('count', count))
+            
+        if options is not None:
+            
+            _query_params.append(('options', options))
+            
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo+json', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/entities',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def query_subscription(
@@ -611,16 +949,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> List[QuerySubscription200ResponseInner]:
-        """Retrieve list of Subscriptions   # noqa: E501
+        """Retrieve list of Subscriptions 
 
-        5.8.4 Query Subscriptions.  This operation allows querying existing Subscriptions.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.query_subscription(options, limit, count, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.8.4 Query Subscriptions.  This operation allows querying existing Subscriptions. 
 
         :param options:
         :type options: List[OptionsSysAttrs]
@@ -634,31 +978,55 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: List[QuerySubscription200ResponseInner]
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the query_subscription_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.query_subscription_with_http_info.raw_function(
-            options,
-            limit,
-            count,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._query_subscription_serialize(
+            options=options,
+            limit=limit,
+            count=count,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[QuerySubscription200ResponseInner]",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def query_subscription_with_http_info(
@@ -669,16 +1037,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Retrieve list of Subscriptions   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[QuerySubscription200ResponseInner]]:
+        """Retrieve list of Subscriptions 
 
-        5.8.4 Query Subscriptions.  This operation allows querying existing Subscriptions.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.query_subscription_with_http_info(options, limit, count, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.8.4 Query Subscriptions.  This operation allows querying existing Subscriptions. 
 
         :param options:
         :type options: List[OptionsSysAttrs]
@@ -692,124 +1066,225 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(List[QuerySubscription200ResponseInner], status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'options',
-            'limit',
-            'count',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._query_subscription_serialize(
+            options=options,
+            limit=limit,
+            count=count,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method query_subscription" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('options') is not None:  # noqa: E501
-            _query_params.append(('options', _params['options']))
-            _collection_formats['options'] = 'csv'
-
-        if _params.get('limit') is not None:  # noqa: E501
-            _query_params.append(('limit', _params['limit']))
-
-        if _params.get('count') is not None:  # noqa: E501
-            _query_params.append(('count', _params['count']))
-
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[QuerySubscription200ResponseInner]",
             '400': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/subscriptions', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def query_subscription_without_preload_content(
+        self,
+        options: Optional[List[OptionsSysAttrs]] = None,
+        limit: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter. ")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned. ")] = None,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Retrieve list of Subscriptions 
+
+        5.8.4 Query Subscriptions.  This operation allows querying existing Subscriptions. 
+
+        :param options:
+        :type options: List[OptionsSysAttrs]
+        :param limit: 6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter. 
+        :type limit: int
+        :param count: 6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned. 
+        :type count: bool
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._query_subscription_serialize(
+            options=options,
+            limit=limit,
+            count=count,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[QuerySubscription200ResponseInner]",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _query_subscription_serialize(
+        self,
+        options,
+        limit,
+        count,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+            'options': 'csv',
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if options is not None:
+            
+            _query_params.append(('options', options))
+            
+        if limit is not None:
+            
+            _query_params.append(('limit', limit))
+            
+        if count is not None:
+            
+            _query_params.append(('count', count))
+            
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/subscriptions',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def retrieve_attr_info(
@@ -818,16 +1293,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> Attribute:
-        """Retrieve Available Attribute Information   # noqa: E501
+        """Retrieve Available Attribute Information 
 
-        5.7.10 Retrieve Available Attribute information.  This operation allows retrieving detailed attribute information about a specified NGSI-LD attribute that belongs to entity instances existing within the NGSI-LD system. The detailed representation includes  the attribute name (as short name if available in the provided @context) and the type names  for which entity instances exist that have the respective attribute, a count of available  attribute instances and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_attr_info(attr_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.10 Retrieve Available Attribute information.  This operation allows retrieving detailed attribute information about a specified NGSI-LD attribute that belongs to entity instances existing within the NGSI-LD system. The detailed representation includes  the attribute name (as short name if available in the provided @context) and the type names  for which entity instances exist that have the respective attribute, a count of available  attribute instances and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty). 
 
         :param attr_id: Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
         :type attr_id: str
@@ -837,29 +1318,54 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: Attribute
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the retrieve_attr_info_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.retrieve_attr_info_with_http_info.raw_function(
-            attr_id,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._retrieve_attr_info_serialize(
+            attr_id=attr_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Attribute",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def retrieve_attr_info_with_http_info(
@@ -868,16 +1374,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Retrieve Available Attribute Information   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Attribute]:
+        """Retrieve Available Attribute Information 
 
-        5.7.10 Retrieve Available Attribute information.  This operation allows retrieving detailed attribute information about a specified NGSI-LD attribute that belongs to entity instances existing within the NGSI-LD system. The detailed representation includes  the attribute name (as short name if available in the provided @context) and the type names  for which entity instances exist that have the respective attribute, a count of available  attribute instances and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_attr_info_with_http_info(attr_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.10 Retrieve Available Attribute information.  This operation allows retrieving detailed attribute information about a specified NGSI-LD attribute that belongs to entity instances existing within the NGSI-LD system. The detailed representation includes  the attribute name (as short name if available in the provided @context) and the type names  for which entity instances exist that have the respective attribute, a count of available  attribute instances and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty). 
 
         :param attr_id: Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
         :type attr_id: str
@@ -887,116 +1399,204 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(Attribute, status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'attr_id',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._retrieve_attr_info_serialize(
+            attr_id=attr_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method retrieve_attr_info" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-        if _params['attr_id'] is not None:
-            _path_params['attrId'] = _params['attr_id']
-
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Attribute",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/attributes/{attrId}', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def retrieve_attr_info_without_preload_content(
+        self,
+        attr_id: Annotated[StrictStr, Field(description="Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")],
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Retrieve Available Attribute Information 
+
+        5.7.10 Retrieve Available Attribute information.  This operation allows retrieving detailed attribute information about a specified NGSI-LD attribute that belongs to entity instances existing within the NGSI-LD system. The detailed representation includes  the attribute name (as short name if available in the provided @context) and the type names  for which entity instances exist that have the respective attribute, a count of available  attribute instances and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty). 
+
+        :param attr_id: Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
+        :type attr_id: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._retrieve_attr_info_serialize(
+            attr_id=attr_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Attribute",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _retrieve_attr_info_serialize(
+        self,
+        attr_id,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if attr_id is not None:
+            _path_params['attrId'] = attr_id
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/attributes/{attrId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def retrieve_attributes(
@@ -1005,16 +1605,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RetrieveAttributes200Response:
-        """Retrieve Available Attributes   # noqa: E501
+        """Retrieve Available Attributes 
 
-        5.7.8 Retrieve Available attributes.  This operation allows retrieving a list of NGSI-LD attributes that belong to entity instances existing within the NGSI- LD system.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_attributes(details, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.8 Retrieve Available attributes.  This operation allows retrieving a list of NGSI-LD attributes that belong to entity instances existing within the NGSI- LD system. 
 
         :param details: If true, then detailed attribute information represented as an array with elements of the Attribute data structure (clause 5.2.28) is to be returned. 
         :type details: bool
@@ -1024,29 +1630,53 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: RetrieveAttributes200Response
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the retrieve_attributes_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.retrieve_attributes_with_http_info.raw_function(
-            details,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._retrieve_attributes_serialize(
+            details=details,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RetrieveAttributes200Response",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def retrieve_attributes_with_http_info(
@@ -1055,16 +1685,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Retrieve Available Attributes   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[RetrieveAttributes200Response]:
+        """Retrieve Available Attributes 
 
-        5.7.8 Retrieve Available attributes.  This operation allows retrieving a list of NGSI-LD attributes that belong to entity instances existing within the NGSI- LD system.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_attributes_with_http_info(details, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.8 Retrieve Available attributes.  This operation allows retrieving a list of NGSI-LD attributes that belong to entity instances existing within the NGSI- LD system. 
 
         :param details: If true, then detailed attribute information represented as an array with elements of the Attribute data structure (clause 5.2.28) is to be returned. 
         :type details: bool
@@ -1074,115 +1710,204 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(RetrieveAttributes200Response, status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'details',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._retrieve_attributes_serialize(
+            details=details,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method retrieve_attributes" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('details') is not None:  # noqa: E501
-            _query_params.append(('details', _params['details']))
-
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "RetrieveAttributes200Response",
             '400': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/attributes', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def retrieve_attributes_without_preload_content(
+        self,
+        details: Annotated[Optional[StrictBool], Field(description="If true, then detailed attribute information represented as an array with elements of the Attribute data structure (clause 5.2.28) is to be returned. ")] = None,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Retrieve Available Attributes 
+
+        5.7.8 Retrieve Available attributes.  This operation allows retrieving a list of NGSI-LD attributes that belong to entity instances existing within the NGSI- LD system. 
+
+        :param details: If true, then detailed attribute information represented as an array with elements of the Attribute data structure (clause 5.2.28) is to be returned. 
+        :type details: bool
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._retrieve_attributes_serialize(
+            details=details,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RetrieveAttributes200Response",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _retrieve_attributes_serialize(
+        self,
+        details,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if details is not None:
+            
+            _query_params.append(('details', details))
+            
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/attributes',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def retrieve_entity(
@@ -1195,16 +1920,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> QueryEntity200ResponseInner:
-        """Entity retrieval by id   # noqa: E501
+        """Entity retrieval by id 
 
-        5.7.1 Retrieve Entity.  This operation allows retrieving an NGSI-LD Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_entity(entity_id, attrs, geometry_property, lang, options, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.1 Retrieve Entity.  This operation allows retrieving an NGSI-LD Entity. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -1222,33 +1953,58 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: QueryEntity200ResponseInner
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the retrieve_entity_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.retrieve_entity_with_http_info.raw_function(
-            entity_id,
-            attrs,
-            geometry_property,
-            lang,
-            options,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._retrieve_entity_serialize(
+            entity_id=entity_id,
+            attrs=attrs,
+            geometry_property=geometry_property,
+            lang=lang,
+            options=options,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "QueryEntity200ResponseInner",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def retrieve_entity_with_http_info(
@@ -1261,16 +2017,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Entity retrieval by id   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[QueryEntity200ResponseInner]:
+        """Entity retrieval by id 
 
-        5.7.1 Retrieve Entity.  This operation allows retrieving an NGSI-LD Entity.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_entity_with_http_info(entity_id, attrs, geometry_property, lang, options, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.1 Retrieve Entity.  This operation allows retrieving an NGSI-LD Entity. 
 
         :param entity_id: Id (URI) of the entity to be retrieved. (required)
         :type entity_id: str
@@ -1288,134 +2050,247 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(QueryEntity200ResponseInner, status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'entity_id',
-            'attrs',
-            'geometry_property',
-            'lang',
-            'options',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._retrieve_entity_serialize(
+            entity_id=entity_id,
+            attrs=attrs,
+            geometry_property=geometry_property,
+            lang=lang,
+            options=options,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method retrieve_entity" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-        if _params['entity_id'] is not None:
-            _path_params['entityId'] = _params['entity_id']
-
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('attrs') is not None:  # noqa: E501
-            _query_params.append(('attrs', _params['attrs']))
-            _collection_formats['attrs'] = 'csv'
-
-        if _params.get('geometry_property') is not None:  # noqa: E501
-            _query_params.append(('geometryProperty', _params['geometry_property']))
-
-        if _params.get('lang') is not None:  # noqa: E501
-            _query_params.append(('lang', _params['lang']))
-
-        if _params.get('options') is not None:  # noqa: E501
-            _query_params.append(('options', _params['options']))
-            _collection_formats['options'] = 'csv'
-
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo+json', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "QueryEntity200ResponseInner",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/entities/{entityId}', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def retrieve_entity_without_preload_content(
+        self,
+        entity_id: Annotated[StrictStr, Field(description="Id (URI) of the entity to be retrieved.")],
+        attrs: Annotated[Optional[List[StrictStr]], Field(description="List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved. ")] = None,
+        geometry_property: Annotated[Optional[StrictStr], Field(description="In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field. ")] = None,
+        lang: Annotated[Optional[StrictStr], Field(description="It is used to reduce languageMaps to a string or string array property in a single preferred language. ")] = None,
+        options: Optional[List[QueryEntityOptionsParameterInner]] = None,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Entity retrieval by id 
+
+        5.7.1 Retrieve Entity.  This operation allows retrieving an NGSI-LD Entity. 
+
+        :param entity_id: Id (URI) of the entity to be retrieved. (required)
+        :type entity_id: str
+        :param attrs: List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved. 
+        :type attrs: List[str]
+        :param geometry_property: In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field. 
+        :type geometry_property: str
+        :param lang: It is used to reduce languageMaps to a string or string array property in a single preferred language. 
+        :type lang: str
+        :param options:
+        :type options: List[QueryEntityOptionsParameterInner]
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._retrieve_entity_serialize(
+            entity_id=entity_id,
+            attrs=attrs,
+            geometry_property=geometry_property,
+            lang=lang,
+            options=options,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "QueryEntity200ResponseInner",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _retrieve_entity_serialize(
+        self,
+        entity_id,
+        attrs,
+        geometry_property,
+        lang,
+        options,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+            'attrs': 'csv',
+            'options': 'csv',
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if entity_id is not None:
+            _path_params['entityId'] = entity_id
+        # process the query parameters
+        if attrs is not None:
+            
+            _query_params.append(('attrs', attrs))
+            
+        if geometry_property is not None:
+            
+            _query_params.append(('geometryProperty', geometry_property))
+            
+        if lang is not None:
+            
+            _query_params.append(('lang', lang))
+            
+        if options is not None:
+            
+            _query_params.append(('options', options))
+            
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo+json', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/entities/{entityId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def retrieve_subscription(
@@ -1424,16 +2299,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> QuerySubscription200ResponseInner:
-        """Subscription retrieval by id   # noqa: E501
+        """Subscription retrieval by id 
 
-        5.8.3 Retrieve Subscription.  This operation allows retrieving an existing subscription.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_subscription(subscription_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.8.3 Retrieve Subscription.  This operation allows retrieving an existing subscription. 
 
         :param subscription_id: Id (URI) of the concerned subscription. (required)
         :type subscription_id: str
@@ -1443,29 +2324,54 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: QuerySubscription200ResponseInner
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the retrieve_subscription_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.retrieve_subscription_with_http_info.raw_function(
-            subscription_id,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._retrieve_subscription_serialize(
+            subscription_id=subscription_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "QuerySubscription200ResponseInner",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def retrieve_subscription_with_http_info(
@@ -1474,16 +2380,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Subscription retrieval by id   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[QuerySubscription200ResponseInner]:
+        """Subscription retrieval by id 
 
-        5.8.3 Retrieve Subscription.  This operation allows retrieving an existing subscription.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_subscription_with_http_info(subscription_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.8.3 Retrieve Subscription.  This operation allows retrieving an existing subscription. 
 
         :param subscription_id: Id (URI) of the concerned subscription. (required)
         :type subscription_id: str
@@ -1493,116 +2405,204 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(QuerySubscription200ResponseInner, status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'subscription_id',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._retrieve_subscription_serialize(
+            subscription_id=subscription_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method retrieve_subscription" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-        if _params['subscription_id'] is not None:
-            _path_params['subscriptionId'] = _params['subscription_id']
-
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "QuerySubscription200ResponseInner",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/subscriptions/{subscriptionId}', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def retrieve_subscription_without_preload_content(
+        self,
+        subscription_id: Annotated[StrictStr, Field(description="Id (URI) of the concerned subscription.")],
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Subscription retrieval by id 
+
+        5.8.3 Retrieve Subscription.  This operation allows retrieving an existing subscription. 
+
+        :param subscription_id: Id (URI) of the concerned subscription. (required)
+        :type subscription_id: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._retrieve_subscription_serialize(
+            subscription_id=subscription_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "QuerySubscription200ResponseInner",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _retrieve_subscription_serialize(
+        self,
+        subscription_id,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if subscription_id is not None:
+            _path_params['subscriptionId'] = subscription_id
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/subscriptions/{subscriptionId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def retrieve_type_info(
@@ -1611,16 +2611,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> EntityTypeInfo:
-        """Details about available entity type   # noqa: E501
+        """Details about available entity type 
 
-        5.7.7 Retrieve Available Entity Type information.  This operation allows retrieving detailed entity type information about a specified NGSI-LD entity type for which entity instances exist within the NGSI-LD system. The detailed representation includes the type name (as short name if available in the provided @context), the count of available entity instances and details about attributes that existing instances of this entity type have, including their name (as short name if available in the provided @context) and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_type_info(type, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.7 Retrieve Available Entity Type information.  This operation allows retrieving detailed entity type information about a specified NGSI-LD entity type for which entity instances exist within the NGSI-LD system. The detailed representation includes the type name (as short name if available in the provided @context), the count of available entity instances and details about attributes that existing instances of this entity type have, including their name (as short name if available in the provided @context) and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty). 
 
         :param type: Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
         :type type: str
@@ -1630,29 +2636,54 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: EntityTypeInfo
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the retrieve_type_info_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.retrieve_type_info_with_http_info.raw_function(
-            type,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._retrieve_type_info_serialize(
+            type=type,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "EntityTypeInfo",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def retrieve_type_info_with_http_info(
@@ -1661,16 +2692,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Details about available entity type   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[EntityTypeInfo]:
+        """Details about available entity type 
 
-        5.7.7 Retrieve Available Entity Type information.  This operation allows retrieving detailed entity type information about a specified NGSI-LD entity type for which entity instances exist within the NGSI-LD system. The detailed representation includes the type name (as short name if available in the provided @context), the count of available entity instances and details about attributes that existing instances of this entity type have, including their name (as short name if available in the provided @context) and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty).   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_type_info_with_http_info(type, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.7 Retrieve Available Entity Type information.  This operation allows retrieving detailed entity type information about a specified NGSI-LD entity type for which entity instances exist within the NGSI-LD system. The detailed representation includes the type name (as short name if available in the provided @context), the count of available entity instances and details about attributes that existing instances of this entity type have, including their name (as short name if available in the provided @context) and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty). 
 
         :param type: Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
         :type type: str
@@ -1680,116 +2717,204 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(EntityTypeInfo, status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'type',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._retrieve_type_info_serialize(
+            type=type,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method retrieve_type_info" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-        if _params['type'] is not None:
-            _path_params['type'] = _params['type']
-
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "EntityTypeInfo",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/types/{type}', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def retrieve_type_info_without_preload_content(
+        self,
+        type: Annotated[StrictStr, Field(description="Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. ")],
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Details about available entity type 
+
+        5.7.7 Retrieve Available Entity Type information.  This operation allows retrieving detailed entity type information about a specified NGSI-LD entity type for which entity instances exist within the NGSI-LD system. The detailed representation includes the type name (as short name if available in the provided @context), the count of available entity instances and details about attributes that existing instances of this entity type have, including their name (as short name if available in the provided @context) and a list of types the attribute can have (e.g. Property, Relationship or GeoProperty). 
+
+        :param type: Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  (required)
+        :type type: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._retrieve_type_info_serialize(
+            type=type,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "EntityTypeInfo",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _retrieve_type_info_serialize(
+        self,
+        type,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if type is not None:
+            _path_params['type'] = type
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/types/{type}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def retrieve_types(
@@ -1798,16 +2923,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RetrieveTypes200Response:
-        """Retrieve available entity types   # noqa: E501
+        """Retrieve available entity types 
 
-        5.7.5 Retrieve Available Entity Types.  This operation allows retrieving a list of NGSI-LD entity types for which entity instances exist within the NGSI-LD system.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_types(details, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.5 Retrieve Available Entity Types.  This operation allows retrieving a list of NGSI-LD entity types for which entity instances exist within the NGSI-LD system. 
 
         :param details: If true, then detailed entity type information represented as an array with elements of the Entity Type data structure (clause 5.2.25) is to be returned. 
         :type details: bool
@@ -1817,29 +2948,53 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: RetrieveTypes200Response
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the retrieve_types_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.retrieve_types_with_http_info.raw_function(
-            details,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._retrieve_types_serialize(
+            details=details,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RetrieveTypes200Response",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def retrieve_types_with_http_info(
@@ -1848,16 +3003,22 @@ class ContextInformationConsumptionApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Retrieve available entity types   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[RetrieveTypes200Response]:
+        """Retrieve available entity types 
 
-        5.7.5 Retrieve Available Entity Types.  This operation allows retrieving a list of NGSI-LD entity types for which entity instances exist within the NGSI-LD system.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_types_with_http_info(details, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.7.5 Retrieve Available Entity Types.  This operation allows retrieving a list of NGSI-LD entity types for which entity instances exist within the NGSI-LD system. 
 
         :param details: If true, then detailed entity type information represented as an array with elements of the Entity Type data structure (clause 5.2.25) is to be returned. 
         :type details: bool
@@ -1867,112 +3028,200 @@ class ContextInformationConsumptionApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(RetrieveTypes200Response, status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'details',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._retrieve_types_serialize(
+            details=details,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method retrieve_types" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('details') is not None:  # noqa: E501
-            _query_params.append(('details', _params['details']))
-
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "RetrieveTypes200Response",
             '400': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/types', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def retrieve_types_without_preload_content(
+        self,
+        details: Annotated[Optional[StrictBool], Field(description="If true, then detailed entity type information represented as an array with elements of the Entity Type data structure (clause 5.2.25) is to be returned. ")] = None,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Retrieve available entity types 
+
+        5.7.5 Retrieve Available Entity Types.  This operation allows retrieving a list of NGSI-LD entity types for which entity instances exist within the NGSI-LD system. 
+
+        :param details: If true, then detailed entity type information represented as an array with elements of the Entity Type data structure (clause 5.2.25) is to be returned. 
+        :type details: bool
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._retrieve_types_serialize(
+            details=details,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RetrieveTypes200Response",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _retrieve_types_serialize(
+        self,
+        details,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if details is not None:
+            
+            _query_params.append(('details', details))
+            
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/types',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+

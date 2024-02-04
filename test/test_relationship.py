@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.relationship import Relationship  # noqa: E501
+from ngsi_ld_client.models.relationship import Relationship
 
 class TestRelationship(unittest.TestCase):
     """Relationship unit test stubs"""
@@ -33,7 +32,7 @@ class TestRelationship(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `Relationship`
         """
-        model = Relationship()  # noqa: E501
+        model = Relationship()
         if include_optional:
             return Relationship(
                 type = 'Relationship',

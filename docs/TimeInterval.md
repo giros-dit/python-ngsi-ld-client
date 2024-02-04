@@ -3,6 +3,7 @@
 5.2.11 NGSI-LD TimeInterval. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **start_at** | **datetime** | Describes the start of the time interval.  | 

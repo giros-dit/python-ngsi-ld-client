@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.notification_data import NotificationData  # noqa: E501
+from ngsi_ld_client.models.notification_data import NotificationData
 
 class TestNotificationData(unittest.TestCase):
     """NotificationData unit test stubs"""
@@ -33,7 +32,7 @@ class TestNotificationData(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `NotificationData`
         """
-        model = NotificationData()  # noqa: E501
+        model = NotificationData()
         if include_optional:
             return NotificationData(
                 type = 'FeatureCollection',

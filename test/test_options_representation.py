@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.options_representation import OptionsRepresentation  # noqa: E501
+from ngsi_ld_client.models.options_representation import OptionsRepresentation
 
 class TestOptionsRepresentation(unittest.TestCase):
     """OptionsRepresentation unit test stubs"""

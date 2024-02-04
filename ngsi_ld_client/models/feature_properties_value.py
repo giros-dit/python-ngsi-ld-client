@@ -13,24 +13,17 @@
 
 
 from __future__ import annotations
-from inspect import getfullargspec
 import json
 import pprint
-import re  # noqa: F401
-
-from typing import Any, List, Optional
 from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
+from typing import Any, List, Optional
 from ngsi_ld_client.models.geo_property import GeoProperty
 from ngsi_ld_client.models.language_property import LanguageProperty
 from ngsi_ld_client.models.model_property import ModelProperty
 from ngsi_ld_client.models.relationship import Relationship
-from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
-from typing_extensions import Literal
 from pydantic import StrictStr, Field
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Union, List, Optional, Dict
+from typing_extensions import Literal, Self
 
 FEATUREPROPERTIESVALUE_ONE_OF_SCHEMAS = ["GeoProperty", "LanguageProperty", "List[GeoProperty]", "List[LanguageProperty]", "List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
 
@@ -55,10 +48,11 @@ class FeaturePropertiesValue(BaseModel):
     # data type: List[LanguageProperty]
     oneof_schema_8_validator: Optional[List[LanguageProperty]] = None
     actual_instance: Optional[Union[GeoProperty, LanguageProperty, List[GeoProperty], List[LanguageProperty], List[ModelProperty], List[Relationship], ModelProperty, Relationship]] = None
-    one_of_schemas: List[str] = Literal["GeoProperty", "LanguageProperty", "List[GeoProperty]", "List[LanguageProperty]", "List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
+    one_of_schemas: List[str] = Field(default=Literal["GeoProperty", "LanguageProperty", "List[GeoProperty]", "List[LanguageProperty]", "List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"])
 
     model_config = {
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -131,7 +125,7 @@ class FeaturePropertiesValue(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
@@ -216,19 +210,17 @@ class FeaturePropertiesValue(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        to_json = getattr(self.actual_instance, "to_json", None)
-        if callable(to_json):
+        if hasattr(self.actual_instance, "to_json") and callable(self.actual_instance.to_json):
             return self.actual_instance.to_json()
         else:
             return json.dumps(self.actual_instance)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Optional[Union[Dict[str, Any], GeoProperty, LanguageProperty, List[GeoProperty], List[LanguageProperty], List[ModelProperty], List[Relationship], ModelProperty, Relationship]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        to_dict = getattr(self.actual_instance, "to_dict", None)
-        if callable(to_dict):
+        if hasattr(self.actual_instance, "to_dict") and callable(self.actual_instance.to_dict):
             return self.actual_instance.to_dict()
         else:
             # primitive type

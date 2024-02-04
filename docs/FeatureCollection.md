@@ -3,6 +3,7 @@
 5.2.30 This data type represents a list of spatially bounded Entities in GeoJSON format, as mandated by IETF RFC 7946. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | GeoJSON Type.  | 

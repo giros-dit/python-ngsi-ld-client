@@ -18,9 +18,8 @@ Create Subscription
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.create_subscription_request import CreateSubscriptionRequest
 from ngsi_ld_client.rest import ApiException
@@ -53,6 +52,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -74,6 +74,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | The HTTP response shall include a \&quot;Location\&quot; HTTP header that contains the resource URI of the created subscription resource.  |  * NGSILD-Tenant -  <br>  * Location -  <br>  |
@@ -91,9 +92,8 @@ Subscription deletion by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -125,6 +125,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **subscription_id** | **str**| Id (URI) of the concerned subscription. | 
@@ -146,6 +147,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content.  |  * NGSILD-Tenant -  <br>  |
@@ -163,9 +165,8 @@ Subscription update by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.subscription import Subscription
 from ngsi_ld_client.rest import ApiException
@@ -199,6 +200,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **subscription_id** | **str**| Id (URI) of the concerned subscription. | 
@@ -221,6 +223,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content.  |  * NGSILD-Tenant -  <br>  |

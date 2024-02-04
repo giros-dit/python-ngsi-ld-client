@@ -17,21 +17,16 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, Field, StrictStr
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr
-from pydantic import Field
 from ngsi_ld_client.models.not_updated_details import NotUpdatedDetails
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class UpdateResult(BaseModel):
     """
-    5.2.18 represents the result of Attribute update (append or update) operations in the NGSI-LD API regardless of whether local or distributed.   # noqa: E501
-    """
+    5.2.18 represents the result of Attribute update (append or update) operations in the NGSI-LD API regardless of whether local or distributed. 
+    """ # noqa: E501
     updated: List[StrictStr] = Field(description="List of Attributes (represented by their Name) that were appended or updated. ")
     not_updated: List[NotUpdatedDetails] = Field(description="List which contains the Attributes (represented by their Name) that were not updated, together with the reason for not being updated. ", alias="notUpdated")
     additional_properties: Dict[str, Any] = {}
@@ -39,7 +34,8 @@ class UpdateResult(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -53,7 +49,7 @@ class UpdateResult(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of UpdateResult from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -68,11 +64,13 @@ class UpdateResult(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in not_updated (list)
@@ -90,7 +88,7 @@ class UpdateResult(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of UpdateResult from a dict"""
         if obj is None:
             return None
@@ -100,7 +98,7 @@ class UpdateResult(BaseModel):
 
         _obj = cls.model_validate({
             "updated": obj.get("updated"),
-            "notUpdated": [NotUpdatedDetails.from_dict(_item) for _item in obj.get("notUpdated")] if obj.get("notUpdated") is not None else None
+            "notUpdated": [NotUpdatedDetails.from_dict(_item) for _item in obj["notUpdated"]] if obj.get("notUpdated") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

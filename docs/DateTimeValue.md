@@ -3,6 +3,7 @@
 Date representation as mandated by C.6 \"Date Representation\" 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** |  | [default to 'DateTime']

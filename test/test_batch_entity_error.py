@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.batch_entity_error import BatchEntityError  # noqa: E501
+from ngsi_ld_client.models.batch_entity_error import BatchEntityError
 
 class TestBatchEntityError(unittest.TestCase):
     """BatchEntityError unit test stubs"""
@@ -33,7 +32,7 @@ class TestBatchEntityError(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `BatchEntityError`
         """
-        model = BatchEntityError()  # noqa: E501
+        model = BatchEntityError()
         if include_optional:
             return BatchEntityError(
                 entity_id = '',

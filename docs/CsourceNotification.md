@@ -3,6 +3,7 @@
 5.3.2 This datatype represents the parameters that allow building a Context Source Notification to be sent to a subscriber. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Csource notification identifier (JSON-LD @id).  | 

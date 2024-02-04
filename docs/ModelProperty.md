@@ -3,6 +3,7 @@
 5.2.5 NGSI-LD Property. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Node type.  | [optional] [default to 'Property']

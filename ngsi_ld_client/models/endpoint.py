@@ -17,21 +17,16 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
-from pydantic import BaseModel, StrictFloat, StrictInt, StrictStr, field_validator
-from pydantic import Field
 from ngsi_ld_client.models.key_value_pair import KeyValuePair
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class Endpoint(BaseModel):
     """
-    5.2.15 represents the parameters that are required in order to define an endpoint for notifications.   # noqa: E501
-    """
+    5.2.15 represents the parameters that are required in order to define an endpoint for notifications. 
+    """ # noqa: E501
     uri: StrictStr = Field(description="URI which conveys the endpoint which will receive the notification. ")
     accept: Optional[StrictStr] = Field(default=None, description="Intended to convey the MIME type of the notification payload body (JSON, or JSON-LD, or GeoJSON). If not present, default is \"application/json\". ")
     timeout: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Maximum period of time in milliseconds which may elapse before a notification is assumed to have failed. The NGSI-LD system can override this value. This only applies if the binding protocol always returns a response. ")
@@ -53,7 +48,8 @@ class Endpoint(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -67,7 +63,7 @@ class Endpoint(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Endpoint from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -82,11 +78,13 @@ class Endpoint(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in receiver_info (list)
@@ -111,7 +109,7 @@ class Endpoint(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Endpoint from a dict"""
         if obj is None:
             return None
@@ -124,8 +122,8 @@ class Endpoint(BaseModel):
             "accept": obj.get("accept"),
             "timeout": obj.get("timeout"),
             "cooldown": obj.get("cooldown"),
-            "receiverInfo": [KeyValuePair.from_dict(_item) for _item in obj.get("receiverInfo")] if obj.get("receiverInfo") is not None else None,
-            "notifierInfo": [KeyValuePair.from_dict(_item) for _item in obj.get("notifierInfo")] if obj.get("notifierInfo") is not None else None
+            "receiverInfo": [KeyValuePair.from_dict(_item) for _item in obj["receiverInfo"]] if obj.get("receiverInfo") is not None else None,
+            "notifierInfo": [KeyValuePair.from_dict(_item) for _item in obj["notifierInfo"]] if obj.get("notifierInfo") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

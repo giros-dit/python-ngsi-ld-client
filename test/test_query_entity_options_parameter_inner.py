@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner  # noqa: E501
+from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
 
 class TestQueryEntityOptionsParameterInner(unittest.TestCase):
     """QueryEntityOptionsParameterInner unit test stubs"""
@@ -33,7 +32,7 @@ class TestQueryEntityOptionsParameterInner(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `QueryEntityOptionsParameterInner`
         """
-        model = QueryEntityOptionsParameterInner()  # noqa: E501
+        model = QueryEntityOptionsParameterInner()
         if include_optional:
             return QueryEntityOptionsParameterInner(
             )

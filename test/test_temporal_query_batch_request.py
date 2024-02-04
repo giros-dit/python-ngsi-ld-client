@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.temporal_query_batch_request import TemporalQueryBatchRequest  # noqa: E501
+from ngsi_ld_client.models.temporal_query_batch_request import TemporalQueryBatchRequest
 
 class TestTemporalQueryBatchRequest(unittest.TestCase):
     """TemporalQueryBatchRequest unit test stubs"""
@@ -33,7 +32,7 @@ class TestTemporalQueryBatchRequest(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `TemporalQueryBatchRequest`
         """
-        model = TemporalQueryBatchRequest()  # noqa: E501
+        model = TemporalQueryBatchRequest()
         if include_optional:
             return TemporalQueryBatchRequest(
                 type = 'Query',

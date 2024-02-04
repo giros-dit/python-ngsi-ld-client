@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.property_previous_value import PropertyPreviousValue  # noqa: E501
+from ngsi_ld_client.models.property_previous_value import PropertyPreviousValue
 
 class TestPropertyPreviousValue(unittest.TestCase):
     """PropertyPreviousValue unit test stubs"""
@@ -33,7 +32,7 @@ class TestPropertyPreviousValue(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `PropertyPreviousValue`
         """
-        model = PropertyPreviousValue()  # noqa: E501
+        model = PropertyPreviousValue()
         if include_optional:
             return PropertyPreviousValue(
                 type = 'DateTime',

@@ -21,9 +21,8 @@ Temporal Representation of Entity Attribute instance addition
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.entity_temporal import EntityTemporal
 from ngsi_ld_client.rest import ApiException
@@ -57,6 +56,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -79,6 +79,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | All the Attributes were added successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -96,9 +97,8 @@ Attribute Instance deletion by instance id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -132,6 +132,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -155,6 +156,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The attribute instance was delete successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -172,9 +174,8 @@ Attribute from Temporal Representation of Entity deletion
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -209,6 +210,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -233,6 +235,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The attribute was deleted successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -250,9 +253,8 @@ Temporal Representation of Entity deletion by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -284,6 +286,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -305,6 +308,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content.  |  * NGSILD-Tenant -  <br>  |
@@ -322,9 +326,8 @@ Attribute Instance update
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.entity_temporal import EntityTemporal
 from ngsi_ld_client.rest import ApiException
@@ -360,6 +363,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -384,6 +388,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The attribute was updated successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -401,9 +406,8 @@ Temporal Representation of Entity creation
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.entity_temporal import EntityTemporal
 from ngsi_ld_client.rest import ApiException
@@ -436,6 +440,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -457,6 +462,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | The HTTP response shall include a \&quot;Location\&quot; HTTP header that contains the resource URI of the created entity resource.  |  * NGSILD-Tenant -  <br>  * Location -  <br>  |

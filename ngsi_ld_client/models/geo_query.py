@@ -17,21 +17,16 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from pydantic import Field
 from ngsi_ld_client.models.geo_query_coordinates import GeoQueryCoordinates
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class GeoQuery(BaseModel):
     """
-    5.2.13 represents a geoquery used for Subscriptions.   # noqa: E501
-    """
+    5.2.13 represents a geoquery used for Subscriptions. 
+    """ # noqa: E501
     geometry: StrictStr = Field(description="Type of the reference geometry. ")
     coordinates: GeoQueryCoordinates
     georel: StrictStr = Field(description="Geo-relationship (near, within, etc.). ")
@@ -41,7 +36,8 @@ class GeoQuery(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -55,7 +51,7 @@ class GeoQuery(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of GeoQuery from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -70,11 +66,13 @@ class GeoQuery(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of coordinates
@@ -88,7 +86,7 @@ class GeoQuery(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of GeoQuery from a dict"""
         if obj is None:
             return None
@@ -98,7 +96,7 @@ class GeoQuery(BaseModel):
 
         _obj = cls.model_validate({
             "geometry": obj.get("geometry"),
-            "coordinates": GeoQueryCoordinates.from_dict(obj.get("coordinates")) if obj.get("coordinates") is not None else None,
+            "coordinates": GeoQueryCoordinates.from_dict(obj["coordinates"]) if obj.get("coordinates") is not None else None,
             "georel": obj.get("georel"),
             "geoproperty": obj.get("geoproperty")
         })

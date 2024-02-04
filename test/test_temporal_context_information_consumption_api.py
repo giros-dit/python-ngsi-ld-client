@@ -14,14 +14,14 @@
 
 import unittest
 
-from ngsi_ld_client.api.temporal_context_information_consumption_api import TemporalContextInformationConsumptionApi  # noqa: E501
+from ngsi_ld_client.api.temporal_context_information_consumption_api import TemporalContextInformationConsumptionApi
 
 
 class TestTemporalContextInformationConsumptionApi(unittest.TestCase):
     """TemporalContextInformationConsumptionApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = TemporalContextInformationConsumptionApi()  # noqa: E501
+        self.api = TemporalContextInformationConsumptionApi()
 
     def tearDown(self) -> None:
         pass
@@ -29,21 +29,21 @@ class TestTemporalContextInformationConsumptionApi(unittest.TestCase):
     def test_query_temporal(self) -> None:
         """Test case for query_temporal
 
-        Query temporal evolution of Entities   # noqa: E501
+        Query temporal evolution of Entities 
         """
         pass
 
     def test_retrieve_temporal(self) -> None:
         """Test case for retrieve_temporal
 
-        Temporal Representation of Entity retrieval by id   # noqa: E501
+        Temporal Representation of Entity retrieval by id 
         """
         pass
 
     def test_temporal_query_batch(self) -> None:
         """Test case for temporal_query_batch
 
-        Temporal Representation of Entity Query based on POST   # noqa: E501
+        Temporal Representation of Entity Query based on POST 
         """
         pass
 

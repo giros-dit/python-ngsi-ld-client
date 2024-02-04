@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geo_query import GeoQuery  # noqa: E501
+from ngsi_ld_client.models.geo_query import GeoQuery
 
 class TestGeoQuery(unittest.TestCase):
     """GeoQuery unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeoQuery(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeoQuery`
         """
-        model = GeoQuery()  # noqa: E501
+        model = GeoQuery()
         if include_optional:
             return GeoQuery(
                 geometry = '',

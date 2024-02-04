@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.feature_properties import FeatureProperties  # noqa: E501
+from ngsi_ld_client.models.feature_properties import FeatureProperties
 
 class TestFeatureProperties(unittest.TestCase):
     """FeatureProperties unit test stubs"""
@@ -33,7 +32,7 @@ class TestFeatureProperties(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `FeatureProperties`
         """
-        model = FeatureProperties()  # noqa: E501
+        model = FeatureProperties()
         if include_optional:
             return FeatureProperties(
                 type = None

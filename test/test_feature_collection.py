@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.feature_collection import FeatureCollection  # noqa: E501
+from ngsi_ld_client.models.feature_collection import FeatureCollection
 
 class TestFeatureCollection(unittest.TestCase):
     """FeatureCollection unit test stubs"""
@@ -33,7 +32,7 @@ class TestFeatureCollection(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `FeatureCollection`
         """
-        model = FeatureCollection()  # noqa: E501
+        model = FeatureCollection()
         if include_optional:
             return FeatureCollection(
                 type = 'FeatureCollection',

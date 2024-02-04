@@ -18,19 +18,15 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel
-from pydantic import Field
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class TimeInterval(BaseModel):
     """
-    5.2.11 NGSI-LD TimeInterval.   # noqa: E501
-    """
+    5.2.11 NGSI-LD TimeInterval. 
+    """ # noqa: E501
     start_at: datetime = Field(description="Describes the start of the time interval. ", alias="startAt")
     end_at: Optional[datetime] = Field(default=None, description="Describes the end of the time interval. If not present the interval is open. ", alias="endAt")
     additional_properties: Dict[str, Any] = {}
@@ -38,7 +34,8 @@ class TimeInterval(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -52,7 +49,7 @@ class TimeInterval(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of TimeInterval from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -67,11 +64,13 @@ class TimeInterval(BaseModel):
           are ignored.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # puts key-value pairs in additional_properties in the top level
@@ -82,7 +81,7 @@ class TimeInterval(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of TimeInterval from a dict"""
         if obj is None:
             return None

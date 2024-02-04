@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.query_entity_coordinates_parameter import QueryEntityCoordinatesParameter  # noqa: E501
+from ngsi_ld_client.models.query_entity_coordinates_parameter import QueryEntityCoordinatesParameter
 
 class TestQueryEntityCoordinatesParameter(unittest.TestCase):
     """QueryEntityCoordinatesParameter unit test stubs"""
@@ -33,7 +32,7 @@ class TestQueryEntityCoordinatesParameter(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `QueryEntityCoordinatesParameter`
         """
-        model = QueryEntityCoordinatesParameter()  # noqa: E501
+        model = QueryEntityCoordinatesParameter()
         if include_optional:
             return QueryEntityCoordinatesParameter(
             )

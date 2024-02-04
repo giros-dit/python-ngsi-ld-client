@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.entity_scope import EntityScope  # noqa: E501
+from ngsi_ld_client.models.entity_scope import EntityScope
 
 class TestEntityScope(unittest.TestCase):
     """EntityScope unit test stubs"""
@@ -33,7 +32,7 @@ class TestEntityScope(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `EntityScope`
         """
-        model = EntityScope()  # noqa: E501
+        model = EntityScope()
         if include_optional:
             return EntityScope(
             )

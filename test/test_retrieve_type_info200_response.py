@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.retrieve_type_info200_response import RetrieveTypeInfo200Response  # noqa: E501
+from ngsi_ld_client.models.retrieve_type_info200_response import RetrieveTypeInfo200Response
 
 class TestRetrieveTypeInfo200Response(unittest.TestCase):
     """RetrieveTypeInfo200Response unit test stubs"""
@@ -33,7 +32,7 @@ class TestRetrieveTypeInfo200Response(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `RetrieveTypeInfo200Response`
         """
-        model = RetrieveTypeInfo200Response()  # noqa: E501
+        model = RetrieveTypeInfo200Response()
         if include_optional:
             return RetrieveTypeInfo200Response(
                 id = '',

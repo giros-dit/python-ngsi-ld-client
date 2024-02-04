@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.options_temporal import OptionsTemporal  # noqa: E501
+from ngsi_ld_client.models.options_temporal import OptionsTemporal
 
 class TestOptionsTemporal(unittest.TestCase):
     """OptionsTemporal unit test stubs"""

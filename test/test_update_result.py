@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.update_result import UpdateResult  # noqa: E501
+from ngsi_ld_client.models.update_result import UpdateResult
 
 class TestUpdateResult(unittest.TestCase):
     """UpdateResult unit test stubs"""
@@ -33,7 +32,7 @@ class TestUpdateResult(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `UpdateResult`
         """
-        model = UpdateResult()  # noqa: E501
+        model = UpdateResult()
         if include_optional:
             return UpdateResult(
                 updated = [

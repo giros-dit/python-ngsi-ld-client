@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.entity_selector import EntitySelector  # noqa: E501
+from ngsi_ld_client.models.entity_selector import EntitySelector
 
 class TestEntitySelector(unittest.TestCase):
     """EntitySelector unit test stubs"""
@@ -33,7 +32,7 @@ class TestEntitySelector(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `EntitySelector`
         """
-        model = EntitySelector()  # noqa: E501
+        model = EntitySelector()
         if include_optional:
             return EntitySelector(
                 id = '',

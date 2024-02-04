@@ -18,20 +18,16 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List
-from pydantic import BaseModel, StrictStr, field_validator
-from pydantic import Field
 from ngsi_ld_client.models.csource_registration import CsourceRegistration
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class CsourceNotification(BaseModel):
     """
-    5.3.2 This datatype represents the parameters that allow building a Context Source Notification to be sent to a subscriber.   # noqa: E501
-    """
+    5.3.2 This datatype represents the parameters that allow building a Context Source Notification to be sent to a subscriber. 
+    """ # noqa: E501
     id: StrictStr = Field(description="Csource notification identifier (JSON-LD @id). ")
     type: StrictStr = Field(description="JSON-LD @type. ")
     subscription_id: StrictStr = Field(description="Identifier of the subscription that originated the notification. ", alias="subscriptionId")
@@ -57,7 +53,8 @@ class CsourceNotification(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -71,7 +68,7 @@ class CsourceNotification(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of CsourceNotification from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -87,12 +84,14 @@ class CsourceNotification(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "data",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "data",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in data (list)
@@ -110,7 +109,7 @@ class CsourceNotification(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of CsourceNotification from a dict"""
         if obj is None:
             return None
@@ -123,7 +122,7 @@ class CsourceNotification(BaseModel):
             "type": obj.get("type"),
             "subscriptionId": obj.get("subscriptionId"),
             "notifiedAt": obj.get("notifiedAt"),
-            "data": [CsourceRegistration.from_dict(_item) for _item in obj.get("data")] if obj.get("data") is not None else None,
+            "data": [CsourceRegistration.from_dict(_item) for _item in obj["data"]] if obj.get("data") is not None else None,
             "triggerReason": obj.get("triggerReason")
         })
         # store additional fields in additional_properties

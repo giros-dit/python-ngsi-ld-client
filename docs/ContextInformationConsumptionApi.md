@@ -24,9 +24,8 @@ Query entities based on POST
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query import Query
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
@@ -62,6 +61,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -83,6 +83,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the query result as a list of Entities.  |  * NGSILD-Tenant -  <br>  |
@@ -99,9 +100,8 @@ Query entities
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
@@ -152,6 +152,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | [**List[str]**](str.md)| List of entity ids to be retrieved. | [optional] 
@@ -188,6 +189,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo+json, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the query result as a list of entities, unless the Accept Header indicates that the Entities are to be rendered as GeoJSON.  If the Accept Header indicates that the Entities are to be rendered as GeoJSON, a response body containing the query result as GeoJSON FeatureCollection is returned.  |  * NGSILD-Results-Count -  <br>  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
@@ -204,9 +206,8 @@ Retrieve list of Subscriptions
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
 from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
@@ -244,6 +245,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **options** | [**List[OptionsSysAttrs]**](OptionsSysAttrs.md)|  | [optional] 
@@ -267,6 +269,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing a list of subscriptions.  |  * NGSILD-Results-Count -  <br>  |
@@ -283,9 +286,8 @@ Retrieve Available Attribute Information
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.attribute import Attribute
 from ngsi_ld_client.rest import ApiException
@@ -320,6 +322,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **attr_id** | **str**| Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  | 
@@ -341,6 +344,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD representation of the detailed information about the available attribute.  |  * NGSILD-Tenant -  <br>  |
@@ -358,9 +362,8 @@ Retrieve Available Attributes
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.retrieve_attributes200_response import RetrieveAttributes200Response
 from ngsi_ld_client.rest import ApiException
@@ -395,6 +398,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **details** | **bool**| If true, then detailed attribute information represented as an array with elements of the Attribute data structure (clause 5.2.28) is to be returned.  | [optional] 
@@ -416,6 +420,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD representation of the AttributeList (clause 5.2.27) is to be returned, unless details&#x3D;true is specified.  If details&#x3D;true is specified, a response body containing a JSON-LD array with elements of the Attribute data structure (clause 5.2.28) is to be returned.  |  * NGSILD-Tenant -  <br>  |
@@ -432,9 +437,8 @@ Entity retrieval by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
@@ -474,6 +478,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -499,6 +504,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo+json, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD representation of the target entity containing the selected Attributes, unless the Accept Header indicates that the Entity is to be rendered as GeoJSON.  If the Accept Header indicates that the Entity is to be rendered as GeoJSON, a GeoJSON Feature is returned.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
@@ -516,9 +522,8 @@ Subscription retrieval by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_subscription200_response_inner import QuerySubscription200ResponseInner
 from ngsi_ld_client.rest import ApiException
@@ -553,6 +558,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **subscription_id** | **str**| Id (URI) of the concerned subscription. | 
@@ -574,6 +580,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD representation of the target subscription.  |  * NGSILD-Warning -  <br>  |
@@ -591,9 +598,8 @@ Details about available entity type
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.entity_type_info import EntityTypeInfo
 from ngsi_ld_client.rest import ApiException
@@ -628,6 +634,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **type** | **str**| Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  | 
@@ -649,6 +656,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD representation of the detailed information about the available entity type.  |  * NGSILD-Tenant -  <br>  |
@@ -666,9 +674,8 @@ Retrieve available entity types
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.retrieve_types200_response import RetrieveTypes200Response
 from ngsi_ld_client.rest import ApiException
@@ -703,6 +710,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **details** | **bool**| If true, then detailed entity type information represented as an array with elements of the Entity Type data structure (clause 5.2.25) is to be returned.  | [optional] 
@@ -724,6 +732,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD representation of the EntityTypeList (clause 5.2.24) is to be returned, unless details&#x3D;true is specified.  If details&#x3D;true is specified, a response body containing a JSON-LD array with elements of the EntityType data structure (clause 5.2.25) is to be returned.  |  * NGSILD-Tenant -  <br>  |

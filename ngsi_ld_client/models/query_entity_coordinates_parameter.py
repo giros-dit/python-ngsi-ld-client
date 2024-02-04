@@ -13,24 +13,16 @@
 
 
 from __future__ import annotations
-from inspect import getfullargspec
 import json
 import pprint
-import re  # noqa: F401
-
-from typing import Any, List, Optional, Union
 from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr, ValidationError, field_validator
-from pydantic import Field
+from typing import Any, List, Optional, Union
 from typing_extensions import Annotated
 from ngsi_ld_client.models.geometry_line_string import GeometryLineString
 from ngsi_ld_client.models.geometry_linear_ring import GeometryLinearRing
-from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
-from typing_extensions import Literal
 from pydantic import StrictStr, Field
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Union, List, Optional, Dict
+from typing_extensions import Literal, Self
 
 QUERYENTITYCOORDINATESPARAMETER_ONE_OF_SCHEMAS = ["GeometryLineString", "List[GeometryLinearRing]", "List[List[float]]", "List[float]"]
 
@@ -47,10 +39,11 @@ class QueryEntityCoordinatesParameter(BaseModel):
     # data type: List[GeometryLinearRing]
     oneof_schema_4_validator: Optional[List[GeometryLinearRing]] = Field(default=None, description="An array of linear rings. ")
     actual_instance: Optional[Union[GeometryLineString, List[GeometryLinearRing], List[List[float]], List[float]]] = None
-    one_of_schemas: List[str] = Literal["GeometryLineString", "List[GeometryLinearRing]", "List[List[float]]", "List[float]"]
+    one_of_schemas: List[str] = Field(default=Literal["GeometryLineString", "List[GeometryLinearRing]", "List[List[float]]", "List[float]"])
 
     model_config = {
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -102,7 +95,7 @@ class QueryEntityCoordinatesParameter(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
@@ -160,19 +153,17 @@ class QueryEntityCoordinatesParameter(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        to_json = getattr(self.actual_instance, "to_json", None)
-        if callable(to_json):
+        if hasattr(self.actual_instance, "to_json") and callable(self.actual_instance.to_json):
             return self.actual_instance.to_json()
         else:
             return json.dumps(self.actual_instance)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Optional[Union[Dict[str, Any], GeometryLineString, List[GeometryLinearRing], List[List[float]], List[float]]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        to_dict = getattr(self.actual_instance, "to_dict", None)
-        if callable(to_dict):
+        if hasattr(self.actual_instance, "to_dict") and callable(self.actual_instance.to_dict):
             return self.actual_instance.to_dict()
         else:
             # primitive type

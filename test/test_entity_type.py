@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.entity_type import EntityType  # noqa: E501
+from ngsi_ld_client.models.entity_type import EntityType
 
 class TestEntityType(unittest.TestCase):
     """EntityType unit test stubs"""
@@ -33,7 +32,7 @@ class TestEntityType(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `EntityType`
         """
-        model = EntityType()  # noqa: E501
+        model = EntityType()
         if include_optional:
             return EntityType(
             )

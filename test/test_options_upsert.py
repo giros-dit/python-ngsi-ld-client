@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.options_upsert import OptionsUpsert  # noqa: E501
+from ngsi_ld_client.models.options_upsert import OptionsUpsert
 
 class TestOptionsUpsert(unittest.TestCase):
     """OptionsUpsert unit test stubs"""

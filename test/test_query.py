@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.query import Query  # noqa: E501
+from ngsi_ld_client.models.query import Query
 
 class TestQuery(unittest.TestCase):
     """Query unit test stubs"""
@@ -33,7 +32,7 @@ class TestQuery(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `Query`
         """
-        model = Query()  # noqa: E501
+        model = Query()
         if include_optional:
             return Query(
                 type = 'Query',

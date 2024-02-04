@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.ld_context_one_of_inner import LdContextOneOfInner  # noqa: E501
+from ngsi_ld_client.models.ld_context_one_of_inner import LdContextOneOfInner
 
 class TestLdContextOneOfInner(unittest.TestCase):
     """LdContextOneOfInner unit test stubs"""
@@ -33,7 +32,7 @@ class TestLdContextOneOfInner(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `LdContextOneOfInner`
         """
-        model = LdContextOneOfInner()  # noqa: E501
+        model = LdContextOneOfInner()
         if include_optional:
             return LdContextOneOfInner(
             )

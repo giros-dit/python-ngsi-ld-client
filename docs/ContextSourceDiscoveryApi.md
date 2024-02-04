@@ -17,9 +17,8 @@ Discover Csource registrations
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
 from ngsi_ld_client.models.query_csr200_response_inner import QueryCSR200ResponseInner
@@ -74,6 +73,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | [**List[str]**](str.md)| List of entity ids to be retrieved. | [optional] 
@@ -114,6 +114,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the query result as an array of context source registrations.  |  * NGSILD-Results-Count -  <br>  |
@@ -130,9 +131,8 @@ Csource registration retrieval by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_csr200_response_inner import QueryCSR200ResponseInner
 from ngsi_ld_client.rest import ApiException
@@ -167,6 +167,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **registration_id** | **str**| Id (URI) of the context source registration. | 
@@ -188,6 +189,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing the JSON-LD representation of the target subscription.  |  * NGSILD-Warning -  <br>  |

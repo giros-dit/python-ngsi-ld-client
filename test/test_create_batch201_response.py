@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.create_batch201_response import CreateBatch201Response  # noqa: E501
+from ngsi_ld_client.models.create_batch201_response import CreateBatch201Response
 
 class TestCreateBatch201Response(unittest.TestCase):
     """CreateBatch201Response unit test stubs"""
@@ -33,7 +32,7 @@ class TestCreateBatch201Response(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `CreateBatch201Response`
         """
-        model = CreateBatch201Response()  # noqa: E501
+        model = CreateBatch201Response()
         if include_optional:
             return CreateBatch201Response(
                 context = None

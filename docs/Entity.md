@@ -3,6 +3,7 @@
 NGSI-LD Entity (see 5.4). 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity id.  | [optional] 

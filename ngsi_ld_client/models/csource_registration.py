@@ -18,9 +18,8 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
-from pydantic import BaseModel, StrictStr, field_validator
-from pydantic import Field
 from typing_extensions import Annotated
 from ngsi_ld_client.models.csource_registration_scope import CsourceRegistrationScope
 from ngsi_ld_client.models.geometry import Geometry
@@ -28,16 +27,13 @@ from ngsi_ld_client.models.key_value_pair import KeyValuePair
 from ngsi_ld_client.models.registration_info import RegistrationInfo
 from ngsi_ld_client.models.registration_management_info import RegistrationManagementInfo
 from ngsi_ld_client.models.time_interval import TimeInterval
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class CsourceRegistration(BaseModel):
     """
-    5.2.9 represents the data needed to register a new Context Source.   # noqa: E501
-    """
+    5.2.9 represents the data needed to register a new Context Source. 
+    """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, description="Unique registration identifier. (JSON-LD @id). There may be multiple registrations per Context Source, i.e. the id is unique per registration. ")
     type: Optional[StrictStr] = Field(default=None, description="JSON-LD @type Use reserved type for identifying Context Source Registration. ")
     registration_name: Optional[Annotated[str, Field(min_length=1, strict=True)]] = Field(default=None, description="A name given to this Context Source Registration. ", alias="registrationName")
@@ -100,7 +96,8 @@ class CsourceRegistration(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -114,7 +111,7 @@ class CsourceRegistration(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of CsourceRegistration from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -137,19 +134,21 @@ class CsourceRegistration(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "status",
+            "times_sent",
+            "times_failed",
+            "last_success",
+            "last_failure",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "status",
-                "times_sent",
-                "times_failed",
-                "last_success",
-                "last_failure",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in information (list)
@@ -195,7 +194,7 @@ class CsourceRegistration(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of CsourceRegistration from a dict"""
         if obj is None:
             return None
@@ -208,21 +207,21 @@ class CsourceRegistration(BaseModel):
             "type": obj.get("type"),
             "registrationName": obj.get("registrationName"),
             "description": obj.get("description"),
-            "information": [RegistrationInfo.from_dict(_item) for _item in obj.get("information")] if obj.get("information") is not None else None,
+            "information": [RegistrationInfo.from_dict(_item) for _item in obj["information"]] if obj.get("information") is not None else None,
             "tenant": obj.get("tenant"),
-            "observationInterval": TimeInterval.from_dict(obj.get("observationInterval")) if obj.get("observationInterval") is not None else None,
-            "managementInterval": TimeInterval.from_dict(obj.get("managementInterval")) if obj.get("managementInterval") is not None else None,
-            "location": Geometry.from_dict(obj.get("location")) if obj.get("location") is not None else None,
-            "observationSpace": Geometry.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
-            "operationSpace": Geometry.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
+            "observationInterval": TimeInterval.from_dict(obj["observationInterval"]) if obj.get("observationInterval") is not None else None,
+            "managementInterval": TimeInterval.from_dict(obj["managementInterval"]) if obj.get("managementInterval") is not None else None,
+            "location": Geometry.from_dict(obj["location"]) if obj.get("location") is not None else None,
+            "observationSpace": Geometry.from_dict(obj["observationSpace"]) if obj.get("observationSpace") is not None else None,
+            "operationSpace": Geometry.from_dict(obj["operationSpace"]) if obj.get("operationSpace") is not None else None,
             "expiresAt": obj.get("expiresAt"),
             "endpoint": obj.get("endpoint"),
-            "contextSourceInfo": [KeyValuePair.from_dict(_item) for _item in obj.get("contextSourceInfo")] if obj.get("contextSourceInfo") is not None else None,
-            "scope": CsourceRegistrationScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
+            "contextSourceInfo": [KeyValuePair.from_dict(_item) for _item in obj["contextSourceInfo"]] if obj.get("contextSourceInfo") is not None else None,
+            "scope": CsourceRegistrationScope.from_dict(obj["scope"]) if obj.get("scope") is not None else None,
             "mode": obj.get("mode"),
             "operations": obj.get("operations"),
             "refreshRate": obj.get("refreshRate"),
-            "management": RegistrationManagementInfo.from_dict(obj.get("management")) if obj.get("management") is not None else None,
+            "management": RegistrationManagementInfo.from_dict(obj["management"]) if obj.get("management") is not None else None,
             "createdAt": obj.get("createdAt"),
             "modifiedAt": obj.get("modifiedAt"),
             "deletedAt": obj.get("deletedAt"),

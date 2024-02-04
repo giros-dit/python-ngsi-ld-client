@@ -29,9 +29,8 @@ Append attributes to Entity
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.entity import Entity
 from ngsi_ld_client.models.options_no_overwrite import OptionsNoOverwrite
@@ -67,6 +66,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -90,6 +90,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | All the Attributes were appended successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -108,9 +109,8 @@ Batch Entity creation
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.rest import ApiException
@@ -145,6 +145,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -166,6 +167,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | If all entities have been successfully created, an array of Strings containing URIs is returned in the response. Each URI represents the Entity Id of a created entity. There is no restriction as to the order of the Entity Ids.  |  * NGSILD-Tenant -  <br>  |
@@ -183,9 +185,8 @@ Entity creation
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.rest import ApiException
@@ -218,6 +219,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -239,6 +241,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | The HTTP response shall include a \&quot;Location\&quot; HTTP header that contains the resource URI of the created entity resource.  |  * Location -  <br>  * NGSILD-Tenant -  <br>  |
@@ -258,9 +261,8 @@ Attribute delete
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -295,6 +297,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -319,6 +322,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The attribute was deleted successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -337,9 +341,8 @@ Batch Entity delete
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.rest import ApiException
@@ -372,6 +375,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -393,6 +397,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | If all entities existed and have been successfully deleted, there is no payload body in the response.  |  * NGSILD-Tenant -  <br>  |
@@ -410,9 +415,8 @@ Entity deletion by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
@@ -444,6 +448,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -465,6 +470,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content.  |  * NGSILD-Tenant -  <br>  |
@@ -483,9 +489,8 @@ Batch Entity merge
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.rest import ApiException
@@ -518,6 +523,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
@@ -539,6 +545,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | If all entities have been successfully merged, there is no payload body in the response.  |  * NGSILD-Tenant -  <br>  |
@@ -556,9 +563,8 @@ Entity merge by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.entity import Entity
 from ngsi_ld_client.models.options_representation import OptionsRepresentation
@@ -596,6 +602,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -621,6 +628,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | All the Attributes were merged successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -639,9 +647,8 @@ Attribute replace
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.replace_attrs_request import ReplaceAttrsRequest
 from ngsi_ld_client.rest import ApiException
@@ -676,6 +683,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -699,6 +707,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The attribute was replaced successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -717,9 +726,8 @@ Entity replacement by id
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.entity import Entity
 from ngsi_ld_client.rest import ApiException
@@ -753,6 +761,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -775,6 +784,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The entity was replaced successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -793,9 +803,8 @@ Partial Attribute update
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.replace_attrs_request import ReplaceAttrsRequest
 from ngsi_ld_client.rest import ApiException
@@ -830,6 +839,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -853,6 +863,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | The attribute was updated successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -871,9 +882,8 @@ Batch Entity update
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_no_overwrite import OptionsNoOverwrite
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
@@ -908,6 +918,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **options** | [**List[OptionsNoOverwrite]**](OptionsNoOverwrite.md)|  | [optional] 
@@ -930,6 +941,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | If all entities already existed and are successfully updated, there is no payload body in the response.  |  * NGSILD-Tenant -  <br>  |
@@ -947,9 +959,8 @@ Update attributes of an Entity
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.entity import Entity
 from ngsi_ld_client.rest import ApiException
@@ -983,6 +994,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
@@ -1005,6 +1017,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | All the Attributes were appended successfully.  |  * NGSILD-Tenant -  <br>  |
@@ -1023,9 +1036,8 @@ Batch Entity create or update (upsert)
 
 ### Example
 
+
 ```python
-import time
-import os
 import ngsi_ld_client
 from ngsi_ld_client.models.options_upsert import OptionsUpsert
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
@@ -1062,6 +1074,7 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **options** | [**List[OptionsUpsert]**](OptionsUpsert.md)|  | [optional] 
@@ -1084,6 +1097,7 @@ No authorization required
  - **Accept**: application/json, application/json+ld, application/geo
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | If all entities not existing prior to this request have been successfully created and the others have been successfully updated, an array of String (with the URIs representing the Entity Ids of the created entities only) is returned in the response. There is no restriction as to the order of the Entity Ids. The merely updated entities do not take part in the response (corresponding to 204 No Content returned in the case of updates).  |  * NGSILD-Tenant -  <br>  |

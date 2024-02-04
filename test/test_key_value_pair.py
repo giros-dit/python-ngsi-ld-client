@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.key_value_pair import KeyValuePair  # noqa: E501
+from ngsi_ld_client.models.key_value_pair import KeyValuePair
 
 class TestKeyValuePair(unittest.TestCase):
     """KeyValuePair unit test stubs"""
@@ -33,7 +32,7 @@ class TestKeyValuePair(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `KeyValuePair`
         """
-        model = KeyValuePair()  # noqa: E501
+        model = KeyValuePair()
         if include_optional:
             return KeyValuePair(
                 key = '',

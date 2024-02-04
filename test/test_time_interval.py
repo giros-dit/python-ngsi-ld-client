@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.time_interval import TimeInterval  # noqa: E501
+from ngsi_ld_client.models.time_interval import TimeInterval
 
 class TestTimeInterval(unittest.TestCase):
     """TimeInterval unit test stubs"""
@@ -33,7 +32,7 @@ class TestTimeInterval(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `TimeInterval`
         """
-        model = TimeInterval()  # noqa: E501
+        model = TimeInterval()
         if include_optional:
             return TimeInterval(
                 start_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),

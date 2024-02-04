@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.replace_attrs_request import ReplaceAttrsRequest  # noqa: E501
+from ngsi_ld_client.models.replace_attrs_request import ReplaceAttrsRequest
 
 class TestReplaceAttrsRequest(unittest.TestCase):
     """ReplaceAttrsRequest unit test stubs"""
@@ -33,7 +32,7 @@ class TestReplaceAttrsRequest(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `ReplaceAttrsRequest`
         """
-        model = ReplaceAttrsRequest()  # noqa: E501
+        model = ReplaceAttrsRequest()
         if include_optional:
             return ReplaceAttrsRequest(
                 type = 'Property',

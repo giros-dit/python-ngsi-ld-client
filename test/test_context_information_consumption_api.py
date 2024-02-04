@@ -14,14 +14,14 @@
 
 import unittest
 
-from ngsi_ld_client.api.context_information_consumption_api import ContextInformationConsumptionApi  # noqa: E501
+from ngsi_ld_client.api.context_information_consumption_api import ContextInformationConsumptionApi
 
 
 class TestContextInformationConsumptionApi(unittest.TestCase):
     """ContextInformationConsumptionApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = ContextInformationConsumptionApi()  # noqa: E501
+        self.api = ContextInformationConsumptionApi()
 
     def tearDown(self) -> None:
         pass
@@ -29,63 +29,63 @@ class TestContextInformationConsumptionApi(unittest.TestCase):
     def test_query_batch(self) -> None:
         """Test case for query_batch
 
-        Query entities based on POST   # noqa: E501
+        Query entities based on POST 
         """
         pass
 
     def test_query_entity(self) -> None:
         """Test case for query_entity
 
-        Query entities   # noqa: E501
+        Query entities 
         """
         pass
 
     def test_query_subscription(self) -> None:
         """Test case for query_subscription
 
-        Retrieve list of Subscriptions   # noqa: E501
+        Retrieve list of Subscriptions 
         """
         pass
 
     def test_retrieve_attr_info(self) -> None:
         """Test case for retrieve_attr_info
 
-        Retrieve Available Attribute Information   # noqa: E501
+        Retrieve Available Attribute Information 
         """
         pass
 
     def test_retrieve_attributes(self) -> None:
         """Test case for retrieve_attributes
 
-        Retrieve Available Attributes   # noqa: E501
+        Retrieve Available Attributes 
         """
         pass
 
     def test_retrieve_entity(self) -> None:
         """Test case for retrieve_entity
 
-        Entity retrieval by id   # noqa: E501
+        Entity retrieval by id 
         """
         pass
 
     def test_retrieve_subscription(self) -> None:
         """Test case for retrieve_subscription
 
-        Subscription retrieval by id   # noqa: E501
+        Subscription retrieval by id 
         """
         pass
 
     def test_retrieve_type_info(self) -> None:
         """Test case for retrieve_type_info
 
-        Details about available entity type   # noqa: E501
+        Details about available entity type 
         """
         pass
 
     def test_retrieve_types(self) -> None:
         """Test case for retrieve_types
 
-        Retrieve available entity types   # noqa: E501
+        Retrieve available entity types 
         """
         pass
 

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geometry_point import GeometryPoint  # noqa: E501
+from ngsi_ld_client.models.geometry_point import GeometryPoint
 
 class TestGeometryPoint(unittest.TestCase):
     """GeometryPoint unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeometryPoint(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeometryPoint`
         """
-        model = GeometryPoint()  # noqa: E501
+        model = GeometryPoint()
         if include_optional:
             return GeometryPoint(
                 type = 'Point',

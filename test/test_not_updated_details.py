@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.not_updated_details import NotUpdatedDetails  # noqa: E501
+from ngsi_ld_client.models.not_updated_details import NotUpdatedDetails
 
 class TestNotUpdatedDetails(unittest.TestCase):
     """NotUpdatedDetails unit test stubs"""
@@ -33,7 +32,7 @@ class TestNotUpdatedDetails(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `NotUpdatedDetails`
         """
-        model = NotUpdatedDetails()  # noqa: E501
+        model = NotUpdatedDetails()
         if include_optional:
             return NotUpdatedDetails(
                 attribute_name = '',

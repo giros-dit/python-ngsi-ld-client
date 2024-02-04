@@ -13,21 +13,14 @@
 
 
 from __future__ import annotations
-from inspect import getfullargspec
 import json
 import pprint
-import re  # noqa: F401
-
-from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field, StrictStr, ValidationError, field_validator
+from typing import Any, Dict, List, Optional
 from ngsi_ld_client.models.ld_context_one_of_inner import LdContextOneOfInner
-from typing import Union, Any, List, TYPE_CHECKING, Optional, Dict
-from typing_extensions import Literal
 from pydantic import StrictStr, Field
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Union, List, Optional, Dict
+from typing_extensions import Literal, Self
 
 LDCONTEXT_ONE_OF_SCHEMAS = ["List[LdContextOneOfInner]", "object", "str"]
 
@@ -38,14 +31,15 @@ class LdContext(BaseModel):
     # data type: str
     oneof_schema_1_validator: Optional[StrictStr] = None
     # data type: object
-    oneof_schema_2_validator: Optional[Union[str, Any]] = None
+    oneof_schema_2_validator: Optional[Dict[str, Any]] = None
     # data type: List[LdContextOneOfInner]
     oneof_schema_3_validator: Optional[List[LdContextOneOfInner]] = None
     actual_instance: Optional[Union[List[LdContextOneOfInner], object, str]] = None
-    one_of_schemas: List[str] = Literal["List[LdContextOneOfInner]", "object", "str"]
+    one_of_schemas: List[str] = Field(default=Literal["List[LdContextOneOfInner]", "object", "str"])
 
     model_config = {
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -92,7 +86,7 @@ class LdContext(BaseModel):
             return v
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
         return cls.from_json(json.dumps(obj))
 
     @classmethod
@@ -144,19 +138,17 @@ class LdContext(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        to_json = getattr(self.actual_instance, "to_json", None)
-        if callable(to_json):
+        if hasattr(self.actual_instance, "to_json") and callable(self.actual_instance.to_json):
             return self.actual_instance.to_json()
         else:
             return json.dumps(self.actual_instance)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Optional[Union[Dict[str, Any], List[LdContextOneOfInner], object, str]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        to_dict = getattr(self.actual_instance, "to_dict", None)
-        if callable(to_dict):
+        if hasattr(self.actual_instance, "to_dict") and callable(self.actual_instance.to_dict):
             return self.actual_instance.to_dict()
         else:
             # primitive type

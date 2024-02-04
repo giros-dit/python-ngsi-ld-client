@@ -3,6 +3,7 @@
 5.2.8 represents what Entities, Entity Types or group of Entity ids (as a regular expression pattern mandated by IEEE 1003.2TM [11]) can be provided (by Context Sources). 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity identifier.  | [optional] 

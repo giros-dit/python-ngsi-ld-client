@@ -3,6 +3,7 @@
 5.2.12 represents a Context Subscription. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Subscription identifier (JSON-LD @id).  | [optional] 

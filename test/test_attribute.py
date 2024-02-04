@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.attribute import Attribute  # noqa: E501
+from ngsi_ld_client.models.attribute import Attribute
 
 class TestAttribute(unittest.TestCase):
     """Attribute unit test stubs"""
@@ -33,7 +32,7 @@ class TestAttribute(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `Attribute`
         """
-        model = Attribute()  # noqa: E501
+        model = Attribute()
         if include_optional:
             return Attribute(
                 id = '',

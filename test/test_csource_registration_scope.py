@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.csource_registration_scope import CsourceRegistrationScope  # noqa: E501
+from ngsi_ld_client.models.csource_registration_scope import CsourceRegistrationScope
 
 class TestCsourceRegistrationScope(unittest.TestCase):
     """CsourceRegistrationScope unit test stubs"""
@@ -33,7 +32,7 @@ class TestCsourceRegistrationScope(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `CsourceRegistrationScope`
         """
-        model = CsourceRegistrationScope()  # noqa: E501
+        model = CsourceRegistrationScope()
         if include_optional:
             return CsourceRegistrationScope(
             )

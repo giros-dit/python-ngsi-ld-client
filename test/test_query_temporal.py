@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.query_temporal import QueryTemporal  # noqa: E501
+from ngsi_ld_client.models.query_temporal import QueryTemporal
 
 class TestQueryTemporal(unittest.TestCase):
     """QueryTemporal unit test stubs"""
@@ -33,7 +32,7 @@ class TestQueryTemporal(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `QueryTemporal`
         """
-        model = QueryTemporal()  # noqa: E501
+        model = QueryTemporal()
         if include_optional:
             return QueryTemporal(
                 type = 'Query',

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.subscription_on_change import SubscriptionOnChange  # noqa: E501
+from ngsi_ld_client.models.subscription_on_change import SubscriptionOnChange
 
 class TestSubscriptionOnChange(unittest.TestCase):
     """SubscriptionOnChange unit test stubs"""
@@ -33,7 +32,7 @@ class TestSubscriptionOnChange(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `SubscriptionOnChange`
         """
-        model = SubscriptionOnChange()  # noqa: E501
+        model = SubscriptionOnChange()
         if include_optional:
             return SubscriptionOnChange(
                 id = '',

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.list_contexts200_response1_one_of_inner1 import ListContexts200Response1OneOfInner1  # noqa: E501
+from ngsi_ld_client.models.list_contexts200_response1_one_of_inner1 import ListContexts200Response1OneOfInner1
 
 class TestListContexts200Response1OneOfInner1(unittest.TestCase):
     """ListContexts200Response1OneOfInner1 unit test stubs"""
@@ -33,7 +32,7 @@ class TestListContexts200Response1OneOfInner1(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `ListContexts200Response1OneOfInner1`
         """
-        model = ListContexts200Response1OneOfInner1()  # noqa: E501
+        model = ListContexts200Response1OneOfInner1()
         if include_optional:
             return ListContexts200Response1OneOfInner1(
                 context = None

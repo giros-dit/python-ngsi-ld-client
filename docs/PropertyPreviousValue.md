@@ -3,6 +3,7 @@
 Previous Property value. Only used in notifications. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** |  | [default to 'DateTime']

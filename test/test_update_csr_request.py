@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.update_csr_request import UpdateCSRRequest  # noqa: E501
+from ngsi_ld_client.models.update_csr_request import UpdateCSRRequest
 
 class TestUpdateCSRRequest(unittest.TestCase):
     """UpdateCSRRequest unit test stubs"""
@@ -33,7 +32,7 @@ class TestUpdateCSRRequest(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `UpdateCSRRequest`
         """
-        model = UpdateCSRRequest()  # noqa: E501
+        model = UpdateCSRRequest()
         if include_optional:
             return UpdateCSRRequest(
                 id = '',

@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.endpoint import Endpoint  # noqa: E501
+from ngsi_ld_client.models.endpoint import Endpoint
 
 class TestEndpoint(unittest.TestCase):
     """Endpoint unit test stubs"""
@@ -33,7 +32,7 @@ class TestEndpoint(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `Endpoint`
         """
-        model = Endpoint()  # noqa: E501
+        model = Endpoint()
         if include_optional:
             return Endpoint(
                 uri = '',

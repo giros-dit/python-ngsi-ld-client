@@ -11,31 +11,21 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
-import re  # noqa: F401
-import io
 import warnings
-
-from pydantic import validate_call, ValidationError
-from typing import Dict, List, Optional, Tuple
-
-from pydantic import Field
+from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
+from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
+
 from datetime import datetime
-
-from pydantic import StrictBool, StrictStr, field_validator
-
+from pydantic import Field, StrictBool, StrictStr, field_validator
 from typing import Any, List, Optional
-
+from typing_extensions import Annotated
 from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
 from ngsi_ld_client.models.query_csr200_response_inner import QueryCSR200ResponseInner
 
-from ngsi_ld_client.api_client import ApiClient
+from ngsi_ld_client.api_client import ApiClient, RequestSerialized
 from ngsi_ld_client.api_response import ApiResponse
-from ngsi_ld_client.exceptions import (  # noqa: F401
-    ApiTypeError,
-    ApiValueError
-)
+from ngsi_ld_client.rest import RESTResponseType
 
 
 class ContextSourceDiscoveryApi:
@@ -49,6 +39,7 @@ class ContextSourceDiscoveryApi:
         if api_client is None:
             api_client = ApiClient.get_default()
         self.api_client = api_client
+
 
     @validate_call
     def query_csr(
@@ -76,16 +67,22 @@ class ContextSourceDiscoveryApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> List[QueryCSR200ResponseInner]:
-        """Discover Csource registrations   # noqa: E501
+        """Discover Csource registrations 
 
-        5.10.2 Query Context Source Registrations.  This operation allows discovering context source registrations from an NGSI-LD system. The behaviour of the discovery of context source registrations differs significantly from the querying of entities as described in clause 5.7.2. The approach is that the client submits a query for entities as described in clause 5.7.2, but instead of receiving the Entity information, it receives a list of Context Source Registrations describing Context Sources that possibly have some of the requested Entity information. This means that the requested Entities and Attributes are matched against the 'information' property as described in clause 5.12.  If no temporal query is present, only Context Source Registrations for Context Sources providing latest information, i.e. without specified time intervals, are considered. If a temporal query is present only Context Source Registrations with matching time intervals, i.e. observationInterval or managementInterval, are considered.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.query_csr(id, type, id_pattern, attrs, q, csf, geometry, georel, coordinates, geoproperty, timeproperty, timerel, time_at, end_time_at, geometry_property, lang, scope_q, options, limit, count, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.10.2 Query Context Source Registrations.  This operation allows discovering context source registrations from an NGSI-LD system. The behaviour of the discovery of context source registrations differs significantly from the querying of entities as described in clause 5.7.2. The approach is that the client submits a query for entities as described in clause 5.7.2, but instead of receiving the Entity information, it receives a list of Context Source Registrations describing Context Sources that possibly have some of the requested Entity information. This means that the requested Entities and Attributes are matched against the 'information' property as described in clause 5.12.  If no temporal query is present, only Context Source Registrations for Context Sources providing latest information, i.e. without specified time intervals, are considered. If a temporal query is present only Context Source Registrations with matching time intervals, i.e. observationInterval or managementInterval, are considered. 
 
         :param id: List of entity ids to be retrieved.
         :type id: List[str]
@@ -133,48 +130,72 @@ class ContextSourceDiscoveryApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: List[QueryCSR200ResponseInner]
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the query_csr_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.query_csr_with_http_info.raw_function(
-            id,
-            type,
-            id_pattern,
-            attrs,
-            q,
-            csf,
-            geometry,
-            georel,
-            coordinates,
-            geoproperty,
-            timeproperty,
-            timerel,
-            time_at,
-            end_time_at,
-            geometry_property,
-            lang,
-            scope_q,
-            options,
-            limit,
-            count,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._query_csr_serialize(
+            id=id,
+            type=type,
+            id_pattern=id_pattern,
+            attrs=attrs,
+            q=q,
+            csf=csf,
+            geometry=geometry,
+            georel=georel,
+            coordinates=coordinates,
+            geoproperty=geoproperty,
+            timeproperty=timeproperty,
+            timerel=timerel,
+            time_at=time_at,
+            end_time_at=end_time_at,
+            geometry_property=geometry_property,
+            lang=lang,
+            scope_q=scope_q,
+            options=options,
+            limit=limit,
+            count=count,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[QueryCSR200ResponseInner]",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def query_csr_with_http_info(
@@ -202,16 +223,22 @@ class ContextSourceDiscoveryApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Discover Csource registrations   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[QueryCSR200ResponseInner]]:
+        """Discover Csource registrations 
 
-        5.10.2 Query Context Source Registrations.  This operation allows discovering context source registrations from an NGSI-LD system. The behaviour of the discovery of context source registrations differs significantly from the querying of entities as described in clause 5.7.2. The approach is that the client submits a query for entities as described in clause 5.7.2, but instead of receiving the Entity information, it receives a list of Context Source Registrations describing Context Sources that possibly have some of the requested Entity information. This means that the requested Entities and Attributes are matched against the 'information' property as described in clause 5.12.  If no temporal query is present, only Context Source Registrations for Context Sources providing latest information, i.e. without specified time intervals, are considered. If a temporal query is present only Context Source Registrations with matching time intervals, i.e. observationInterval or managementInterval, are considered.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.query_csr_with_http_info(id, type, id_pattern, attrs, q, csf, geometry, georel, coordinates, geoproperty, timeproperty, timerel, time_at, end_time_at, geometry_property, lang, scope_q, options, limit, count, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.10.2 Query Context Source Registrations.  This operation allows discovering context source registrations from an NGSI-LD system. The behaviour of the discovery of context source registrations differs significantly from the querying of entities as described in clause 5.7.2. The approach is that the client submits a query for entities as described in clause 5.7.2, but instead of receiving the Entity information, it receives a list of Context Source Registrations describing Context Sources that possibly have some of the requested Entity information. This means that the requested Entities and Attributes are matched against the 'information' property as described in clause 5.12.  If no temporal query is present, only Context Source Registrations for Context Sources providing latest information, i.e. without specified time intervals, are considered. If a temporal query is present only Context Source Registrations with matching time intervals, i.e. observationInterval or managementInterval, are considered. 
 
         :param id: List of entity ids to be retrieved.
         :type id: List[str]
@@ -259,200 +286,415 @@ class ContextSourceDiscoveryApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(List[QueryCSR200ResponseInner], status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'id',
-            'type',
-            'id_pattern',
-            'attrs',
-            'q',
-            'csf',
-            'geometry',
-            'georel',
-            'coordinates',
-            'geoproperty',
-            'timeproperty',
-            'timerel',
-            'time_at',
-            'end_time_at',
-            'geometry_property',
-            'lang',
-            'scope_q',
-            'options',
-            'limit',
-            'count',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._query_csr_serialize(
+            id=id,
+            type=type,
+            id_pattern=id_pattern,
+            attrs=attrs,
+            q=q,
+            csf=csf,
+            geometry=geometry,
+            georel=georel,
+            coordinates=coordinates,
+            geoproperty=geoproperty,
+            timeproperty=timeproperty,
+            timerel=timerel,
+            time_at=time_at,
+            end_time_at=end_time_at,
+            geometry_property=geometry_property,
+            lang=lang,
+            scope_q=scope_q,
+            options=options,
+            limit=limit,
+            count=count,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method query_csr" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('id') is not None:  # noqa: E501
-            _query_params.append(('id', _params['id']))
-            _collection_formats['id'] = 'csv'
-
-        if _params.get('type') is not None:  # noqa: E501
-            _query_params.append(('type', _params['type']))
-
-        if _params.get('id_pattern') is not None:  # noqa: E501
-            _query_params.append(('idPattern', _params['id_pattern']))
-
-        if _params.get('attrs') is not None:  # noqa: E501
-            _query_params.append(('attrs', _params['attrs']))
-            _collection_formats['attrs'] = 'csv'
-
-        if _params.get('q') is not None:  # noqa: E501
-            _query_params.append(('q', _params['q']))
-
-        if _params.get('csf') is not None:  # noqa: E501
-            _query_params.append(('csf', _params['csf']))
-
-        if _params.get('geometry') is not None:  # noqa: E501
-            _query_params.append(('geometry', _params['geometry']))
-
-        if _params.get('georel') is not None:  # noqa: E501
-            _query_params.append(('georel', _params['georel']))
-
-        if _params.get('coordinates') is not None:  # noqa: E501
-            _query_params.append(('coordinates', _params['coordinates']))
-
-        if _params.get('geoproperty') is not None:  # noqa: E501
-            _query_params.append(('geoproperty', _params['geoproperty']))
-
-        if _params.get('timeproperty') is not None:  # noqa: E501
-            _query_params.append(('timeproperty', _params['timeproperty']))
-
-        if _params.get('timerel') is not None:  # noqa: E501
-            _query_params.append(('timerel', _params['timerel']))
-
-        if _params.get('time_at') is not None:  # noqa: E501
-            if isinstance(_params['time_at'], datetime):
-                _query_params.append(('timeAt', _params['time_at'].strftime(self.api_client.configuration.datetime_format)))
-            else:
-                _query_params.append(('timeAt', _params['time_at']))
-
-        if _params.get('end_time_at') is not None:  # noqa: E501
-            if isinstance(_params['end_time_at'], datetime):
-                _query_params.append(('endTimeAt', _params['end_time_at'].strftime(self.api_client.configuration.datetime_format)))
-            else:
-                _query_params.append(('endTimeAt', _params['end_time_at']))
-
-        if _params.get('geometry_property') is not None:  # noqa: E501
-            _query_params.append(('geometryProperty', _params['geometry_property']))
-
-        if _params.get('lang') is not None:  # noqa: E501
-            _query_params.append(('lang', _params['lang']))
-
-        if _params.get('scope_q') is not None:  # noqa: E501
-            _query_params.append(('scopeQ', _params['scope_q']))
-
-        if _params.get('options') is not None:  # noqa: E501
-            _query_params.append(('options', _params['options']))
-            _collection_formats['options'] = 'csv'
-
-        if _params.get('limit') is not None:  # noqa: E501
-            _query_params.append(('limit', _params['limit']))
-
-        if _params.get('count') is not None:  # noqa: E501
-            _query_params.append(('count', _params['count']))
-
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[QueryCSR200ResponseInner]",
             '400': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/csourceRegistrations', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def query_csr_without_preload_content(
+        self,
+        id: Annotated[Optional[List[StrictStr]], Field(description="List of entity ids to be retrieved.")] = None,
+        type: Annotated[Optional[StrictStr], Field(description="Selection of Entity Types as per clause 4.17. ")] = None,
+        id_pattern: Annotated[Optional[StrictStr], Field(description="Regular expression that shall be matched by entity ids.")] = None,
+        attrs: Annotated[Optional[List[StrictStr]], Field(description="List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved. ")] = None,
+        q: Annotated[Optional[StrictStr], Field(description="Query as per clause 4.9. ")] = None,
+        csf: Annotated[Optional[StrictStr], Field(description="Context Source filter as per clause 4.9.")] = None,
+        geometry: Annotated[Optional[StrictStr], Field(description="Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. ")] = None,
+        georel: Annotated[Optional[Any], Field(description="Geo relationship as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. ")] = None,
+        coordinates: Annotated[Optional[Any], Field(description="Coordinates serialized as a string as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. ")] = None,
+        geoproperty: Annotated[Optional[StrictStr], Field(description="The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present. ")] = None,
+        timeproperty: Annotated[Optional[StrictStr], Field(description="Allowed values: \"observedAt\", \"createdAt\", \"modifiedAt\" and \"deletedAt\". If not specified, the default is \"observedAt\". (See clause 4.8) ")] = None,
+        timerel: Annotated[Optional[StrictStr], Field(description="Allowed values: \"before\", \"after\", \"between\" ")] = None,
+        time_at: Annotated[Optional[datetime], Field(description="It shall be a DateTime. Cardinality shall be 1 if timerel is present. String representing the timeAt parameter as defined by clause 4.11. ")] = None,
+        end_time_at: Annotated[Optional[datetime], Field(description="It shall be a DateTime. Cardinality shall be 1 if timerel is equal to \"between\". String representing the endTimeAt parameter as defined by clause 4.11. ")] = None,
+        geometry_property: Annotated[Optional[StrictStr], Field(description="In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field. ")] = None,
+        lang: Annotated[Optional[StrictStr], Field(description="It is used to reduce languageMaps to a string or string array property in a single preferred language. ")] = None,
+        scope_q: Annotated[Optional[StrictStr], Field(description="Scope query (see clause 4.19). ")] = None,
+        options: Optional[List[OptionsSysAttrs]] = None,
+        limit: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter. ")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned. ")] = None,
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Discover Csource registrations 
+
+        5.10.2 Query Context Source Registrations.  This operation allows discovering context source registrations from an NGSI-LD system. The behaviour of the discovery of context source registrations differs significantly from the querying of entities as described in clause 5.7.2. The approach is that the client submits a query for entities as described in clause 5.7.2, but instead of receiving the Entity information, it receives a list of Context Source Registrations describing Context Sources that possibly have some of the requested Entity information. This means that the requested Entities and Attributes are matched against the 'information' property as described in clause 5.12.  If no temporal query is present, only Context Source Registrations for Context Sources providing latest information, i.e. without specified time intervals, are considered. If a temporal query is present only Context Source Registrations with matching time intervals, i.e. observationInterval or managementInterval, are considered. 
+
+        :param id: List of entity ids to be retrieved.
+        :type id: List[str]
+        :param type: Selection of Entity Types as per clause 4.17. 
+        :type type: str
+        :param id_pattern: Regular expression that shall be matched by entity ids.
+        :type id_pattern: str
+        :param attrs: List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved. 
+        :type attrs: List[str]
+        :param q: Query as per clause 4.9. 
+        :type q: str
+        :param csf: Context Source filter as per clause 4.9.
+        :type csf: str
+        :param geometry: Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. 
+        :type geometry: str
+        :param georel: Geo relationship as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. 
+        :type georel: QueryEntityGeorelParameter
+        :param coordinates: Coordinates serialized as a string as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present. 
+        :type coordinates: QueryEntityCoordinatesParameter
+        :param geoproperty: The name of the Property that contains the geospatial data that will be used to resolve the geoquery. By default, will be location (see clause 4.7). It shall be ignored unless a geoquery is present. 
+        :type geoproperty: str
+        :param timeproperty: Allowed values: \"observedAt\", \"createdAt\", \"modifiedAt\" and \"deletedAt\". If not specified, the default is \"observedAt\". (See clause 4.8) 
+        :type timeproperty: str
+        :param timerel: Allowed values: \"before\", \"after\", \"between\" 
+        :type timerel: str
+        :param time_at: It shall be a DateTime. Cardinality shall be 1 if timerel is present. String representing the timeAt parameter as defined by clause 4.11. 
+        :type time_at: datetime
+        :param end_time_at: It shall be a DateTime. Cardinality shall be 1 if timerel is equal to \"between\". String representing the endTimeAt parameter as defined by clause 4.11. 
+        :type end_time_at: datetime
+        :param geometry_property: In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field. 
+        :type geometry_property: str
+        :param lang: It is used to reduce languageMaps to a string or string array property in a single preferred language. 
+        :type lang: str
+        :param scope_q: Scope query (see clause 4.19). 
+        :type scope_q: str
+        :param options:
+        :type options: List[OptionsSysAttrs]
+        :param limit: 6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter. 
+        :type limit: int
+        :param count: 6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned. 
+        :type count: bool
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._query_csr_serialize(
+            id=id,
+            type=type,
+            id_pattern=id_pattern,
+            attrs=attrs,
+            q=q,
+            csf=csf,
+            geometry=geometry,
+            georel=georel,
+            coordinates=coordinates,
+            geoproperty=geoproperty,
+            timeproperty=timeproperty,
+            timerel=timerel,
+            time_at=time_at,
+            end_time_at=end_time_at,
+            geometry_property=geometry_property,
+            lang=lang,
+            scope_q=scope_q,
+            options=options,
+            limit=limit,
+            count=count,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[QueryCSR200ResponseInner]",
+            '400': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _query_csr_serialize(
+        self,
+        id,
+        type,
+        id_pattern,
+        attrs,
+        q,
+        csf,
+        geometry,
+        georel,
+        coordinates,
+        geoproperty,
+        timeproperty,
+        timerel,
+        time_at,
+        end_time_at,
+        geometry_property,
+        lang,
+        scope_q,
+        options,
+        limit,
+        count,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+            'id': 'csv',
+            'attrs': 'csv',
+            'options': 'csv',
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if id is not None:
+            
+            _query_params.append(('id', id))
+            
+        if type is not None:
+            
+            _query_params.append(('type', type))
+            
+        if id_pattern is not None:
+            
+            _query_params.append(('idPattern', id_pattern))
+            
+        if attrs is not None:
+            
+            _query_params.append(('attrs', attrs))
+            
+        if q is not None:
+            
+            _query_params.append(('q', q))
+            
+        if csf is not None:
+            
+            _query_params.append(('csf', csf))
+            
+        if geometry is not None:
+            
+            _query_params.append(('geometry', geometry))
+            
+        if georel is not None:
+            
+            _query_params.append(('georel', georel))
+            
+        if coordinates is not None:
+            
+            _query_params.append(('coordinates', coordinates))
+            
+        if geoproperty is not None:
+            
+            _query_params.append(('geoproperty', geoproperty))
+            
+        if timeproperty is not None:
+            
+            _query_params.append(('timeproperty', timeproperty))
+            
+        if timerel is not None:
+            
+            _query_params.append(('timerel', timerel))
+            
+        if time_at is not None:
+            if isinstance(time_at, datetime):
+                _query_params.append(
+                    (
+                        'timeAt',
+                        time_at.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
+            else:
+                _query_params.append(('timeAt', time_at))
+            
+        if end_time_at is not None:
+            if isinstance(end_time_at, datetime):
+                _query_params.append(
+                    (
+                        'endTimeAt',
+                        end_time_at.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
+            else:
+                _query_params.append(('endTimeAt', end_time_at))
+            
+        if geometry_property is not None:
+            
+            _query_params.append(('geometryProperty', geometry_property))
+            
+        if lang is not None:
+            
+            _query_params.append(('lang', lang))
+            
+        if scope_q is not None:
+            
+            _query_params.append(('scopeQ', scope_q))
+            
+        if options is not None:
+            
+            _query_params.append(('options', options))
+            
+        if limit is not None:
+            
+            _query_params.append(('limit', limit))
+            
+        if count is not None:
+            
+            _query_params.append(('count', count))
+            
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/csourceRegistrations',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def retrieve_csr(
@@ -461,16 +703,22 @@ class ContextSourceDiscoveryApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> QueryCSR200ResponseInner:
-        """Csource registration retrieval by id   # noqa: E501
+        """Csource registration retrieval by id 
 
-        5.10.1 Retrieve Context Source Registration.  This operation allows retrieving a specific context source registration from an NGSI-LD system.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_csr(registration_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.10.1 Retrieve Context Source Registration.  This operation allows retrieving a specific context source registration from an NGSI-LD system. 
 
         :param registration_id: Id (URI) of the context source registration. (required)
         :type registration_id: str
@@ -480,29 +728,54 @@ class ContextSourceDiscoveryApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _request_timeout: timeout setting for this request.
-               If one number provided, it will be total request
-               timeout. It can also be a pair (tuple) of
-               (connection, read) timeouts.
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: QueryCSR200ResponseInner
-        """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            message = "Error! Please call the retrieve_csr_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"  # noqa: E501
-            raise ValueError(message)
+        """ # noqa: E501
 
-        return self.retrieve_csr_with_http_info.raw_function(
-            registration_id,
-            local,
-            link,
-            ngsild_tenant,
-            **kwargs,
+        _param = self._retrieve_csr_serialize(
+            registration_id=registration_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "QueryCSR200ResponseInner",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
 
     @validate_call
     def retrieve_csr_with_http_info(
@@ -511,16 +784,22 @@ class ContextSourceDiscoveryApi:
         local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
         link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
         ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
-        **kwargs,
-    ) -> ApiResponse:
-        """Csource registration retrieval by id   # noqa: E501
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[QueryCSR200ResponseInner]:
+        """Csource registration retrieval by id 
 
-        5.10.1 Retrieve Context Source Registration.  This operation allows retrieving a specific context source registration from an NGSI-LD system.   # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.retrieve_csr_with_http_info(registration_id, local, link, ngsild_tenant, async_req=True)
-        >>> result = thread.get()
+        5.10.1 Retrieve Context Source Registration.  This operation allows retrieving a specific context source registration from an NGSI-LD system. 
 
         :param registration_id: Id (URI) of the context source registration. (required)
         :type registration_id: str
@@ -530,113 +809,200 @@ class ContextSourceDiscoveryApi:
         :type link: str
         :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
         :type ngsild_tenant: str
-        :param async_req: Whether to execute the request asynchronously.
-        :type async_req: bool, optional
-        :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the
-                                 HTTP response body without reading/decoding.
-                                 Default is True.
-        :type _preload_content: bool, optional
-        :param _return_http_data_only: response data instead of ApiResponse
-                                       object with status code, headers, etc
-        :type _return_http_data_only: bool, optional
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
         :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the authentication
-                              in the spec for a single request.
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
         :type _request_auth: dict, optional
-        :type _content_type: string, optional: force content-type for the request
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
         :return: Returns the result object.
-                 If the method is called asynchronously,
-                 returns the request thread.
-        :rtype: tuple(QueryCSR200ResponseInner, status_code(int), headers(HTTPHeaderDict))
-        """
+        """ # noqa: E501
 
-        _params = locals()
-
-        _all_params = [
-            'registration_id',
-            'local',
-            'link',
-            'ngsild_tenant'
-        ]
-        _all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
-            ]
+        _param = self._retrieve_csr_serialize(
+            registration_id=registration_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
         )
-
-        # validate the arguments
-        for _key, _val in _params['kwargs'].items():
-            if _key not in _all_params:
-                raise ApiTypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method retrieve_csr" % _key
-                )
-            _params[_key] = _val
-        del _params['kwargs']
-
-        _collection_formats: Dict[str, str] = {}
-
-        # process the path parameters
-        _path_params: Dict[str, str] = {}
-        if _params['registration_id'] is not None:
-            _path_params['registrationId'] = _params['registration_id']
-
-
-        # process the query parameters
-        _query_params: List[Tuple[str, str]] = []
-        if _params.get('local') is not None:  # noqa: E501
-            _query_params.append(('local', _params['local']))
-
-        # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
-        if _params['link'] is not None:
-            _header_params['Link'] = _params['link']
-
-        if _params['ngsild_tenant'] is not None:
-            _header_params['NGSILD-Tenant'] = _params['ngsild_tenant']
-
-        # process the form parameters
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, str] = {}
-        # process the body parameter
-        _body_params = None
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/json+ld', 'application/geo'])  # noqa: E501
-
-        # authentication setting
-        _auth_settings: List[str] = []  # noqa: E501
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "QueryCSR200ResponseInner",
             '400': "ProblemDetails",
             '404': "ProblemDetails",
         }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
 
-        return self.api_client.call_api(
-            '/csourceRegistrations/{registrationId}', 'GET',
-            _path_params,
-            _query_params,
-            _header_params,
+
+    @validate_call
+    def retrieve_csr_without_preload_content(
+        self,
+        registration_id: Annotated[StrictStr, Field(description="Id (URI) of the context source registration.")],
+        local: Annotated[Optional[StrictBool], Field(description="6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). ")] = None,
+        link: Annotated[Optional[StrictStr], Field(description="6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. ")] = None,
+        ngsild_tenant: Annotated[Optional[StrictStr], Field(description="6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. ")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Csource registration retrieval by id 
+
+        5.10.1 Retrieve Context Source Registration.  This operation allows retrieving a specific context source registration from an NGSI-LD system. 
+
+        :param registration_id: Id (URI) of the context source registration. (required)
+        :type registration_id: str
+        :param local: 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4). 
+        :type local: bool
+        :param link: 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header. 
+        :type link: str
+        :param ngsild_tenant: 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted. 
+        :type ngsild_tenant: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._retrieve_csr_serialize(
+            registration_id=registration_id,
+            local=local,
+            link=link,
+            ngsild_tenant=ngsild_tenant,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "QueryCSR200ResponseInner",
+            '400': "ProblemDetails",
+            '404': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _retrieve_csr_serialize(
+        self,
+        registration_id,
+        local,
+        link,
+        ngsild_tenant,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, str] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if registration_id is not None:
+            _path_params['registrationId'] = registration_id
+        # process the query parameters
+        if local is not None:
+            
+            _query_params.append(('local', local))
+            
+        # process the header parameters
+        if link is not None:
+            _header_params['Link'] = link
+        if ngsild_tenant is not None:
+            _header_params['NGSILD-Tenant'] = ngsild_tenant
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json', 
+                'application/json+ld', 
+                'application/geo'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/csourceRegistrations/{registrationId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
             body=_body_params,
             post_params=_form_params,
             files=_files,
-            response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+

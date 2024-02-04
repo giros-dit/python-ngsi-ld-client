@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.geo_property import GeoProperty  # noqa: E501
+from ngsi_ld_client.models.geo_property import GeoProperty
 
 class TestGeoProperty(unittest.TestCase):
     """GeoProperty unit test stubs"""
@@ -33,7 +32,7 @@ class TestGeoProperty(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `GeoProperty`
         """
-        model = GeoProperty()  # noqa: E501
+        model = GeoProperty()
         if include_optional:
             return GeoProperty(
                 type = 'GeoProperty',

@@ -14,14 +14,14 @@
 
 import unittest
 
-from ngsi_ld_client.api.context_information_subscription_api import ContextInformationSubscriptionApi  # noqa: E501
+from ngsi_ld_client.api.context_information_subscription_api import ContextInformationSubscriptionApi
 
 
 class TestContextInformationSubscriptionApi(unittest.TestCase):
     """ContextInformationSubscriptionApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = ContextInformationSubscriptionApi()  # noqa: E501
+        self.api = ContextInformationSubscriptionApi()
 
     def tearDown(self) -> None:
         pass
@@ -29,21 +29,21 @@ class TestContextInformationSubscriptionApi(unittest.TestCase):
     def test_create_subscription(self) -> None:
         """Test case for create_subscription
 
-        Create Subscription   # noqa: E501
+        Create Subscription 
         """
         pass
 
     def test_delete_subscription(self) -> None:
         """Test case for delete_subscription
 
-        Subscription deletion by id   # noqa: E501
+        Subscription deletion by id 
         """
         pass
 
     def test_update_subscription(self) -> None:
         """Test case for update_subscription
 
-        Subscription update by id   # noqa: E501
+        Subscription update by id 
         """
         pass
 

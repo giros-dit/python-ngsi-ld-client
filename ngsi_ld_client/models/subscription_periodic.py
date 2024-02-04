@@ -18,24 +18,20 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictBool, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
-from pydantic import BaseModel, StrictBool, StrictStr, field_validator
-from pydantic import Field
 from typing_extensions import Annotated
 from ngsi_ld_client.models.entity_selector import EntitySelector
 from ngsi_ld_client.models.geo_query import GeoQuery
 from ngsi_ld_client.models.notification_params import NotificationParams
 from ngsi_ld_client.models.temporal_query import TemporalQuery
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class SubscriptionPeriodic(BaseModel):
     """
     SubscriptionPeriodic
-    """
+    """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, description="Subscription identifier (JSON-LD @id). ")
     type: Optional[StrictStr] = Field(default=None, description="JSON-LD @type. ")
     subscription_name: Optional[StrictStr] = Field(default=None, description="A (short) name given to this Subscription. ", alias="subscriptionName")
@@ -92,7 +88,8 @@ class SubscriptionPeriodic(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -106,7 +103,7 @@ class SubscriptionPeriodic(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of SubscriptionPeriodic from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -125,15 +122,17 @@ class SubscriptionPeriodic(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "status",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "status",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
@@ -160,7 +159,7 @@ class SubscriptionPeriodic(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of SubscriptionPeriodic from a dict"""
         if obj is None:
             return None
@@ -173,15 +172,15 @@ class SubscriptionPeriodic(BaseModel):
             "type": obj.get("type"),
             "subscriptionName": obj.get("subscriptionName"),
             "description": obj.get("description"),
-            "entities": [EntitySelector.from_dict(_item) for _item in obj.get("entities")] if obj.get("entities") is not None else None,
+            "entities": [EntitySelector.from_dict(_item) for _item in obj["entities"]] if obj.get("entities") is not None else None,
             "notificationTrigger": obj.get("notificationTrigger"),
             "q": obj.get("q"),
-            "geoQ": GeoQuery.from_dict(obj.get("geoQ")) if obj.get("geoQ") is not None else None,
+            "geoQ": GeoQuery.from_dict(obj["geoQ"]) if obj.get("geoQ") is not None else None,
             "csf": obj.get("csf"),
             "isActive": obj.get("isActive"),
-            "notification": NotificationParams.from_dict(obj.get("notification")) if obj.get("notification") is not None else None,
+            "notification": NotificationParams.from_dict(obj["notification"]) if obj.get("notification") is not None else None,
             "expiresAt": obj.get("expiresAt"),
-            "temporalQ": TemporalQuery.from_dict(obj.get("temporalQ")) if obj.get("temporalQ") is not None else None,
+            "temporalQ": TemporalQuery.from_dict(obj["temporalQ"]) if obj.get("temporalQ") is not None else None,
             "scopeQ": obj.get("scopeQ"),
             "lang": obj.get("lang"),
             "createdAt": obj.get("createdAt"),

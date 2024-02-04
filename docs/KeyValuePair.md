@@ -3,6 +3,7 @@
 5.2.22 represents the optional information that is required when contacting an endpoint for notifications. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **key** | **str** | The key of the key/value pair.  | 

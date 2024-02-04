@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_client.models.retrieve_context200_response import RetrieveContext200Response  # noqa: E501
+from ngsi_ld_client.models.retrieve_context200_response import RetrieveContext200Response
 
 class TestRetrieveContext200Response(unittest.TestCase):
     """RetrieveContext200Response unit test stubs"""
@@ -33,7 +32,7 @@ class TestRetrieveContext200Response(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `RetrieveContext200Response`
         """
-        model = RetrieveContext200Response()  # noqa: E501
+        model = RetrieveContext200Response()
         if include_optional:
             return RetrieveContext200Response(
                 context = None
