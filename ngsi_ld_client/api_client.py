@@ -354,7 +354,11 @@ class ApiClient:
                 self.sanitize_for_serialization(sub_obj) for sub_obj in obj
             )
         elif isinstance(obj, (datetime.datetime, datetime.date)):
-            return obj.isoformat()
+            # WARNING: MANUALLY EDITED -- THIS MAY BREAK THE CODE.
+            # observedAt must be defined as Zulu/military format.
+            # See: https://fiware-datamodels.readthedocs.io/en/stable/ngsi-ld_faq/
+            # return obj.isoformat()
+            return obj.strftime(self.configuration.datetime_format)
 
         elif isinstance(obj, dict):
             obj_dict = obj
