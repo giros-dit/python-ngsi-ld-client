@@ -176,7 +176,11 @@ class Configuration:
         """Options to pass down to the underlying urllib3 socket
         """
 
-        self.datetime_format = "%Y-%m-%dT%H:%M:%S.%f%z"
+        # WARNING: MANUALLY EDITED -- THIS MAY BREAK THE CODE.
+        # observedAt must be defined as Zulu/military format.
+        # See: https://fiware-datamodels.readthedocs.io/en/stable/ngsi-ld_faq/
+        #self.datetime_format = "%Y-%m-%dT%H:%M:%S.%f%z"
+        self.datetime_format = "%Y-%m-%dT%H:%M:%S.%fZ"
         """datetime format
         """
 
