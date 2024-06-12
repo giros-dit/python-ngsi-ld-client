@@ -11,22 +11,20 @@ Name | Type | Description | Notes
 **description** | **str** | A description of this Context Source Registration.  | [optional] 
 **information** | [**List[RegistrationInfo]**](RegistrationInfo.md) | Describes the Entities, Properties and Relationships for which the Context Source may be able to provide information.  | [optional] 
 **tenant** | **str** | Identifies the tenant that has to be specified in all requests to the Context Source that are related to the information registered in this Context Source Registration. If not present, the default tenant is assumed. Should only be present in systems supporting multi-tenancy.  | [optional] 
-**observation_interval** | [**TimeInterval**](TimeInterval.md) |  | [optional] 
-**management_interval** | [**TimeInterval**](TimeInterval.md) |  | [optional] 
-**location** | [**Geometry**](Geometry.md) |  | [optional] 
-**observation_space** | [**Geometry**](Geometry.md) |  | [optional] 
-**operation_space** | [**Geometry**](Geometry.md) |  | [optional] 
+**observation_interval** | [**TimeInterval**](TimeInterval.md) | If present, the Context Source can be queried for Temporal Entity Representations. (If latest Entity information is also provided, a separate Context Registration is needed for this purpose). The observationInterval specifies the time interval for which the Context Source can provide Entity information as specified by the observedAt Temporal Property. A temporal query based on the observedAt Temporal Property, which is the default, is matched against the observationInterval for overlap.  | [optional] 
+**management_interval** | [**TimeInterval**](TimeInterval.md) | If present, the Context Source can be queried for Temporal Entity Representations. (If latest Entity information is also provided, a separate Context Registration is needed for this purpose). The managementInterval specifies the time interval for which the Context Source can provide Entity information as specified by the createdAt, modifiedAt and deletedAt Temporal Properties. A temporal query based on the createdAt, modifiedAt or deletedAt Temporal Property is matched against the managementInterval for overlap.  | [optional] 
+**location** | [**Geometry**](Geometry.md) | Location for which the Context Source may be able to provide information.  | [optional] 
+**observation_space** | [**Geometry**](Geometry.md) | Geographic location that includes the observation spaces of all entities as specified by their  respective observationSpace GeoProperty for which the Context Source may be able to provide  information.  | [optional] 
+**operation_space** | [**Geometry**](Geometry.md) | Geographic location that includes the operation spaces of all entities as specified by their  respective operationSpace GeoProperty for which the Context Source may be able to provide  information.  | [optional] 
 **expires_at** | **datetime** | Provides an expiration date. When passed the Context Source Registration will become invalid and the Context Source might no longer be available.  | [optional] 
 **endpoint** | **str** | Endpoint expressed as dereferenceable URI through which the Context Source exposes its NGSI-LD interface.  | [optional] 
 **context_source_info** | [**List[KeyValuePair]**](KeyValuePair.md) | Generic {key, value} array to convey optional information to provide when contacting the registered Context Source.  | [optional] 
 **scope** | [**CsourceRegistrationScope**](CsourceRegistrationScope.md) |  | [optional] 
-**mode** | **str** | The definition of the mode of distributed operation (see clause 4.3.6) supported by the registered Context Source.  | [optional] 
+**mode** | **str** | The definition of the mode of distributed operation (see clause 4.3.6) supported by the registered Context Source.  | [optional] [default to 'inclusive']
 **operations** | **List[str]** | The definition limited subset of API operations supported by the registered Context Source.  If undefined, the default set of operations is \&quot;federationOps\&quot; (see clause 4.20).  | [optional] 
 **refresh_rate** | **str** | An indication of the likely period of time to elapse between updates at this registered endpoint. Brokers may optionally use this information to help implement caching.  | [optional] 
-**management** | [**RegistrationManagementInfo**](RegistrationManagementInfo.md) |  | [optional] 
-**created_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  | [optional] [readonly] 
-**modified_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  | [optional] [readonly] 
-**deleted_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32).  | [optional] [readonly] 
+**management** | [**RegistrationManagementInfo**](RegistrationManagementInfo.md) | Holds additional optional registration management information that can be used to limit unnecessary distributed operation requests.  | [optional] 
+**system_generated_attrs** | [**SystemGeneratedAttributes**](SystemGeneratedAttributes.md) |  | [optional] 
 **status** | **str** | Read-only. Status of the Registration. It shall be \&quot;ok\&quot; if the last attempt to perform a distributed operation succeeded. It shall be \&quot;failed\&quot; if the last attempt to perform a distributed operation failed.  | [optional] [readonly] 
 **times_sent** | **float** | Number of times that the registration triggered a distributed operation, including failed attempts.  | [optional] [readonly] 
 **times_failed** | **float** | Number of times that the registration triggered a distributed operation request that failed. | [optional] [readonly] 
@@ -44,12 +42,12 @@ json = "{}"
 # create an instance of UpdateCSRRequest from a JSON string
 update_csr_request_instance = UpdateCSRRequest.from_json(json)
 # print the JSON string representation of the object
-print UpdateCSRRequest.to_json()
+print(UpdateCSRRequest.to_json())
 
 # convert the object into a dict
 update_csr_request_dict = update_csr_request_instance.to_dict()
 # create an instance of UpdateCSRRequest from a dict
-update_csr_request_form_dict = update_csr_request.from_dict(update_csr_request_dict)
+update_csr_request_from_dict = UpdateCSRRequest.from_dict(update_csr_request_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

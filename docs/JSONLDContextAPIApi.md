@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 
 # **create_context**
-> create_context(body)
+> create_context(ngsild_tenant=ngsild_tenant, create_context_request=create_context_request)
 
 Add a user @context to the internal cache 
 
@@ -22,6 +22,7 @@ Add a user @context to the internal cache
 
 ```python
 import ngsi_ld_client
+from ngsi_ld_client.models.create_context_request import CreateContextRequest
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -36,11 +37,12 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.JSONLDContextAPIApi(api_client)
-    body = None # object | Payload body in the request contains a JSON object that has a root node named @context, which represents a JSON-LD \"local\" context. 
+    ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    create_context_request = ngsi_ld_client.CreateContextRequest() # CreateContextRequest | Payload body in the request contains a JSON object that has a root node named @context, which represents a JSON-LD \"local\" context.  (optional)
 
     try:
         # Add a user @context to the internal cache 
-        api_instance.create_context(body)
+        api_instance.create_context(ngsild_tenant=ngsild_tenant, create_context_request=create_context_request)
     except Exception as e:
         print("Exception when calling JSONLDContextAPIApi->create_context: %s\n" % e)
 ```
@@ -52,7 +54,8 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | **object**| Payload body in the request contains a JSON object that has a root node named @context, which represents a JSON-LD \&quot;local\&quot; context.  | 
+ **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **create_context_request** | [**CreateContextRequest**](CreateContextRequest.md)| Payload body in the request contains a JSON object that has a root node named @context, which represents a JSON-LD \&quot;local\&quot; context.  | [optional] 
 
 ### Return type
 
@@ -65,19 +68,19 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | The HTTP response shall include a \&quot;Location\&quot; HTTP header that contains the local URI of the added @context.  |  * NGSILD-Tenant -  <br>  * Location -  <br>  |
-**400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
+**400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_context**
-> delete_context(context_id, reload=reload, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> delete_context(context_id, reload=reload, ngsild_tenant=ngsild_tenant)
 
 Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it 
 
@@ -104,13 +107,11 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     api_instance = ngsi_ld_client.JSONLDContextAPIApi(api_client)
     context_id = 'context_id_example' # str | Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. 
     reload = True # bool | Indicates to perform a download and replace of the @context, as specified in clause 5.13.5.4.  (optional)
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
-    link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
         # Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it 
-        api_instance.delete_context(context_id, reload=reload, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_instance.delete_context(context_id, reload=reload, ngsild_tenant=ngsild_tenant)
     except Exception as e:
         print("Exception when calling JSONLDContextAPIApi->delete_context: %s\n" % e)
 ```
@@ -124,8 +125,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **context_id** | **str**| Local identifier of the @context to be managed (served or deleted). For @contexts of kind \&quot;Cached\&quot; this can also be the original URL the Broker downloaded the @context from.  | 
  **reload** | **bool**| Indicates to perform a download and replace of the @context, as specified in clause 5.13.5.4.  | [optional] 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
- **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
 
 ### Return type
@@ -146,14 +145,14 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content.  |  * NGSILD-Tenant -  <br>  |
-**400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
-**404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  |
+**400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
+**404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **503** | It is used when re-downloading fails.  |  * NGSILD-Tenant -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_contexts**
-> ListContexts200Response list_contexts(details=details, kind=kind, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> ListContexts200Response list_contexts(details=details, kind=kind, ngsild_tenant=ngsild_tenant)
 
 List all cached @contexts 
 
@@ -181,13 +180,11 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     api_instance = ngsi_ld_client.JSONLDContextAPIApi(api_client)
     details = True # bool | Whether a list of URLs or a more detailed list of JSON Objects is requested. (optional)
     kind = 'kind_example' # str | Can be either \"Cached\", \"Hosted\", or \"ImplicitlyCreated\".  (optional)
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
-    link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
         # List all cached @contexts 
-        api_response = api_instance.list_contexts(details=details, kind=kind, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.list_contexts(details=details, kind=kind, ngsild_tenant=ngsild_tenant)
         print("The response of JSONLDContextAPIApi->list_contexts:\n")
         pprint(api_response)
     except Exception as e:
@@ -203,8 +200,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **details** | **bool**| Whether a list of URLs or a more detailed list of JSON Objects is requested. | [optional] 
  **kind** | **str**| Can be either \&quot;Cached\&quot;, \&quot;Hosted\&quot;, or \&quot;ImplicitlyCreated\&quot;.  | [optional] 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
- **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
 
 ### Return type
@@ -218,19 +213,19 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json, application/json+ld
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A response body containing a list of URLs or a list of JSON Objects, as defined in clause 5.13.3.5, representing metadata about stored @contexts.  |  * NGSILD-Tenant -  <br>  |
-**400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
+**400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_context**
-> object retrieve_context(context_id, details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> RetrieveContext200Response retrieve_context(context_id, details=details, ngsild_tenant=ngsild_tenant)
 
 Serve one specific user @context 
 
@@ -241,6 +236,7 @@ Serve one specific user @context
 
 ```python
 import ngsi_ld_client
+from ngsi_ld_client.models.retrieve_context200_response import RetrieveContext200Response
 from ngsi_ld_client.rest import ApiException
 from pprint import pprint
 
@@ -257,13 +253,11 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     api_instance = ngsi_ld_client.JSONLDContextAPIApi(api_client)
     context_id = 'context_id_example' # str | Local identifier of the @context to be managed (served or deleted). For @contexts of kind \"Cached\" this can also be the original URL the Broker downloaded the @context from. 
     details = True # bool | Whether a list of URLs or a more detailed list of JSON Objects is requested. (optional)
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
-    link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
 
     try:
         # Serve one specific user @context 
-        api_response = api_instance.retrieve_context(context_id, details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.retrieve_context(context_id, details=details, ngsild_tenant=ngsild_tenant)
         print("The response of JSONLDContextAPIApi->retrieve_context:\n")
         pprint(api_response)
     except Exception as e:
@@ -279,13 +273,11 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **context_id** | **str**| Local identifier of the @context to be managed (served or deleted). For @contexts of kind \&quot;Cached\&quot; this can also be the original URL the Broker downloaded the @context from.  | 
  **details** | **bool**| Whether a list of URLs or a more detailed list of JSON Objects is requested. | [optional] 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
- **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
 
 ### Return type
 
-**object**
+[**RetrieveContext200Response**](RetrieveContext200Response.md)
 
 ### Authorization
 
@@ -301,8 +293,8 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | If the parameter details is False or missing, response body contains a JSON object that has a root node named @context, which represents a JSON-LD \&quot;local context\&quot;. If the parameter details is True, response body contains a JSON object as defined in clause 5.13.4.5, which metadata of a JSON-LD \&quot;local context\&quot;.  |  * NGSILD-Tenant -  <br>  |
-**400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
-**404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  |
+**400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
+**404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **422** | It is used to indicate that the operation is not available, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

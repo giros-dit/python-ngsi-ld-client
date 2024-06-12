@@ -18,12 +18,12 @@ json = "{}"
 # create an instance of GeometryPoint from a JSON string
 geometry_point_instance = GeometryPoint.from_json(json)
 # print the JSON string representation of the object
-print GeometryPoint.to_json()
+print(GeometryPoint.to_json())
 
 # convert the object into a dict
 geometry_point_dict = geometry_point_instance.to_dict()
 # create an instance of GeometryPoint from a dict
-geometry_point_form_dict = geometry_point.from_dict(geometry_point_dict)
+geometry_point_from_dict = GeometryPoint.from_dict(geometry_point_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -17,12 +17,12 @@ json = "{}"
 # create an instance of LdContext from a JSON string
 ld_context_instance = LdContext.from_json(json)
 # print the JSON string representation of the object
-print LdContext.to_json()
+print(LdContext.to_json())
 
 # convert the object into a dict
 ld_context_dict = ld_context_instance.to_dict()
 # create an instance of LdContext from a dict
-ld_context_form_dict = ld_context.from_dict(ld_context_dict)
+ld_context_from_dict = LdContext.from_dict(ld_context_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

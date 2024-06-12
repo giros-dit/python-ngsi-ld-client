@@ -1,6 +1,6 @@
 # SubscriptionCommon
 
-5.2.12 represents a Context Subscription. 
+5.2.12 This datatype represents a Context Subscription. 
 
 ## Properties
 
@@ -13,18 +13,17 @@ Name | Type | Description | Notes
 **entities** | [**List[EntitySelector]**](EntitySelector.md) | Entities subscribed.  | [optional] 
 **notification_trigger** | **List[str]** | The notification triggers listed indicate what kind of changes shall trigger a notification. If not present, the default is the combination attributeCreated and attributeUpdated. entityUpdated is equivalent to the combination attributeCreated, attributeUpdated and attributeDeleted.  | [optional] 
 **q** | **str** | Query that shall be met by subscribed entities in order to trigger the notification.  | [optional] 
-**geo_q** | [**GeoQuery**](GeoQuery.md) |  | [optional] 
+**geo_q** | [**GeoQuery**](GeoQuery.md) | Geoquery that shall be met by subscribed entities in order to trigger the notification.  | [optional] 
 **csf** | **str** | Context source filter that shall be met by Context Source Registrations describing Context Sources to be used for Entity Subscriptions.  | [optional] 
-**is_active** | **bool** | Allows clients to temporarily pause the subscription by making it inactive. true indicates that the Subscription is under operation. false indicates that the subscription is paused and notifications shall not be delivered.  | [optional] 
-**notification** | [**NotificationParams**](NotificationParams.md) |  | [optional] 
+**is_active** | **bool** | Allows clients to temporarily pause the subscription by making it inactive. true indicates that the Subscription is under operation. false indicates that the subscription is paused and notifications shall not be delivered.  | [optional] [default to True]
+**notification** | [**NotificationParams**](NotificationParams.md) | Notification details.  | [optional] 
 **expires_at** | **datetime** | Expiration date for the subscription.  | [optional] 
-**temporal_q** | [**TemporalQuery**](TemporalQuery.md) |  | [optional] 
+**temporal_q** | [**TemporalQuery**](TemporalQuery.md) | Temporal Query to be used only in Context Registration Subscriptions for matching Context Source Registrations of Context Sources providing temporal information.  | [optional] 
 **scope_q** | **str** | Scope query.  | [optional] 
 **lang** | **str** | Language filter to be applied to the query (clause 4.15).  | [optional] 
-**created_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  | [optional] [readonly] 
-**modified_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  | [optional] [readonly] 
-**deleted_at** | **datetime** | Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32).  | [optional] [readonly] 
+**system_generated_attrs** | [**SystemGeneratedAttributes**](SystemGeneratedAttributes.md) |  | [optional] 
 **status** | **str** | Read-only. Provided by the system when querying the details of a subscription.  | [optional] [readonly] 
+**jsonld_context** | **str** | The dereferenceable URI of the JSON-LD @context to be used when sending  a notification resulting from the subscription. If not provided, the @context used for the subscription shall be used as a default.  | [optional] 
 
 ## Example
 
@@ -36,12 +35,12 @@ json = "{}"
 # create an instance of SubscriptionCommon from a JSON string
 subscription_common_instance = SubscriptionCommon.from_json(json)
 # print the JSON string representation of the object
-print SubscriptionCommon.to_json()
+print(SubscriptionCommon.to_json())
 
 # convert the object into a dict
 subscription_common_dict = subscription_common_instance.to_dict()
 # create an instance of SubscriptionCommon from a dict
-subscription_common_form_dict = subscription_common.from_dict(subscription_common_dict)
+subscription_common_from_dict = SubscriptionCommon.from_dict(subscription_common_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

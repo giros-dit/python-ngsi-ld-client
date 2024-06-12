@@ -20,12 +20,12 @@ json = "{}"
 # create an instance of AttributeList from a JSON string
 attribute_list_instance = AttributeList.from_json(json)
 # print the JSON string representation of the object
-print AttributeList.to_json()
+print(AttributeList.to_json())
 
 # convert the object into a dict
 attribute_list_dict = attribute_list_instance.to_dict()
 # create an instance of AttributeList from a dict
-attribute_list_form_dict = attribute_list.from_dict(attribute_list_dict)
+attribute_list_from_dict = AttributeList.from_dict(attribute_list_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
