@@ -23,12 +23,12 @@ json = "{}"
 # create an instance of CsourceNotification from a JSON string
 csource_notification_instance = CsourceNotification.from_json(json)
 # print the JSON string representation of the object
-print CsourceNotification.to_json()
+print(CsourceNotification.to_json())
 
 # convert the object into a dict
 csource_notification_dict = csource_notification_instance.to_dict()
 # create an instance of CsourceNotification from a dict
-csource_notification_form_dict = csource_notification.from_dict(csource_notification_dict)
+csource_notification_from_dict = CsourceNotification.from_dict(csource_notification_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

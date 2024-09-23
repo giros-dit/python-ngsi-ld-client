@@ -1,15 +1,15 @@
 # NotificationParams
 
-5.2.14 represents the parameters that allow to convey the details of a notification. 
+5.2.14 This datatype represents the parameters that allow to convey the details of a notification. 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attributes** | **List[str]** | Entity Attribute Names (Properties or Relationships) to be included in the notification payload body. If undefined it will mean all Attributes.  | [optional] 
-**sys_attrs** | **bool** | If true, the system generated attributes createdAt and modifiedAt are included in the response payload body, in the case of a deletion also deletedAt.  | [optional] 
+**sys_attrs** | **bool** | If true, the system generated attributes createdAt and modifiedAt are included in the response payload body, in the case of a deletion also deletedAt.  | [optional] [default to False]
 **format** | **str** | Conveys the representation format of the entities delivered at notification time. By default, it will be in the normalized format.  | [optional] 
-**show_changes** | **bool** | If true the previous value (previousValue) of Properties or languageMap (previousLanguageMap) of Language Properties or object (previousObject) of Relationships is provided in addition to the current one. This requires that it exists, i.e. in case of modifications and deletions,  but not in the case of creations. showChanges cannot be true in case format is \&quot;keyValues\&quot;.  | [optional] 
+**show_changes** | **bool** | If true the previous value (previousValue) of Properties or languageMap (previousLanguageMap) of Language Properties or object (previousObject) of Relationships is provided in addition to the current one. This requires that it exists, i.e. in case of modifications and deletions,  but not in the case of creations. showChanges cannot be true in case format is \&quot;keyValues\&quot;.  | [optional] [default to False]
 **endpoint** | [**Endpoint**](Endpoint.md) |  | 
 **status** | **str** | Status of the Notification. It shall be \&quot;ok\&quot; if the last attempt to notify the subscriber succeeded. It shall be \&quot;failed\&quot; if the last attempt to notify the subscriber failed.  | [optional] 
 **times_sent** | **float** | Number of times that the notification has been sent. Provided by the system when querying the details of a subscription.  | [optional] 
@@ -28,12 +28,12 @@ json = "{}"
 # create an instance of NotificationParams from a JSON string
 notification_params_instance = NotificationParams.from_json(json)
 # print the JSON string representation of the object
-print NotificationParams.to_json()
+print(NotificationParams.to_json())
 
 # convert the object into a dict
 notification_params_dict = notification_params_instance.to_dict()
 # create an instance of NotificationParams from a dict
-notification_params_form_dict = notification_params.from_dict(notification_params_dict)
+notification_params_from_dict = NotificationParams.from_dict(notification_params_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -11,9 +11,9 @@ Name | Type | Description | Notes
 **q** | **str** | Query that shall be matched by Entities in order to be retrieved.  | [optional] 
 **geo_q** | [**GeoQuery**](GeoQuery.md) |  | [optional] 
 **csf** | **str** | Context source filter that shall be matched by Context Source Registrations describing Context Sources to be used for retrieving Entities.  | [optional] 
-**temporal_q** | [**TemporalQuery**](TemporalQuery.md) |  | 
 **scope_q** | **str** | Scope query. | [optional] 
 **lang** | **str** | Language filter to be applied to the query (clause 4.15). | [optional] 
+**temporal_q** | [**TemporalQuery**](TemporalQuery.md) |  | 
 **context** | [**LdContext**](LdContext.md) |  | 
 
 ## Example
@@ -26,12 +26,12 @@ json = "{}"
 # create an instance of TemporalQueryBatchRequest from a JSON string
 temporal_query_batch_request_instance = TemporalQueryBatchRequest.from_json(json)
 # print the JSON string representation of the object
-print TemporalQueryBatchRequest.to_json()
+print(TemporalQueryBatchRequest.to_json())
 
 # convert the object into a dict
 temporal_query_batch_request_dict = temporal_query_batch_request_instance.to_dict()
 # create an instance of TemporalQueryBatchRequest from a dict
-temporal_query_batch_request_form_dict = temporal_query_batch_request.from_dict(temporal_query_batch_request_dict)
+temporal_query_batch_request_from_dict = TemporalQueryBatchRequest.from_dict(temporal_query_batch_request_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

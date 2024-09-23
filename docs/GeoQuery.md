@@ -1,6 +1,6 @@
 # GeoQuery
 
-5.2.13 represents a geoquery used for Subscriptions. 
+5.2.13 This datatype represents a geoquery used for Subscriptions. 
 
 ## Properties
 
@@ -21,12 +21,12 @@ json = "{}"
 # create an instance of GeoQuery from a JSON string
 geo_query_instance = GeoQuery.from_json(json)
 # print the JSON string representation of the object
-print GeoQuery.to_json()
+print(GeoQuery.to_json())
 
 # convert the object into a dict
 geo_query_dict = geo_query_instance.to_dict()
 # create an instance of GeoQuery from a dict
-geo_query_form_dict = geo_query.from_dict(geo_query_dict)
+geo_query_from_dict = GeoQuery.from_dict(geo_query_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

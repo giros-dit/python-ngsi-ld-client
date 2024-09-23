@@ -21,12 +21,12 @@ json = "{}"
 # create an instance of RegistrationManagementInfo from a JSON string
 registration_management_info_instance = RegistrationManagementInfo.from_json(json)
 # print the JSON string representation of the object
-print RegistrationManagementInfo.to_json()
+print(RegistrationManagementInfo.to_json())
 
 # convert the object into a dict
 registration_management_info_dict = registration_management_info_instance.to_dict()
 # create an instance of RegistrationManagementInfo from a dict
-registration_management_info_form_dict = registration_management_info.from_dict(registration_management_info_dict)
+registration_management_info_from_dict = RegistrationManagementInfo.from_dict(registration_management_info_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
