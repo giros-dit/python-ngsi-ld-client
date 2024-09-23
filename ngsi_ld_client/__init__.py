@@ -71,7 +71,6 @@ from ngsi_ld_client.models.feature_properties import FeatureProperties
 from ngsi_ld_client.models.feature_properties_type import FeaturePropertiesType
 from ngsi_ld_client.models.feature_properties_value import FeaturePropertiesValue
 from ngsi_ld_client.models.geo_property import GeoProperty
-from ngsi_ld_client.models.geo_property_previous_value import GeoPropertyPreviousValue
 from ngsi_ld_client.models.geo_property_value import GeoPropertyValue
 from ngsi_ld_client.models.geo_query import GeoQuery
 from ngsi_ld_client.models.geo_query_coordinates import GeoQueryCoordinates
@@ -137,7 +136,6 @@ from ngsi_ld_client.models.subscription import Subscription
 from ngsi_ld_client.models.subscription_common import SubscriptionCommon
 from ngsi_ld_client.models.subscription_on_change import SubscriptionOnChange
 from ngsi_ld_client.models.subscription_periodic import SubscriptionPeriodic
-from ngsi_ld_client.models.system_generated_attributes import SystemGeneratedAttributes
 from ngsi_ld_client.models.temporal_query import TemporalQuery
 from ngsi_ld_client.models.temporal_query_batch_request import TemporalQueryBatchRequest
 from ngsi_ld_client.models.time_interval import TimeInterval

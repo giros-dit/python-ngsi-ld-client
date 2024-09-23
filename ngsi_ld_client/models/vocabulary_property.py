@@ -20,7 +20,6 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from ngsi_ld_client.models.system_generated_attributes import SystemGeneratedAttributes
 from ngsi_ld_client.models.vocabulary_property_previous_vocab import VocabularyPropertyPreviousVocab
 from ngsi_ld_client.models.vocabulary_property_vocab import VocabularyPropertyVocab
 from typing import Optional, Set
@@ -33,12 +32,14 @@ class VocabularyProperty(BaseModel):
     type: Optional[StrictStr] = Field(default='VocabularyProperty', description="Node type. ")
     vocab: Optional[VocabularyPropertyVocab] = None
     previous_vocab: Optional[VocabularyPropertyPreviousVocab] = Field(default=None, alias="previousVocab")
-    observed_at: Optional[datetime] = Field(default=None, description="Timestamp. See clause 4.8. ", alias="observedAt")
+    observed_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ", alias="observedAt")
     dataset_id: Optional[StrictStr] = Field(default=None, description="It allows identifying a set or group of property values. ", alias="datasetId")
-    system_generated_attrs: Optional[SystemGeneratedAttributes] = Field(default=None, alias="systemGeneratedAttrs")
+    created_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  Entity creation timestamp. See clause 4.8. ", alias="createdAt")
+    modified_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  Entity last modification timestamp. See clause 4.8. ", alias="modifiedAt")
+    deleted_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8. It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     instance_id: Optional[StrictStr] = Field(default=None, description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ", alias="instanceId")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["type", "vocab", "previousVocab", "observedAt", "datasetId", "systemGeneratedAttrs", "instanceId"]
+    __properties: ClassVar[List[str]] = ["type", "vocab", "previousVocab", "observedAt", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -99,9 +100,6 @@ class VocabularyProperty(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of previous_vocab
         if self.previous_vocab:
             _dict['previousVocab'] = self.previous_vocab.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of system_generated_attrs
-        if self.system_generated_attrs:
-            _dict['systemGeneratedAttrs'] = self.system_generated_attrs.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -124,7 +122,9 @@ class VocabularyProperty(BaseModel):
             "previousVocab": VocabularyPropertyPreviousVocab.from_dict(obj["previousVocab"]) if obj.get("previousVocab") is not None else None,
             "observedAt": obj.get("observedAt"),
             "datasetId": obj.get("datasetId"),
-            "systemGeneratedAttrs": SystemGeneratedAttributes.from_dict(obj["systemGeneratedAttrs"]) if obj.get("systemGeneratedAttrs") is not None else None,
+            "createdAt": obj.get("createdAt"),
+            "modifiedAt": obj.get("modifiedAt"),
+            "deletedAt": obj.get("deletedAt"),
             "instanceId": obj.get("instanceId")
         })
         # store additional fields in additional_properties

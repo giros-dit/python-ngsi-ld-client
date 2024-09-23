@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 Query temporal evolution of Entities 
 
-5.7.4 Query Temporal Evolution of Entities.  This operation allows querying the temporal evolution of Entities present in an NGSI-LD system. It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query. 
+5.7.4 Query Temporal Evolution of Entities.  This operation allows querying the temporal evolution of Entities present in an NGSI-LD system. It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query.  *The query parameters timerel and timeAt are required. 
 
 ### Example
 
@@ -122,7 +122,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the query result as a list of temporal representation of Entities.  |  * NGSILD-Tenant -  <br>  * NGSILD-Results-Count -  <br>  |
+**200** | A response body containing the query result as a list of temporal representation of Entities.  |  * NGSILD-Tenant -  <br>  * NGSILD-Results-Count -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -212,13 +212,13 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json, application/json+ld
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the JSON-LD temporal representation of the target entity containing the selected Attributes.  |  * NGSILD-Tenant -  <br>  |
+**200** | A response body containing the JSON-LD temporal representation of the target entity containing the selected Attributes.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
@@ -295,7 +295,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the query result as a list of Entities.  |  * NGSILD-Tenant -  <br>  |
+**200** | A response body containing the query result as a list of Entities.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

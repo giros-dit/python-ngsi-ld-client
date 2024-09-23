@@ -25,7 +25,6 @@ from ngsi_ld_client.models.entity_selector import EntitySelector
 from ngsi_ld_client.models.geo_query import GeoQuery
 from ngsi_ld_client.models.ld_context import LdContext
 from ngsi_ld_client.models.notification_params import NotificationParams
-from ngsi_ld_client.models.system_generated_attributes import SystemGeneratedAttributes
 from ngsi_ld_client.models.temporal_query import TemporalQuery
 from typing import Optional, Set
 from typing_extensions import Self
@@ -41,15 +40,17 @@ class QuerySubscription200ResponseInner1(BaseModel):
     entities: Optional[Annotated[List[EntitySelector], Field(min_length=1)]] = Field(default=None, description="Entities subscribed. ")
     notification_trigger: Optional[List[StrictStr]] = Field(default=None, description="The notification triggers listed indicate what kind of changes shall trigger a notification. If not present, the default is the combination attributeCreated and attributeUpdated. entityUpdated is equivalent to the combination attributeCreated, attributeUpdated and attributeDeleted. ", alias="notificationTrigger")
     q: Optional[StrictStr] = Field(default=None, description="Query that shall be met by subscribed entities in order to trigger the notification. ")
-    geo_q: Optional[GeoQuery] = Field(default=None, description="Geoquery that shall be met by subscribed entities in order to trigger the notification. ", alias="geoQ")
+    geo_q: Optional[GeoQuery] = Field(default=None, alias="geoQ")
     csf: Optional[StrictStr] = Field(default=None, description="Context source filter that shall be met by Context Source Registrations describing Context Sources to be used for Entity Subscriptions. ")
     is_active: Optional[StrictBool] = Field(default=True, description="Allows clients to temporarily pause the subscription by making it inactive. true indicates that the Subscription is under operation. false indicates that the subscription is paused and notifications shall not be delivered. ", alias="isActive")
-    notification: NotificationParams = Field(description="Notification details. ")
+    notification: NotificationParams
     expires_at: Optional[datetime] = Field(default=None, description="Expiration date for the subscription. ", alias="expiresAt")
-    temporal_q: Optional[TemporalQuery] = Field(default=None, description="Temporal Query to be used only in Context Registration Subscriptions for matching Context Source Registrations of Context Sources providing temporal information. ", alias="temporalQ")
+    temporal_q: Optional[TemporalQuery] = Field(default=None, alias="temporalQ")
     scope_q: Optional[StrictStr] = Field(default=None, description="Scope query. ", alias="scopeQ")
     lang: Optional[StrictStr] = Field(default=None, description="Language filter to be applied to the query (clause 4.15). ")
-    system_generated_attrs: Optional[SystemGeneratedAttributes] = Field(default=None, alias="systemGeneratedAttrs")
+    created_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  Entity creation timestamp. See clause 4.8. ", alias="createdAt")
+    modified_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  Entity last modification timestamp. See clause 4.8. ", alias="modifiedAt")
+    deleted_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8. It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     status: Optional[StrictStr] = Field(default=None, description="Read-only. Provided by the system when querying the details of a subscription. ")
     jsonld_context: Optional[StrictStr] = Field(default=None, description="The dereferenceable URI of the JSON-LD @context to be used when sending  a notification resulting from the subscription. If not provided, the @context used for the subscription shall be used as a default. ", alias="jsonldContext")
     watched_attributes: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ", alias="watchedAttributes")
@@ -57,7 +58,7 @@ class QuerySubscription200ResponseInner1(BaseModel):
     time_interval: Optional[Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ", alias="timeInterval")
     context: LdContext = Field(alias="@context")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "systemGeneratedAttrs", "status", "jsonldContext", "watchedAttributes", "throttling", "timeInterval", "@context"]
+    __properties: ClassVar[List[str]] = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "createdAt", "modifiedAt", "deletedAt", "status", "jsonldContext", "watchedAttributes", "throttling", "timeInterval", "@context"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -133,9 +134,9 @@ class QuerySubscription200ResponseInner1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
         _items = []
         if self.entities:
-            for _item in self.entities:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_entities in self.entities:
+                if _item_entities:
+                    _items.append(_item_entities.to_dict())
             _dict['entities'] = _items
         # override the default output from pydantic by calling `to_dict()` of geo_q
         if self.geo_q:
@@ -146,9 +147,6 @@ class QuerySubscription200ResponseInner1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of temporal_q
         if self.temporal_q:
             _dict['temporalQ'] = self.temporal_q.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of system_generated_attrs
-        if self.system_generated_attrs:
-            _dict['systemGeneratedAttrs'] = self.system_generated_attrs.to_dict()
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
             _dict['@context'] = self.context.to_dict()
@@ -184,7 +182,9 @@ class QuerySubscription200ResponseInner1(BaseModel):
             "temporalQ": TemporalQuery.from_dict(obj["temporalQ"]) if obj.get("temporalQ") is not None else None,
             "scopeQ": obj.get("scopeQ"),
             "lang": obj.get("lang"),
-            "systemGeneratedAttrs": SystemGeneratedAttributes.from_dict(obj["systemGeneratedAttrs"]) if obj.get("systemGeneratedAttrs") is not None else None,
+            "createdAt": obj.get("createdAt"),
+            "modifiedAt": obj.get("modifiedAt"),
+            "deletedAt": obj.get("deletedAt"),
             "status": obj.get("status"),
             "jsonldContext": obj.get("jsonldContext"),
             "watchedAttributes": obj.get("watchedAttributes"),

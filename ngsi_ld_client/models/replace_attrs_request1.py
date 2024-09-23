@@ -20,10 +20,10 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from ngsi_ld_client.models.geo_property_previous_value import GeoPropertyPreviousValue
 from ngsi_ld_client.models.geometry import Geometry
 from ngsi_ld_client.models.ld_context import LdContext
-from ngsi_ld_client.models.system_generated_attributes import SystemGeneratedAttributes
+from ngsi_ld_client.models.vocabulary_property_previous_vocab import VocabularyPropertyPreviousVocab
+from ngsi_ld_client.models.vocabulary_property_vocab import VocabularyPropertyVocab
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -32,20 +32,24 @@ class ReplaceAttrsRequest1(BaseModel):
     ReplaceAttrsRequest1
     """ # noqa: E501
     context: LdContext = Field(alias="@context")
-    type: Optional[StrictStr] = Field(default='LanguageProperty', description="Node type. ")
-    value: Optional[Geometry] = Field(default=None, description="Geolocation encoded as GeoJSON. As mandated by clause 4.7. ")
-    observed_at: Optional[datetime] = Field(default=None, description="Timestamp. See clause 4.8. ", alias="observedAt")
+    type: Optional[StrictStr] = Field(default='VocabularyProperty', description="Node type. ")
+    value: Optional[Geometry] = None
+    observed_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ", alias="observedAt")
     unit_code: Optional[StrictStr] = Field(default=None, description="Property Value's unit code. ", alias="unitCode")
     dataset_id: Optional[StrictStr] = Field(default=None, description="It allows identifying a set or group of property values. ", alias="datasetId")
-    system_generated_attrs: Optional[SystemGeneratedAttributes] = Field(default=None, alias="systemGeneratedAttrs")
+    created_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  Entity creation timestamp. See clause 4.8. ", alias="createdAt")
+    modified_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  Entity last modification timestamp. See clause 4.8. ", alias="modifiedAt")
+    deleted_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8. It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     instance_id: Optional[StrictStr] = Field(default=None, description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ", alias="instanceId")
-    previous_value: Optional[GeoPropertyPreviousValue] = Field(default=None, alias="previousValue")
+    previous_value: Optional[Geometry] = Field(default=None, alias="previousValue")
     object: Optional[StrictStr] = Field(default=None, description="Relationship's target object. ")
     previous_object: Optional[StrictStr] = Field(default=None, description="Previous Relationship's target object. Only used in notifications, if the showChanges  option is explicitly requested. ", alias="previousObject")
     language_map: Optional[Dict[str, Any]] = Field(default=None, description="String Property Values defined in multiple natural languages. ", alias="languageMap")
     previous_language_map: Optional[Dict[str, Any]] = Field(default=None, description="Previous Language Property languageMap. Only used in notifications, if the showChanges  option is explicitly requested. ", alias="previousLanguageMap")
+    vocab: Optional[VocabularyPropertyVocab] = None
+    previous_vocab: Optional[VocabularyPropertyPreviousVocab] = Field(default=None, alias="previousVocab")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["@context", "type", "value", "observedAt", "unitCode", "datasetId", "systemGeneratedAttrs", "instanceId", "previousValue", "object", "previousObject", "languageMap", "previousLanguageMap"]
+    __properties: ClassVar[List[str]] = ["@context", "type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue", "object", "previousObject", "languageMap", "previousLanguageMap", "vocab", "previousVocab"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -53,8 +57,8 @@ class ReplaceAttrsRequest1(BaseModel):
         if value is None:
             return value
 
-        if value not in set(['LanguageProperty']):
-            raise ValueError("must be one of enum values ('LanguageProperty')")
+        if value not in set(['VocabularyProperty']):
+            raise ValueError("must be one of enum values ('VocabularyProperty')")
         return value
 
     model_config = ConfigDict(
@@ -110,12 +114,15 @@ class ReplaceAttrsRequest1(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of value
         if self.value:
             _dict['value'] = self.value.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of system_generated_attrs
-        if self.system_generated_attrs:
-            _dict['systemGeneratedAttrs'] = self.system_generated_attrs.to_dict()
         # override the default output from pydantic by calling `to_dict()` of previous_value
         if self.previous_value:
             _dict['previousValue'] = self.previous_value.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of vocab
+        if self.vocab:
+            _dict['vocab'] = self.vocab.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of previous_vocab
+        if self.previous_vocab:
+            _dict['previousVocab'] = self.previous_vocab.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -134,18 +141,22 @@ class ReplaceAttrsRequest1(BaseModel):
 
         _obj = cls.model_validate({
             "@context": LdContext.from_dict(obj["@context"]) if obj.get("@context") is not None else None,
-            "type": obj.get("type") if obj.get("type") is not None else 'LanguageProperty',
+            "type": obj.get("type") if obj.get("type") is not None else 'VocabularyProperty',
             "value": Geometry.from_dict(obj["value"]) if obj.get("value") is not None else None,
             "observedAt": obj.get("observedAt"),
             "unitCode": obj.get("unitCode"),
             "datasetId": obj.get("datasetId"),
-            "systemGeneratedAttrs": SystemGeneratedAttributes.from_dict(obj["systemGeneratedAttrs"]) if obj.get("systemGeneratedAttrs") is not None else None,
+            "createdAt": obj.get("createdAt"),
+            "modifiedAt": obj.get("modifiedAt"),
+            "deletedAt": obj.get("deletedAt"),
             "instanceId": obj.get("instanceId"),
-            "previousValue": GeoPropertyPreviousValue.from_dict(obj["previousValue"]) if obj.get("previousValue") is not None else None,
+            "previousValue": Geometry.from_dict(obj["previousValue"]) if obj.get("previousValue") is not None else None,
             "object": obj.get("object"),
             "previousObject": obj.get("previousObject"),
             "languageMap": obj.get("languageMap"),
-            "previousLanguageMap": obj.get("previousLanguageMap")
+            "previousLanguageMap": obj.get("previousLanguageMap"),
+            "vocab": VocabularyPropertyVocab.from_dict(obj["vocab"]) if obj.get("vocab") is not None else None,
+            "previousVocab": VocabularyPropertyPreviousVocab.from_dict(obj["previousVocab"]) if obj.get("previousVocab") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

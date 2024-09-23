@@ -73,7 +73,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -146,7 +146,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -233,7 +233,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing a list of subscriptions.  |  * NGSILD-Tenant -  <br>  * NGSILD-Results-Count -  <br>  |
+**200** | A response body containing a list of subscriptions.  |  * NGSILD-Tenant -  <br>  * NGSILD-Results-Count -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -305,13 +305,13 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json, application/json+ld
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the JSON-LD representation of the target subscription.  |  * NGSILD-Tenant -  <br>  |
+**200** | A response body containing the JSON-LD representation of the target subscription.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
@@ -381,7 +381,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 

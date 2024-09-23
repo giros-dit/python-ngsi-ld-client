@@ -27,7 +27,7 @@ class TestUpdateCSRRequest(unittest.TestCase):
 
     def make_instance(self, include_optional) -> UpdateCSRRequest:
         """Test UpdateCSRRequest
-            include_option is a boolean, when False only required
+            include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
         # uncomment below to create an instance of `UpdateCSRRequest`
@@ -82,10 +82,9 @@ class TestUpdateCSRRequest(unittest.TestCase):
                     cache_duration = '', 
                     timeout = 1, 
                     cooldown = 1, ),
-                system_generated_attrs = ngsi_ld_client.models.system_generated_attributes.SystemGeneratedAttributes(
-                    created_at = null, 
-                    modified_at = null, 
-                    deleted_at = null, ),
+                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
+                modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
+                deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 status = 'ok',
                 times_sent = 0,
                 times_failed = 0,

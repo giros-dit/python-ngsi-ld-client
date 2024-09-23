@@ -30,7 +30,7 @@ class FeatureCollection(BaseModel):
     """ # noqa: E501
     type: StrictStr = Field(description="GeoJSON Type. ")
     features: Optional[List[Feature]] = Field(default=None, description="In the case that no matches are found, \"features\" will be an empty array. ")
-    context: Optional[LdContext] = Field(default=None, description="JSON-LD @context. This field is only present if requested in the payload by the HTTP Prefer Header (IETF RFC 7240). ", alias="@context")
+    context: Optional[LdContext] = Field(default=None, alias="@context")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["type", "features", "@context"]
 
@@ -85,9 +85,9 @@ class FeatureCollection(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in features (list)
         _items = []
         if self.features:
-            for _item in self.features:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_features in self.features:
+                if _item_features:
+                    _items.append(_item_features.to_dict())
             _dict['features'] = _items
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:

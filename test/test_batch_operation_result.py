@@ -27,7 +27,7 @@ class TestBatchOperationResult(unittest.TestCase):
 
     def make_instance(self, include_optional) -> BatchOperationResult:
         """Test BatchOperationResult
-            include_option is a boolean, when False only required
+            include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
         # uncomment below to create an instance of `BatchOperationResult`
@@ -42,7 +42,12 @@ class TestBatchOperationResult(unittest.TestCase):
                     ngsi_ld_client.models.batch_entity_error.BatchEntityError(
                         entity_id = '', 
                         registration_id = '', 
-                        error = null, )
+                        error = ngsi_ld_client.models.problem_details.ProblemDetails(
+                            type = '', 
+                            title = '', 
+                            status = 56, 
+                            detail = '', 
+                            instance = '', ), )
                     ]
             )
         else:
@@ -54,7 +59,12 @@ class TestBatchOperationResult(unittest.TestCase):
                     ngsi_ld_client.models.batch_entity_error.BatchEntityError(
                         entity_id = '', 
                         registration_id = '', 
-                        error = null, )
+                        error = ngsi_ld_client.models.problem_details.ProblemDetails(
+                            type = '', 
+                            title = '', 
+                            status = 56, 
+                            detail = '', 
+                            instance = '', ), )
                     ],
         )
         """

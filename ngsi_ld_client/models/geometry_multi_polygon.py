@@ -86,9 +86,9 @@ class GeometryMultiPolygon(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in coordinates (list)
         _items = []
         if self.coordinates:
-            for _item in self.coordinates:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_coordinates in self.coordinates:
+                if _item_coordinates:
+                    _items.append(_item_coordinates.to_dict())
             _dict['coordinates'] = _items
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:

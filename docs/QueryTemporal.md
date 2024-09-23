@@ -10,11 +10,11 @@ Name | Type | Description | Notes
 **entities** | [**List[EntitySelector]**](EntitySelector.md) | Entity ids, id pattern and Entity types that shall be matched by Entities in order to be retrieved.  | [optional] 
 **attrs** | **List[str]** | List of Attributes that shall be matched by Entities in order to be retrieved. If not present all Attributes will be retrieved.  | [optional] 
 **q** | **str** | Query that shall be matched by Entities in order to be retrieved.  | [optional] 
-**geo_q** | [**GeoQuery**](GeoQuery.md) | Geoquery that shall be matched by Entities in order be retrieved.  | [optional] 
+**geo_q** | [**GeoQuery**](GeoQuery.md) |  | [optional] 
 **csf** | **str** | Context source filter that shall be matched by Context Source Registrations describing Context Sources to be used for retrieving Entities.  | [optional] 
 **scope_q** | **str** | Scope query. | [optional] 
 **lang** | **str** | Language filter to be applied to the query (clause 4.15). | [optional] 
-**temporal_q** | [**TemporalQuery**](TemporalQuery.md) | Temporal Query to be present only for \&quot;Query Temporal Evolution of Entities\&quot; operation (clause 5.7.4).  | 
+**temporal_q** | [**TemporalQuery**](TemporalQuery.md) |  | 
 
 ## Example
 

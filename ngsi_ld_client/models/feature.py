@@ -31,9 +31,9 @@ class Feature(BaseModel):
     """ # noqa: E501
     id: StrictStr = Field(description="Entity id. ")
     type: StrictStr = Field(description="GeoJSON Type. ")
-    geometry: Geometry = Field(description="Null if no matching GeoProperty. ")
-    properties: FeatureProperties = Field(description="List of attributes as mandated by clause 5.2.31. ")
-    context: Optional[LdContext] = Field(default=None, description="JSON-LD @context. This field is only present if requested in the payload by the HTTP Prefer Header (IETF RFC 7240). ", alias="@context")
+    geometry: Geometry
+    properties: FeatureProperties
+    context: Optional[LdContext] = Field(default=None, alias="@context")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "type", "geometry", "properties", "@context"]
 

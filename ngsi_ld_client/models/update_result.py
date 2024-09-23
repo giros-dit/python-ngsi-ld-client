@@ -76,9 +76,9 @@ class UpdateResult(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in not_updated (list)
         _items = []
         if self.not_updated:
-            for _item in self.not_updated:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_not_updated in self.not_updated:
+                if _item_not_updated:
+                    _items.append(_item_not_updated.to_dict())
             _dict['notUpdated'] = _items
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:

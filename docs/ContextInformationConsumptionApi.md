@@ -90,7 +90,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the query result as a list of Entities.  |  * NGSILD-Tenant -  <br>  |
+**200** | A response body containing the query result as a list of Entities.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -190,7 +190,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo+json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo+json
 
 ### HTTP response details
 
@@ -266,13 +266,13 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json, application/json+ld
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the JSON-LD representation of the detailed information about the available attribute.  |  * NGSILD-Tenant -  <br>  |
+**200** | A response body containing the JSON-LD representation of the detailed information about the available attribute.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
@@ -348,7 +348,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the JSON-LD representation of the AttributeList (clause 5.2.27) is to be returned, unless details&#x3D;true is specified.  If details&#x3D;true is specified, a response body containing a JSON-LD array with elements of the Attribute data structure (clause 5.2.28) is to be returned.  |  * NGSILD-Tenant -  <br>  |
+**200** | A response body containing the JSON-LD representation of the AttributeList (clause 5.2.27) is to be returned, unless details&#x3D;true is specified.  If details&#x3D;true is specified, a response body containing a JSON-LD array with elements of the Attribute data structure (clause 5.2.28) is to be returned.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -428,7 +428,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo+json, application/geo
+ - **Accept**: application/json, application/json+ld, application/geo+json
 
 ### HTTP response details
 
@@ -505,13 +505,13 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json, application/json+ld
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the JSON-LD representation of the detailed information about the available entity type.  |  * NGSILD-Tenant -  <br>  |
+**200** | A response body containing the JSON-LD representation of the detailed information about the available entity type.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
@@ -587,7 +587,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the JSON-LD representation of the EntityTypeList (clause 5.2.24) is to be returned, unless details&#x3D;true is specified.  If details&#x3D;true is specified, a response body containing a JSON-LD array with elements of the EntityType data structure (clause 5.2.25) is to be returned.  |  * NGSILD-Tenant -  <br>  |
+**200** | A response body containing the JSON-LD representation of the EntityTypeList (clause 5.2.24) is to be returned, unless details&#x3D;true is specified.  If details&#x3D;true is specified, a response body containing a JSON-LD array with elements of the EntityType data structure (clause 5.2.25) is to be returned.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

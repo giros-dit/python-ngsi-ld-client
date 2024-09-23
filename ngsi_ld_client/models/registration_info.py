@@ -78,9 +78,9 @@ class RegistrationInfo(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
         _items = []
         if self.entities:
-            for _item in self.entities:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_entities in self.entities:
+                if _item_entities:
+                    _items.append(_item_entities.to_dict())
             _dict['entities'] = _items
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:

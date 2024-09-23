@@ -89,7 +89,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -240,7 +240,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -250,7 +250,7 @@ No authorization required
 **207** | If the entity input data matches to a registration, the relevant parts of the request are forwarded as a distributed operation. In the case when an error response is received back from any distributed operation, a response body containing the result returned from each registration is returned in a BatchOperationResult structure. Errors can occur whenever a distributed operation is unsupported, fails or times out, see clause 6.3.17.  |  * NGSILD-Tenant -  <br>  * Location -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **409** | It is used to indicate that the entity or an exclusive or redirect registration defining the entity already exists, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
-**422** | It is used to indicate that the operation is not available, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
+**422** | It is used to indicate that the operation is not available, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -323,7 +323,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -472,7 +472,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -632,7 +632,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -713,7 +713,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -792,7 +792,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -873,7 +873,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -1029,7 +1029,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 

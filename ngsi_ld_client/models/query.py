@@ -33,7 +33,7 @@ class Query(BaseModel):
     entities: Optional[Annotated[List[EntitySelector], Field(min_length=1)]] = Field(default=None, description="Entity ids, id pattern and Entity types that shall be matched by Entities in order to be retrieved. ")
     attrs: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, description="List of Attributes that shall be matched by Entities in order to be retrieved. If not present all Attributes will be retrieved. ")
     q: Optional[StrictStr] = Field(default=None, description="Query that shall be matched by Entities in order to be retrieved. ")
-    geo_q: Optional[GeoQuery] = Field(default=None, description="Geoquery that shall be matched by Entities in order be retrieved. ", alias="geoQ")
+    geo_q: Optional[GeoQuery] = Field(default=None, alias="geoQ")
     csf: Optional[StrictStr] = Field(default=None, description="Context source filter that shall be matched by Context Source Registrations describing Context Sources to be used for retrieving Entities. ")
     scope_q: Optional[StrictStr] = Field(default=None, description="Scope query.", alias="scopeQ")
     lang: Optional[StrictStr] = Field(default=None, description="Language filter to be applied to the query (clause 4.15).")
@@ -91,9 +91,9 @@ class Query(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in entities (list)
         _items = []
         if self.entities:
-            for _item in self.entities:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_entities in self.entities:
+                if _item_entities:
+                    _items.append(_item_entities.to_dict())
             _dict['entities'] = _items
         # override the default output from pydantic by calling `to_dict()` of geo_q
         if self.geo_q:

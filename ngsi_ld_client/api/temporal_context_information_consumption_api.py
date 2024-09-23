@@ -85,7 +85,7 @@ class TemporalContextInformationConsumptionApi:
     ) -> List[QueryTemporal200ResponseInner]:
         """Query temporal evolution of Entities 
 
-        5.7.4 Query Temporal Evolution of Entities.  This operation allows querying the temporal evolution of Entities present in an NGSI-LD system. It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query. 
+        5.7.4 Query Temporal Evolution of Entities.  This operation allows querying the temporal evolution of Entities present in an NGSI-LD system. It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query.  *The query parameters timerel and timeAt are required. 
 
         :param id: List of entity ids to be retrieved.
         :type id: List[str]
@@ -249,7 +249,7 @@ class TemporalContextInformationConsumptionApi:
     ) -> ApiResponse[List[QueryTemporal200ResponseInner]]:
         """Query temporal evolution of Entities 
 
-        5.7.4 Query Temporal Evolution of Entities.  This operation allows querying the temporal evolution of Entities present in an NGSI-LD system. It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query. 
+        5.7.4 Query Temporal Evolution of Entities.  This operation allows querying the temporal evolution of Entities present in an NGSI-LD system. It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query.  *The query parameters timerel and timeAt are required. 
 
         :param id: List of entity ids to be retrieved.
         :type id: List[str]
@@ -413,7 +413,7 @@ class TemporalContextInformationConsumptionApi:
     ) -> RESTResponseType:
         """Query temporal evolution of Entities 
 
-        5.7.4 Query Temporal Evolution of Entities.  This operation allows querying the temporal evolution of Entities present in an NGSI-LD system. It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query. 
+        5.7.4 Query Temporal Evolution of Entities.  This operation allows querying the temporal evolution of Entities present in an NGSI-LD system. It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query.  *The query parameters timerel and timeAt are required. 
 
         :param id: List of entity ids to be retrieved.
         :type id: List[str]
@@ -575,7 +575,9 @@ class TemporalContextInformationConsumptionApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -700,12 +702,13 @@ class TemporalContextInformationConsumptionApi:
 
 
         # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json', 
-                'application/json+ld'
-            ]
-        )
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json', 
+                    'application/json+ld'
+                ]
+            )
 
 
         # authentication setting
@@ -1122,7 +1125,9 @@ class TemporalContextInformationConsumptionApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1201,13 +1206,13 @@ class TemporalContextInformationConsumptionApi:
 
 
         # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json', 
-                'application/json+ld', 
-                'application/geo'
-            ]
-        )
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json', 
+                    'application/json+ld'
+                ]
+            )
 
 
         # authentication setting
@@ -1489,7 +1494,9 @@ class TemporalContextInformationConsumptionApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1510,12 +1517,13 @@ class TemporalContextInformationConsumptionApi:
 
 
         # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json', 
-                'application/json+ld'
-            ]
-        )
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json', 
+                    'application/json+ld'
+                ]
+            )
 
         # set the HTTP header `Content-Type`
         if _content_type:

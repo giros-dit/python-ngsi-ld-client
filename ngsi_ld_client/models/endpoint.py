@@ -91,16 +91,16 @@ class Endpoint(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in receiver_info (list)
         _items = []
         if self.receiver_info:
-            for _item in self.receiver_info:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_receiver_info in self.receiver_info:
+                if _item_receiver_info:
+                    _items.append(_item_receiver_info.to_dict())
             _dict['receiverInfo'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in notifier_info (list)
         _items = []
         if self.notifier_info:
-            for _item in self.notifier_info:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_notifier_info in self.notifier_info:
+                if _item_notifier_info:
+                    _items.append(_item_notifier_info.to_dict())
             _dict['notifierInfo'] = _items
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:

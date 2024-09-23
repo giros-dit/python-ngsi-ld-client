@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **entity_id** | **str** | Entity Id corresponding to the Entity in error.  | 
 **registration_id** | **str** | Registration Id corresponding to a failed distributed operation (optional).  | [optional] 
-**error** | [**ProblemDetails**](ProblemDetails.md) | One instance per Entity in error.  | 
+**error** | [**ProblemDetails**](ProblemDetails.md) |  | 
 
 ## Example
 

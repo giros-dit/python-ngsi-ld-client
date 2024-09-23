@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | GeoJSON Type.  | 
 **features** | [**List[Feature]**](Feature.md) | In the case that no matches are found, \&quot;features\&quot; will be an empty array.  | [optional] 
-**context** | [**LdContext**](LdContext.md) | JSON-LD @context. This field is only present if requested in the payload by the HTTP Prefer Header (IETF RFC 7240).  | [optional] 
+**context** | [**LdContext**](LdContext.md) |  | [optional] 
 
 ## Example
 

@@ -26,7 +26,6 @@ from ngsi_ld_client.models.geometry import Geometry
 from ngsi_ld_client.models.key_value_pair import KeyValuePair
 from ngsi_ld_client.models.registration_info import RegistrationInfo
 from ngsi_ld_client.models.registration_management_info import RegistrationManagementInfo
-from ngsi_ld_client.models.system_generated_attributes import SystemGeneratedAttributes
 from ngsi_ld_client.models.time_interval import TimeInterval
 from typing import Optional, Set
 from typing_extensions import Self
@@ -41,11 +40,11 @@ class CreateCSRRequest(BaseModel):
     description: Optional[Annotated[str, Field(min_length=1, strict=True)]] = Field(default=None, description="A description of this Context Source Registration. ")
     information: Annotated[List[RegistrationInfo], Field(min_length=1)] = Field(description="Describes the Entities, Properties and Relationships for which the Context Source may be able to provide information. ")
     tenant: Optional[StrictStr] = Field(default=None, description="Identifies the tenant that has to be specified in all requests to the Context Source that are related to the information registered in this Context Source Registration. If not present, the default tenant is assumed. Should only be present in systems supporting multi-tenancy. ")
-    observation_interval: Optional[TimeInterval] = Field(default=None, description="If present, the Context Source can be queried for Temporal Entity Representations. (If latest Entity information is also provided, a separate Context Registration is needed for this purpose). The observationInterval specifies the time interval for which the Context Source can provide Entity information as specified by the observedAt Temporal Property. A temporal query based on the observedAt Temporal Property, which is the default, is matched against the observationInterval for overlap. ", alias="observationInterval")
-    management_interval: Optional[TimeInterval] = Field(default=None, description="If present, the Context Source can be queried for Temporal Entity Representations. (If latest Entity information is also provided, a separate Context Registration is needed for this purpose). The managementInterval specifies the time interval for which the Context Source can provide Entity information as specified by the createdAt, modifiedAt and deletedAt Temporal Properties. A temporal query based on the createdAt, modifiedAt or deletedAt Temporal Property is matched against the managementInterval for overlap. ", alias="managementInterval")
-    location: Optional[Geometry] = Field(default=None, description="Location for which the Context Source may be able to provide information. ")
-    observation_space: Optional[Geometry] = Field(default=None, description="Geographic location that includes the observation spaces of all entities as specified by their  respective observationSpace GeoProperty for which the Context Source may be able to provide  information. ", alias="observationSpace")
-    operation_space: Optional[Geometry] = Field(default=None, description="Geographic location that includes the operation spaces of all entities as specified by their  respective operationSpace GeoProperty for which the Context Source may be able to provide  information. ", alias="operationSpace")
+    observation_interval: Optional[TimeInterval] = Field(default=None, alias="observationInterval")
+    management_interval: Optional[TimeInterval] = Field(default=None, alias="managementInterval")
+    location: Optional[Geometry] = None
+    observation_space: Optional[Geometry] = Field(default=None, alias="observationSpace")
+    operation_space: Optional[Geometry] = Field(default=None, alias="operationSpace")
     expires_at: Optional[datetime] = Field(default=None, description="Provides an expiration date. When passed the Context Source Registration will become invalid and the Context Source might no longer be available. ", alias="expiresAt")
     endpoint: StrictStr = Field(description="Endpoint expressed as dereferenceable URI through which the Context Source exposes its NGSI-LD interface. ")
     context_source_info: Optional[List[KeyValuePair]] = Field(default=None, description="Generic {key, value} array to convey optional information to provide when contacting the registered Context Source. ", alias="contextSourceInfo")
@@ -53,15 +52,17 @@ class CreateCSRRequest(BaseModel):
     mode: Optional[StrictStr] = Field(default='inclusive', description="The definition of the mode of distributed operation (see clause 4.3.6) supported by the registered Context Source. ")
     operations: Optional[List[StrictStr]] = Field(default=None, description="The definition limited subset of API operations supported by the registered Context Source.  If undefined, the default set of operations is \"federationOps\" (see clause 4.20). ")
     refresh_rate: Optional[StrictStr] = Field(default=None, description="An indication of the likely period of time to elapse between updates at this registered endpoint. Brokers may optionally use this information to help implement caching. ", alias="refreshRate")
-    management: Optional[RegistrationManagementInfo] = Field(default=None, description="Holds additional optional registration management information that can be used to limit unnecessary distributed operation requests. ")
-    system_generated_attrs: Optional[SystemGeneratedAttributes] = Field(default=None, alias="systemGeneratedAttrs")
+    management: Optional[RegistrationManagementInfo] = None
+    created_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  Entity creation timestamp. See clause 4.8. ", alias="createdAt")
+    modified_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  Entity last modification timestamp. See clause 4.8. ", alias="modifiedAt")
+    deleted_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8. It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     status: Optional[StrictStr] = Field(default=None, description="Read-only. Status of the Registration. It shall be \"ok\" if the last attempt to perform a distributed operation succeeded. It shall be \"failed\" if the last attempt to perform a distributed operation failed. ")
     times_sent: Optional[Union[Annotated[float, Field(strict=True, ge=0)], Annotated[int, Field(strict=True, ge=0)]]] = Field(default=None, description="Number of times that the registration triggered a distributed operation, including failed attempts. ", alias="timesSent")
     times_failed: Optional[Union[Annotated[float, Field(strict=True, ge=0)], Annotated[int, Field(strict=True, ge=0)]]] = Field(default=None, description="Number of times that the registration triggered a distributed operation request that failed.", alias="timesFailed")
     last_success: Optional[datetime] = Field(default=None, description="Timestamp corresponding to the instant when the last successfully distributed operation was sent. Created on first successful operation. ", alias="lastSuccess")
     last_failure: Optional[datetime] = Field(default=None, description="Timestamp corresponding to the instant when the last distributed operation resulting in a failure (for instance, in the HTTP binding, an HTTP response code other than 2xx) was returned. ", alias="lastFailure")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["id", "type", "registrationName", "description", "information", "tenant", "observationInterval", "managementInterval", "location", "observationSpace", "operationSpace", "expiresAt", "endpoint", "contextSourceInfo", "scope", "mode", "operations", "refreshRate", "management", "systemGeneratedAttrs", "status", "timesSent", "timesFailed", "lastSuccess", "lastFailure"]
+    __properties: ClassVar[List[str]] = ["id", "type", "registrationName", "description", "information", "tenant", "observationInterval", "managementInterval", "location", "observationSpace", "operationSpace", "expiresAt", "endpoint", "contextSourceInfo", "scope", "mode", "operations", "refreshRate", "management", "createdAt", "modifiedAt", "deletedAt", "status", "timesSent", "timesFailed", "lastSuccess", "lastFailure"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -144,9 +145,9 @@ class CreateCSRRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in information (list)
         _items = []
         if self.information:
-            for _item in self.information:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_information in self.information:
+                if _item_information:
+                    _items.append(_item_information.to_dict())
             _dict['information'] = _items
         # override the default output from pydantic by calling `to_dict()` of observation_interval
         if self.observation_interval:
@@ -166,9 +167,9 @@ class CreateCSRRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in context_source_info (list)
         _items = []
         if self.context_source_info:
-            for _item in self.context_source_info:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_context_source_info in self.context_source_info:
+                if _item_context_source_info:
+                    _items.append(_item_context_source_info.to_dict())
             _dict['contextSourceInfo'] = _items
         # override the default output from pydantic by calling `to_dict()` of scope
         if self.scope:
@@ -176,9 +177,6 @@ class CreateCSRRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of management
         if self.management:
             _dict['management'] = self.management.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of system_generated_attrs
-        if self.system_generated_attrs:
-            _dict['systemGeneratedAttrs'] = self.system_generated_attrs.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -215,7 +213,9 @@ class CreateCSRRequest(BaseModel):
             "operations": obj.get("operations"),
             "refreshRate": obj.get("refreshRate"),
             "management": RegistrationManagementInfo.from_dict(obj["management"]) if obj.get("management") is not None else None,
-            "systemGeneratedAttrs": SystemGeneratedAttributes.from_dict(obj["systemGeneratedAttrs"]) if obj.get("systemGeneratedAttrs") is not None else None,
+            "createdAt": obj.get("createdAt"),
+            "modifiedAt": obj.get("modifiedAt"),
+            "deletedAt": obj.get("deletedAt"),
             "status": obj.get("status"),
             "timesSent": obj.get("timesSent"),
             "timesFailed": obj.get("timesFailed"),

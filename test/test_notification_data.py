@@ -27,7 +27,7 @@ class TestNotificationData(unittest.TestCase):
 
     def make_instance(self, include_optional) -> NotificationData:
         """Test NotificationData
-            include_option is a boolean, when False only required
+            include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
         # uncomment below to create an instance of `NotificationData`
@@ -41,7 +41,9 @@ class TestNotificationData(unittest.TestCase):
                         id = '', 
                         type = 'Feature', 
                         geometry = null, 
-                        properties = null, 
+                        properties = {
+                            'key' : null
+                            }, 
                         @context = null, )
                     ],
                 context = None

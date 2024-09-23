@@ -71,7 +71,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -80,7 +80,7 @@ No authorization required
 **201** | The HTTP response shall include a \&quot;Location\&quot; HTTP header that contains the resource URI of the created context source registration resource.  |  * NGSILD-Tenant -  <br>  * Location -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **409** | It is used to indicate that the entity or an exclusive or redirect registration defining the entity already exists, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
-**422** | It is used to indicate that the operation is not available, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  |
+**422** | It is used to indicate that the operation is not available, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -145,7 +145,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 
@@ -221,7 +221,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json, application/json+ld
- - **Accept**: application/json, application/json+ld, application/geo
+ - **Accept**: application/json
 
 ### HTTP response details
 

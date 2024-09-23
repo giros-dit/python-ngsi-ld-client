@@ -42,7 +42,6 @@ docs/FeatureProperties.md
 docs/FeaturePropertiesType.md
 docs/FeaturePropertiesValue.md
 docs/GeoProperty.md
-docs/GeoPropertyPreviousValue.md
 docs/GeoPropertyValue.md
 docs/GeoQuery.md
 docs/GeoQueryCoordinates.md
@@ -109,7 +108,6 @@ docs/Subscription.md
 docs/SubscriptionCommon.md
 docs/SubscriptionOnChange.md
 docs/SubscriptionPeriodic.md
-docs/SystemGeneratedAttributes.md
 docs/TemporalContextInformationConsumptionApi.md
 docs/TemporalContextInformationProvisionApi.md
 docs/TemporalQuery.md
@@ -170,7 +168,6 @@ ngsi_ld_client/models/feature_properties.py
 ngsi_ld_client/models/feature_properties_type.py
 ngsi_ld_client/models/feature_properties_value.py
 ngsi_ld_client/models/geo_property.py
-ngsi_ld_client/models/geo_property_previous_value.py
 ngsi_ld_client/models/geo_property_value.py
 ngsi_ld_client/models/geo_query.py
 ngsi_ld_client/models/geo_query_coordinates.py
@@ -236,7 +233,6 @@ ngsi_ld_client/models/subscription.py
 ngsi_ld_client/models/subscription_common.py
 ngsi_ld_client/models/subscription_on_change.py
 ngsi_ld_client/models/subscription_periodic.py
-ngsi_ld_client/models/system_generated_attributes.py
 ngsi_ld_client/models/temporal_query.py
 ngsi_ld_client/models/temporal_query_batch_request.py
 ngsi_ld_client/models/time_interval.py
@@ -292,7 +288,6 @@ test/test_feature_properties.py
 test/test_feature_properties_type.py
 test/test_feature_properties_value.py
 test/test_geo_property.py
-test/test_geo_property_previous_value.py
 test/test_geo_property_value.py
 test/test_geo_query.py
 test/test_geo_query_coordinates.py
@@ -359,7 +354,6 @@ test/test_subscription.py
 test/test_subscription_common.py
 test/test_subscription_on_change.py
 test/test_subscription_periodic.py
-test/test_system_generated_attributes.py
 test/test_temporal_context_information_consumption_api.py
 test/test_temporal_context_information_provision_api.py
 test/test_temporal_query.py

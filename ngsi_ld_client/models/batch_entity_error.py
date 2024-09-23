@@ -29,7 +29,7 @@ class BatchEntityError(BaseModel):
     """ # noqa: E501
     entity_id: StrictStr = Field(description="Entity Id corresponding to the Entity in error. ", alias="entityId")
     registration_id: Optional[StrictStr] = Field(default=None, description="Registration Id corresponding to a failed distributed operation (optional). ", alias="registrationId")
-    error: ProblemDetails = Field(description="One instance per Entity in error. ")
+    error: ProblemDetails
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["entityId", "registrationId", "error"]
 

@@ -27,7 +27,7 @@ class TestVocabularyProperty(unittest.TestCase):
 
     def make_instance(self, include_optional) -> VocabularyProperty:
         """Test VocabularyProperty
-            include_option is a boolean, when False only required
+            include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
         # uncomment below to create an instance of `VocabularyProperty`
@@ -40,10 +40,9 @@ class TestVocabularyProperty(unittest.TestCase):
                 previous_vocab = None,
                 observed_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 dataset_id = '',
-                system_generated_attrs = ngsi_ld_client.models.system_generated_attributes.SystemGeneratedAttributes(
-                    created_at = null, 
-                    modified_at = null, 
-                    deleted_at = null, ),
+                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
+                modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
+                deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 instance_id = ''
             )
         else:

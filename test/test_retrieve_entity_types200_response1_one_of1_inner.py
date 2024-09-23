@@ -27,7 +27,7 @@ class TestRetrieveEntityTypes200Response1OneOf1Inner(unittest.TestCase):
 
     def make_instance(self, include_optional) -> RetrieveEntityTypes200Response1OneOf1Inner:
         """Test RetrieveEntityTypes200Response1OneOf1Inner
-            include_option is a boolean, when False only required
+            include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
         # uncomment below to create an instance of `RetrieveEntityTypes200Response1OneOf1Inner`

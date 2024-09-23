@@ -88,9 +88,9 @@ class RetrieveEntityTypeInfo200Response(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of each item in attribute_details (list)
         _items = []
         if self.attribute_details:
-            for _item in self.attribute_details:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_attribute_details in self.attribute_details:
+                if _item_attribute_details:
+                    _items.append(_item_attribute_details.to_dict())
             _dict['attributeDetails'] = _items
         # override the default output from pydantic by calling `to_dict()` of context
         if self.context:
