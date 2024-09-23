@@ -9,7 +9,8 @@ Name | Type | Description | Notes
 **type** | **str** | JSON-LD @type.  | 
 **subscription_name** | **str** | A (short) name given to this Subscription.  | [optional] 
 **description** | **str** | Subscription description.  | [optional] 
-**entities** | [**List[EntitySelector]**](EntitySelector.md) | Entities subscribed.  | [optional] 
+**entities** | [**List[EntitySelector]**](EntitySelector.md) | Entities subscribed.  Mandatory if timeInterval is present, unless the execution of the request  is limited to local scope (see clause 5.5.13).  | [optional] 
+**local_only** | **bool** | If localOnly&#x3D;true then the subscription only pertains to the Entities  stored locally (see clause 5.5.13).  | [optional] 
 **notification_trigger** | **List[str]** | The notification triggers listed indicate what kind of changes shall trigger a notification. If not present, the default is the combination attributeCreated and attributeUpdated. entityUpdated is equivalent to the combination attributeCreated, attributeUpdated and attributeDeleted.  | [optional] 
 **q** | **str** | Query that shall be met by subscribed entities in order to trigger the notification.  | [optional] 
 **geo_q** | [**GeoQuery**](GeoQuery.md) |  | [optional] 
@@ -24,6 +25,8 @@ Name | Type | Description | Notes
 **modified_at** | **datetime** | It is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  Entity last modification timestamp. See clause 4.8.  | [optional] 
 **deleted_at** | **datetime** | It is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8. It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32).  | [optional] 
 **status** | **str** | Read-only. Provided by the system when querying the details of a subscription.  | [optional] [readonly] 
+**jsonld_context** | **str** | The dereferenceable URI of the JSON-LD @context to be used when sending  a notification resulting from the subscription. If not provided, the @context used for the subscription shall be used as a default.  | [optional] 
+**dataset_id** | **List[str]** | Specifies the datasetIds of the Attribute instances to be selected for each  matched Attribute as per clause 4.5.5. Valid URIs, \&quot;@none\&quot; for including the  default Attribute instances.  | [optional] 
 **watched_attributes** | **List[str]** | Watched Attributes (Properties or Relationships). If not defined it means any Attribute.  | [optional] 
 **throttling** | **float** | Minimal period of time in seconds which shall elapse between two consecutive notifications.  | [optional] 
 **time_interval** | **float** | Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached.  | [optional] 

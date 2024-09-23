@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity identifier.  | [optional] 
 **id_pattern** | **str** | A regular expression which denotes a pattern that shall be matched by the provided or subscribed Entities.  | [optional] 
-**type** | **str** | Selector of Entity Type(s).  | 
+**type** | **str** | Selector of Entity Type(s). If type is specified as \&quot;*\&quot;, implying local scope, local scope shall not be explicitly set to be false  (clause 5.5.13) for the execution of the corresponding operation.  | 
 
 ## Example
 

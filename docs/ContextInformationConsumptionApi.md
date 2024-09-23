@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 
 # **query_batch**
-> List[QueryEntity200ResponseInner] query_batch(count=count, limit=limit, local=local, options=options, link=link, ngsild_tenant=ngsild_tenant, query=query)
+> List[QueryEntity200ResponseInner] query_batch(count=count, limit=limit, local=local, options=options, link=link, ngsild_tenant=ngsild_tenant, via=via, query=query)
 
 Query entities based on POST 
 
@@ -43,15 +43,16 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
     count = True # bool | 6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned.  (optional)
     limit = 56 # int | 6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter.  (optional)
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
+    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  (optional)
     options = [ngsi_ld_client.OptionsRepresentation()] # List[OptionsRepresentation] |  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    via = 'via_example' # str | 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \"hostAlias\"  (see clause 5.2.40) as the pseudonym.  (optional)
     query = ngsi_ld_client.Query() # Query | Payload body in the request contains a JSON-LD object which represents the query to be performed. (optional)
 
     try:
         # Query entities based on POST 
-        api_response = api_instance.query_batch(count=count, limit=limit, local=local, options=options, link=link, ngsild_tenant=ngsild_tenant, query=query)
+        api_response = api_instance.query_batch(count=count, limit=limit, local=local, options=options, link=link, ngsild_tenant=ngsild_tenant, via=via, query=query)
         print("The response of ContextInformationConsumptionApi->query_batch:\n")
         pprint(api_response)
     except Exception as e:
@@ -67,10 +68,11 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **count** | **bool**| 6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \&quot;limit\&quot; URI parameter), the total number of matching results (e.g. number of Entities) is returned.  | [optional] 
  **limit** | **int**| 6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter.  | [optional] 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
+ **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  | [optional] 
  **options** | [**List[OptionsRepresentation]**](OptionsRepresentation.md)|  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **via** | **str**| 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \&quot;hostAlias\&quot;  (see clause 5.2.40) as the pseudonym.  | [optional] 
  **query** | [**Query**](Query.md)| Payload body in the request contains a JSON-LD object which represents the query to be performed. | [optional] 
 
 ### Return type
@@ -96,7 +98,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **query_entity**
-> List[QueryEntity200ResponseInner] query_entity(id=id, type=type, id_pattern=id_pattern, attrs=attrs, q=q, csf=csf, geometry=geometry, georel=georel, coordinates=coordinates, geoproperty=geoproperty, geometry_property=geometry_property, lang=lang, scope_q=scope_q, limit=limit, count=count, options=options, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> List[QueryEntity200ResponseInner] query_entity(id=id, type=type, id_pattern=id_pattern, attrs=attrs, pick=pick, omit=omit, q=q, csf=csf, geometry=geometry, georel=georel, coordinates=coordinates, geoproperty=geoproperty, geometry_property=geometry_property, lang=lang, scope_q=scope_q, contained_by=contained_by, join=join, join_level=join_level, dataset_id=dataset_id, details=details, limit=limit, count=count, options=options, format=format, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
 
 Query entities 
 
@@ -107,6 +109,7 @@ Query entities
 
 ```python
 import ngsi_ld_client
+from ngsi_ld_client.models.format_representation import FormatRepresentation
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
 from ngsi_ld_client.rest import ApiException
@@ -124,9 +127,11 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
     id = ['id_example'] # List[str] | List of entity ids to be retrieved. (optional)
-    type = 'type_example' # str | Selection of Entity Types as per clause 4.17.  (optional)
+    type = 'type_example' # str | Selection of Entity Types as per clause 4.17. \"*\" is also allowed as a value and local is  implicitly set to true and shall not be explicitly set to false.  (optional)
     id_pattern = 'id_pattern_example' # str | Regular expression that shall be matched by entity ids. (optional)
-    attrs = ['attrs_example'] # List[str] | List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved.  (optional)
+    attrs = ['attrs_example'] # List[str] | List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved.  A synonym for a combination of the pick and q parameters. DEPRECATED. Each String is an Attribute (Property or Relationship) name.  (optional)
+    pick = ['pick_example'] # List[str] | Each String is an Entity member (\"id\", \"type\", \"scope\" or a projected Attribute name). When defined, every Entity within the payload body is reduced down to only contain  the listed Entity members.  (optional)
+    omit = ['omit_example'] # List[str] | Each String is an Entity member (\"id\", \"type\", \"scope\" or a projected Attribute name).  When defined, the listed Entity members are removed from each Entity within the payload.  (optional)
     q = 'q_example' # str | Query as per clause 4.9.  (optional)
     csf = 'csf_example' # str | Context Source filter as per clause 4.9. (optional)
     geometry = 'geometry_example' # str | Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  (optional)
@@ -136,16 +141,23 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     geometry_property = 'geometry_property_example' # str | 4.5.16.1 Top-level \"geometry\" field selection algorithm.  A parameter of the request (named \"geometryProperty\") may be used to indicate the name of the GeoProperty to be selected.  If this parameter is not present, then the default name of \"location\" shall be used.  In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field.  (optional)
     lang = 'lang_example' # str | It is used to reduce languageMaps to a string or string array property in a single preferred language.  (optional)
     scope_q = 'scope_q_example' # str | Scope query (see clause 4.19).  (optional)
+    contained_by = ['contained_by_example'] # List[str] | List of entity ids which have previously been encountered whilst retrieving the  Entity Graph. Only applicable if joinLevel is present.  (optional)
+    join = 'join_example' # str | The type of Linked Entity retrieval to apply (see clause 4.5.23). Allowed values: \"flat\", \"inline\", \"@none\".  (optional)
+    join_level = 56 # int | Depth of Linked Entity retrieval to apply. Only applicable if join parameter is present.  (optional)
+    dataset_id = ngsi_ld_client.QueryEntityDatasetIdParameter() # QueryEntityDatasetIdParameter | Specifies the datasetIds of the Attribute instances to be selected for each matched Attribute as per clause 4.5.5,  or the datasetId of the dataset to be deleted.  (optional)
+    details = True # bool | If true, the location of the EntityMap used in the operation is returned in the response. (optional)
     limit = 56 # int | 6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter.  (optional)
     count = True # bool | 6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned.  (optional)
     options = [ngsi_ld_client.QueryEntityOptionsParameterInner()] # List[QueryEntityOptionsParameterInner] |  (optional)
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
+    format = ngsi_ld_client.FormatRepresentation() # FormatRepresentation |  (optional)
+    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    via = 'via_example' # str | 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \"hostAlias\"  (see clause 5.2.40) as the pseudonym.  (optional)
 
     try:
         # Query entities 
-        api_response = api_instance.query_entity(id=id, type=type, id_pattern=id_pattern, attrs=attrs, q=q, csf=csf, geometry=geometry, georel=georel, coordinates=coordinates, geoproperty=geoproperty, geometry_property=geometry_property, lang=lang, scope_q=scope_q, limit=limit, count=count, options=options, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.query_entity(id=id, type=type, id_pattern=id_pattern, attrs=attrs, pick=pick, omit=omit, q=q, csf=csf, geometry=geometry, georel=georel, coordinates=coordinates, geoproperty=geoproperty, geometry_property=geometry_property, lang=lang, scope_q=scope_q, contained_by=contained_by, join=join, join_level=join_level, dataset_id=dataset_id, details=details, limit=limit, count=count, options=options, format=format, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
         print("The response of ContextInformationConsumptionApi->query_entity:\n")
         pprint(api_response)
     except Exception as e:
@@ -160,9 +172,11 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | [**List[str]**](str.md)| List of entity ids to be retrieved. | [optional] 
- **type** | **str**| Selection of Entity Types as per clause 4.17.  | [optional] 
+ **type** | **str**| Selection of Entity Types as per clause 4.17. \&quot;*\&quot; is also allowed as a value and local is  implicitly set to true and shall not be explicitly set to false.  | [optional] 
  **id_pattern** | **str**| Regular expression that shall be matched by entity ids. | [optional] 
- **attrs** | [**List[str]**](str.md)| List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved.  | [optional] 
+ **attrs** | [**List[str]**](str.md)| List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved.  A synonym for a combination of the pick and q parameters. DEPRECATED. Each String is an Attribute (Property or Relationship) name.  | [optional] 
+ **pick** | [**List[str]**](str.md)| Each String is an Entity member (\&quot;id\&quot;, \&quot;type\&quot;, \&quot;scope\&quot; or a projected Attribute name). When defined, every Entity within the payload body is reduced down to only contain  the listed Entity members.  | [optional] 
+ **omit** | [**List[str]**](str.md)| Each String is an Entity member (\&quot;id\&quot;, \&quot;type\&quot;, \&quot;scope\&quot; or a projected Attribute name).  When defined, the listed Entity members are removed from each Entity within the payload.  | [optional] 
  **q** | **str**| Query as per clause 4.9.  | [optional] 
  **csf** | **str**| Context Source filter as per clause 4.9. | [optional] 
  **geometry** | **str**| Geometry as per clause 4.10. It is part of geoquery. It shall be one if geometry or georel are present.  | [optional] 
@@ -172,12 +186,19 @@ Name | Type | Description  | Notes
  **geometry_property** | **str**| 4.5.16.1 Top-level \&quot;geometry\&quot; field selection algorithm.  A parameter of the request (named \&quot;geometryProperty\&quot;) may be used to indicate the name of the GeoProperty to be selected.  If this parameter is not present, then the default name of \&quot;location\&quot; shall be used.  In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field.  | [optional] 
  **lang** | **str**| It is used to reduce languageMaps to a string or string array property in a single preferred language.  | [optional] 
  **scope_q** | **str**| Scope query (see clause 4.19).  | [optional] 
+ **contained_by** | [**List[str]**](str.md)| List of entity ids which have previously been encountered whilst retrieving the  Entity Graph. Only applicable if joinLevel is present.  | [optional] 
+ **join** | **str**| The type of Linked Entity retrieval to apply (see clause 4.5.23). Allowed values: \&quot;flat\&quot;, \&quot;inline\&quot;, \&quot;@none\&quot;.  | [optional] 
+ **join_level** | **int**| Depth of Linked Entity retrieval to apply. Only applicable if join parameter is present.  | [optional] 
+ **dataset_id** | [**QueryEntityDatasetIdParameter**](.md)| Specifies the datasetIds of the Attribute instances to be selected for each matched Attribute as per clause 4.5.5,  or the datasetId of the dataset to be deleted.  | [optional] 
+ **details** | **bool**| If true, the location of the EntityMap used in the operation is returned in the response. | [optional] 
  **limit** | **int**| 6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter.  | [optional] 
  **count** | **bool**| 6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \&quot;limit\&quot; URI parameter), the total number of matching results (e.g. number of Entities) is returned.  | [optional] 
  **options** | [**List[QueryEntityOptionsParameterInner]**](QueryEntityOptionsParameterInner.md)|  | [optional] 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
+ **format** | [**FormatRepresentation**](.md)|  | [optional] 
+ **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **via** | **str**| 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \&quot;hostAlias\&quot;  (see clause 5.2.40) as the pseudonym.  | [optional] 
 
 ### Return type
 
@@ -196,13 +217,14 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the query result as a list of entities, unless the Accept Header indicates that the Entities are to be rendered as GeoJSON.  If the Accept Header indicates that the Entities are to be rendered as GeoJSON, a response body containing the query result as GeoJSON FeatureCollection is returned.  |  * NGSILD-Results-Count -  <br>  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
+**200** | A response body containing the query result as a list of entities, unless the Accept Header indicates that the Entities are to be rendered as GeoJSON.  If the Accept Header indicates that the Entities are to be rendered as GeoJSON, a response body containing the query result as GeoJSON FeatureCollection is returned.  If an EntityMap has been requested, the HTTP response shall include an \&quot;NGSILDEntityMap\&quot; HTTP  header that contains the resource URI of the EntityMap resource used in the operation.  |  * NGSILD-Results-Count -  <br>  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
+**501** | It is used by Registered Context Sources to indicate that the data format  of the request is unsupported see clause 6.3.7.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_attr_type_info**
-> Attribute retrieve_attr_type_info(attr_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> Attribute retrieve_attr_type_info(attr_id, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
 
 Details about available attribute 
 
@@ -229,13 +251,14 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
     attr_id = 'attr_id_example' # str | Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. 
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
+    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    via = 'via_example' # str | 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \"hostAlias\"  (see clause 5.2.40) as the pseudonym.  (optional)
 
     try:
         # Details about available attribute 
-        api_response = api_instance.retrieve_attr_type_info(attr_id, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.retrieve_attr_type_info(attr_id, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
         print("The response of ContextInformationConsumptionApi->retrieve_attr_type_info:\n")
         pprint(api_response)
     except Exception as e:
@@ -250,9 +273,10 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **attr_id** | **str**| Name of the attribute for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  | 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
+ **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **via** | **str**| 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \&quot;hostAlias\&quot;  (see clause 5.2.40) as the pseudonym.  | [optional] 
 
 ### Return type
 
@@ -278,7 +302,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_attr_types**
-> RetrieveAttrTypes200Response retrieve_attr_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> RetrieveAttrTypes200Response retrieve_attr_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
 
 Available attributes 
 
@@ -305,13 +329,14 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
     details = True # bool | If true, then detailed attribute information represented as an array with elements of the Attribute data structure (clause 5.2.28) is to be returned.  (optional)
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
+    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    via = 'via_example' # str | 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \"hostAlias\"  (see clause 5.2.40) as the pseudonym.  (optional)
 
     try:
         # Available attributes 
-        api_response = api_instance.retrieve_attr_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.retrieve_attr_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
         print("The response of ContextInformationConsumptionApi->retrieve_attr_types:\n")
         pprint(api_response)
     except Exception as e:
@@ -326,9 +351,10 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **details** | **bool**| If true, then detailed attribute information represented as an array with elements of the Attribute data structure (clause 5.2.28) is to be returned.  | [optional] 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
+ **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **via** | **str**| 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \&quot;hostAlias\&quot;  (see clause 5.2.40) as the pseudonym.  | [optional] 
 
 ### Return type
 
@@ -353,7 +379,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_entity**
-> QueryEntity200ResponseInner retrieve_entity(entity_id, attrs=attrs, geometry_property=geometry_property, lang=lang, options=options, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> QueryEntity200ResponseInner retrieve_entity(entity_id, type=type, attrs=attrs, pick=pick, omit=omit, geometry_property=geometry_property, lang=lang, contained_by=contained_by, join=join, join_level=join_level, dataset_id=dataset_id, details=details, options=options, format=format, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
 
 Entity retrieval by id 
 
@@ -364,6 +390,7 @@ Entity retrieval by id
 
 ```python
 import ngsi_ld_client
+from ngsi_ld_client.models.format_representation import FormatRepresentation
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
 from ngsi_ld_client.rest import ApiException
@@ -380,18 +407,28 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
-    entity_id = 'entity_id_example' # str | Id (URI) of the entity to be retrieved.
-    attrs = ['attrs_example'] # List[str] | List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved.  (optional)
+    entity_id = 'entity_id_example' # str | Id (URI) of the Entity to be retrieved, updated or deleted.
+    type = 'type_example' # str | Selection of Entity Types as per clause 4.17. \"*\" is also allowed as a value and local is  implicitly set to true and shall not be explicitly set to false.  (optional)
+    attrs = ['attrs_example'] # List[str] | List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved.  A synonym for a combination of the pick and q parameters. DEPRECATED. Each String is an Attribute (Property or Relationship) name.  (optional)
+    pick = ['pick_example'] # List[str] | Each String is an Entity member (\"id\", \"type\", \"scope\" or a projected Attribute name). When defined, every Entity within the payload body is reduced down to only contain  the listed Entity members.  (optional)
+    omit = ['omit_example'] # List[str] | Each String is an Entity member (\"id\", \"type\", \"scope\" or a projected Attribute name).  When defined, the listed Entity members are removed from each Entity within the payload.  (optional)
     geometry_property = 'geometry_property_example' # str | 4.5.16.1 Top-level \"geometry\" field selection algorithm.  A parameter of the request (named \"geometryProperty\") may be used to indicate the name of the GeoProperty to be selected.  If this parameter is not present, then the default name of \"location\" shall be used.  In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field.  (optional)
     lang = 'lang_example' # str | It is used to reduce languageMaps to a string or string array property in a single preferred language.  (optional)
+    contained_by = ['contained_by_example'] # List[str] | List of entity ids which have previously been encountered whilst retrieving the  Entity Graph. Only applicable if joinLevel is present.  (optional)
+    join = 'join_example' # str | The type of Linked Entity retrieval to apply (see clause 4.5.23). Allowed values: \"flat\", \"inline\", \"@none\".  (optional)
+    join_level = 56 # int | Depth of Linked Entity retrieval to apply. Only applicable if join parameter is present.  (optional)
+    dataset_id = ngsi_ld_client.QueryEntityDatasetIdParameter() # QueryEntityDatasetIdParameter | Specifies the datasetIds of the Attribute instances to be selected for each matched Attribute as per clause 4.5.5,  or the datasetId of the dataset to be deleted.  (optional)
+    details = True # bool | If true, the location of the EntityMap used in the operation is returned in the response. (optional)
     options = [ngsi_ld_client.QueryEntityOptionsParameterInner()] # List[QueryEntityOptionsParameterInner] |  (optional)
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
+    format = ngsi_ld_client.FormatRepresentation() # FormatRepresentation |  (optional)
+    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    via = 'via_example' # str | 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \"hostAlias\"  (see clause 5.2.40) as the pseudonym.  (optional)
 
     try:
         # Entity retrieval by id 
-        api_response = api_instance.retrieve_entity(entity_id, attrs=attrs, geometry_property=geometry_property, lang=lang, options=options, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.retrieve_entity(entity_id, type=type, attrs=attrs, pick=pick, omit=omit, geometry_property=geometry_property, lang=lang, contained_by=contained_by, join=join, join_level=join_level, dataset_id=dataset_id, details=details, options=options, format=format, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
         print("The response of ContextInformationConsumptionApi->retrieve_entity:\n")
         pprint(api_response)
     except Exception as e:
@@ -405,14 +442,24 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **entity_id** | **str**| Id (URI) of the entity to be retrieved. | 
- **attrs** | [**List[str]**](str.md)| List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved.  | [optional] 
+ **entity_id** | **str**| Id (URI) of the Entity to be retrieved, updated or deleted. | 
+ **type** | **str**| Selection of Entity Types as per clause 4.17. \&quot;*\&quot; is also allowed as a value and local is  implicitly set to true and shall not be explicitly set to false.  | [optional] 
+ **attrs** | [**List[str]**](str.md)| List of Attributes to be matched by the Entity and included in the response. If the Entity does not have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not specified, no matching is performed and all Attributes related to the Entity shall be retrieved.  A synonym for a combination of the pick and q parameters. DEPRECATED. Each String is an Attribute (Property or Relationship) name.  | [optional] 
+ **pick** | [**List[str]**](str.md)| Each String is an Entity member (\&quot;id\&quot;, \&quot;type\&quot;, \&quot;scope\&quot; or a projected Attribute name). When defined, every Entity within the payload body is reduced down to only contain  the listed Entity members.  | [optional] 
+ **omit** | [**List[str]**](str.md)| Each String is an Entity member (\&quot;id\&quot;, \&quot;type\&quot;, \&quot;scope\&quot; or a projected Attribute name).  When defined, the listed Entity members are removed from each Entity within the payload.  | [optional] 
  **geometry_property** | **str**| 4.5.16.1 Top-level \&quot;geometry\&quot; field selection algorithm.  A parameter of the request (named \&quot;geometryProperty\&quot;) may be used to indicate the name of the GeoProperty to be selected.  If this parameter is not present, then the default name of \&quot;location\&quot; shall be used.  In the case of GeoJSON Entity representation, this parameter indicates which GeoProperty to use for the toplevel geometry field.  | [optional] 
  **lang** | **str**| It is used to reduce languageMaps to a string or string array property in a single preferred language.  | [optional] 
+ **contained_by** | [**List[str]**](str.md)| List of entity ids which have previously been encountered whilst retrieving the  Entity Graph. Only applicable if joinLevel is present.  | [optional] 
+ **join** | **str**| The type of Linked Entity retrieval to apply (see clause 4.5.23). Allowed values: \&quot;flat\&quot;, \&quot;inline\&quot;, \&quot;@none\&quot;.  | [optional] 
+ **join_level** | **int**| Depth of Linked Entity retrieval to apply. Only applicable if join parameter is present.  | [optional] 
+ **dataset_id** | [**QueryEntityDatasetIdParameter**](.md)| Specifies the datasetIds of the Attribute instances to be selected for each matched Attribute as per clause 4.5.5,  or the datasetId of the dataset to be deleted.  | [optional] 
+ **details** | **bool**| If true, the location of the EntityMap used in the operation is returned in the response. | [optional] 
  **options** | [**List[QueryEntityOptionsParameterInner]**](QueryEntityOptionsParameterInner.md)|  | [optional] 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
+ **format** | [**FormatRepresentation**](.md)|  | [optional] 
+ **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **via** | **str**| 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \&quot;hostAlias\&quot;  (see clause 5.2.40) as the pseudonym.  | [optional] 
 
 ### Return type
 
@@ -431,14 +478,15 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | A response body containing the JSON-LD representation of the target entity containing the selected Attributes, unless the Accept Header indicates that the Entity is to be rendered as GeoJSON.  If the Accept Header indicates that the Entity is to be rendered as GeoJSON, a GeoJSON Feature is returned.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
+**200** | A response body containing the JSON-LD representation of the target entity containing the selected Attributes, unless the Accept Header indicates that the Entity is to be rendered as GeoJSON.  If the Accept Header indicates that the Entity is to be rendered as GeoJSON, a GeoJSON Feature is returned.  If an EntityMap has been requested, the HTTP response shall include an \&quot;NGSILDEntityMap\&quot; HTTP header that  contains the resource URI of the EntityMap resource used in the operation.  |  * NGSILD-EntityMap -  <br>  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
+**501** | It is used by Registered Context Sources to indicate that the data format  of the request is unsupported see clause 6.3.7.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_entity_type_info**
-> EntityTypeInfo retrieve_entity_type_info(type, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> EntityTypeInfo retrieve_entity_type_info(type, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
 
 Details about available entity type 
 
@@ -465,13 +513,14 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
     type = 'type_example' # str | Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided. 
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
+    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    via = 'via_example' # str | 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \"hostAlias\"  (see clause 5.2.40) as the pseudonym.  (optional)
 
     try:
         # Details about available entity type 
-        api_response = api_instance.retrieve_entity_type_info(type, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.retrieve_entity_type_info(type, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
         print("The response of ContextInformationConsumptionApi->retrieve_entity_type_info:\n")
         pprint(api_response)
     except Exception as e:
@@ -486,9 +535,10 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **type** | **str**| Name of the entity type for which detailed information is to be retrieved. The Fully Qualified Name (FQN) as well as the short name can be used, given that the latter is part of the JSON-LD @context provided.  | 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
+ **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **via** | **str**| 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \&quot;hostAlias\&quot;  (see clause 5.2.40) as the pseudonym.  | [optional] 
 
 ### Return type
 
@@ -514,7 +564,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **retrieve_entity_types**
-> RetrieveEntityTypes200Response retrieve_entity_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
+> RetrieveEntityTypes200Response retrieve_entity_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
 
 Retrieve available entity types  
 
@@ -541,13 +591,14 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
     details = True # bool | If true, then detailed entity type information represented as an array with elements of the Entity Type data structure (clause 5.2.25) is to be returned.  (optional)
-    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
+    local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  (optional)
     link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
+    via = 'via_example' # str | 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \"hostAlias\"  (see clause 5.2.40) as the pseudonym.  (optional)
 
     try:
         # Retrieve available entity types  
-        api_response = api_instance.retrieve_entity_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant)
+        api_response = api_instance.retrieve_entity_types(details=details, local=local, link=link, ngsild_tenant=ngsild_tenant, via=via)
         print("The response of ContextInformationConsumptionApi->retrieve_entity_types:\n")
         pprint(api_response)
     except Exception as e:
@@ -562,9 +613,10 @@ with ngsi_ld_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **details** | **bool**| If true, then detailed entity type information represented as an array with elements of the Entity Type data structure (clause 5.2.25) is to be returned.  | [optional] 
- **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  | [optional] 
+ **local** | **bool**| 6.3.18 Limiting Distributed Operations. If local&#x3D;true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  The parameter described in this clause limits the execution of an operation to a local Context Source  or Context Broker (clause 5.5.13).  | [optional] 
  **link** | **str**| 6.3.5 JSON-LD @context resolution  In summary, from a developer&#39;s perspective, for POST, PATCH and PUT operations, if MIME type is \&quot;application/ld+json\&quot;, then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \&quot;application/json\&quot;, then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  | [optional] 
  **ngsild_tenant** | **str**| 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  | [optional] 
+ **via** | **str**| 6.3.18 Limiting Distributed Operations  If present, the listing of previously encountered Context Sources supplied is used when determining  matching registrations. HTTP Via Header (IETF RFC 7230).  Any Context Broker implementation passing a distributed operation request onward to another Context Source  shall send an additional field value on the Via header field using its own unique Context Source \&quot;hostAlias\&quot;  (see clause 5.2.40) as the pseudonym.  | [optional] 
 
 ### Return type
 

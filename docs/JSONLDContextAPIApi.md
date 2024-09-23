@@ -147,7 +147,7 @@ No authorization required
 **204** | No Content.  |  * NGSILD-Tenant -  <br>  |
 **400** | It is used to indicate that the request or its content is incorrect, see clause 6.3.2. In the returned ProblemDetails structure, the \&quot;detail\&quot; attribute should convey more information about the error.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
 **404** | It is used when a client provided an entity identifier (URI) not known to the system, see clause 6.3.2.  |  * NGSILD-Tenant -  <br>  * NGSILD-Warning -  <br>  |
-**503** | It is used when re-downloading fails.  |  * NGSILD-Tenant -  <br>  |
+**504** | It is used when re-downloading fails.  |  * NGSILD-Tenant -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

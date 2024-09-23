@@ -1,6 +1,6 @@
 # OptionsNoOverwrite
 
-6.16.3 For POST method associated to the operation \"Batch Entity Update\", the \"noOvevwrite\"  options query parameter indicates that no attribute overwrite shall be performed. 
+6.16.3 For POST method associated to the operations \"Batch Entity Update\" and \"Append Entity Attributes\", the \"noOvevwrite\"  options query parameter indicates that no attribute overwrite shall be performed. 
 
 ## Enum
 

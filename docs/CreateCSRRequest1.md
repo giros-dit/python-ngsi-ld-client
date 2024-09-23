@@ -8,8 +8,10 @@ Name | Type | Description | Notes
 **id** | **str** | Unique registration identifier. (JSON-LD @id). There may be multiple registrations per Context Source, i.e. the id is unique per registration.  | [optional] 
 **type** | **str** | JSON-LD @type Use reserved type for identifying Context Source Registration.  | 
 **registration_name** | **str** | A name given to this Context Source Registration.  | [optional] 
+**context_source_alias** | **str** | A previously retrieved unique id for a registered Context Source which is used to  identify loops. In the multi-tenancy use case (see clause 4.14), this id shall be  used to identify a specific Tenant within a registered Context Source.  | [optional] 
 **description** | **str** | A description of this Context Source Registration.  | [optional] 
 **information** | [**List[RegistrationInfo]**](RegistrationInfo.md) | Describes the Entities, Properties and Relationships for which the Context Source may be able to provide information.  | 
+**dataset_id** | **List[str]** | Specifies the datasetIds of Attributes that the Context Source can provide,  defined as per clause 4.5.5. Valid URIs, \&quot;@none\&quot; for including the default  Attribute instances.  | [optional] 
 **tenant** | **str** | Identifies the tenant that has to be specified in all requests to the Context Source that are related to the information registered in this Context Source Registration. If not present, the default tenant is assumed. Should only be present in systems supporting multi-tenancy.  | [optional] 
 **observation_interval** | [**TimeInterval**](TimeInterval.md) |  | [optional] 
 **management_interval** | [**TimeInterval**](TimeInterval.md) |  | [optional] 
