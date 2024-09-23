@@ -75,14 +75,17 @@ configuration = ngsi_ld_client.Configuration(
 with ngsi_ld_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = ngsi_ld_client.ContextInformationConsumptionApi(api_client)
+    count = True # bool | 6.3.13 Counting number of results. If true, then a special HTTP header (NGSILD-Results-Count) is set in the response. Regardless of how many entities are actually returned (maybe due to the \"limit\" URI parameter), the total number of matching results (e.g. number of Entities) is returned.  (optional)
+    limit = 56 # int | 6.3.10 Pagination behaviour. It defines the limit to the number of NGSI-LD Elements that shall be retrieved at a maximum as mandated by clause 5.5.9. The value 0 is only allowed in combination with the count URI parameter.  (optional)
     local = True # bool | 6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).  (optional)
-    link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON- LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
+    options = [ngsi_ld_client.OptionsRepresentation()] # List[OptionsRepresentation] |  (optional)
+    link = 'link_example' # str | 6.3.5 JSON-LD @context resolution  In summary, from a developer's perspective, for POST, PATCH and PUT operations, if MIME type is \"application/ld+json\", then the associated @context shall be provided only as part of the request payload body. Likewise, if MIME type is \"application/json\", then the associated @context shall be provided only by using the JSON-LD Link header. No mixes are allowed, i.e. mixing options shall result in HTTP response errors. Implementations should provide descriptive error messages when these situations arise.  In contrast, GET and DELETE operations always take their input @context from the JSON-LD Link Header.  (optional)
     ngsild_tenant = 'ngsild_tenant_example' # str | 6.3.14 Tenant specification. The tenant to which the NGSI-LD HTTP operation is targeted.  (optional)
-    query = ngsi_ld_client.Query() # Query |  (optional)
+    query = ngsi_ld_client.Query() # Query | Payload body in the request contains a JSON-LD object which represents the query to be performed. (optional)
 
     try:
         # Query entities based on POST 
-        api_response = api_instance.query_batch(local=local, link=link, ngsild_tenant=ngsild_tenant, query=query)
+        api_response = api_instance.query_batch(count=count, limit=limit, local=local, options=options, link=link, ngsild_tenant=ngsild_tenant, query=query)
         print("The response of ContextInformationConsumptionApi->query_batch:\n")
         pprint(api_response)
     except ApiException as e:
@@ -98,39 +101,39 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ContextInformationConsumptionApi* | [**query_batch**](docs/ContextInformationConsumptionApi.md#query_batch) | **POST** /entityOperations/query | Query entities based on POST 
 *ContextInformationConsumptionApi* | [**query_entity**](docs/ContextInformationConsumptionApi.md#query_entity) | **GET** /entities | Query entities 
-*ContextInformationConsumptionApi* | [**query_subscription**](docs/ContextInformationConsumptionApi.md#query_subscription) | **GET** /subscriptions | Retrieve list of Subscriptions 
-*ContextInformationConsumptionApi* | [**retrieve_attr_info**](docs/ContextInformationConsumptionApi.md#retrieve_attr_info) | **GET** /attributes/{attrId} | Retrieve Available Attribute Information 
-*ContextInformationConsumptionApi* | [**retrieve_attributes**](docs/ContextInformationConsumptionApi.md#retrieve_attributes) | **GET** /attributes | Retrieve Available Attributes 
+*ContextInformationConsumptionApi* | [**retrieve_attr_type_info**](docs/ContextInformationConsumptionApi.md#retrieve_attr_type_info) | **GET** /attributes/{attrId} | Details about available attribute 
+*ContextInformationConsumptionApi* | [**retrieve_attr_types**](docs/ContextInformationConsumptionApi.md#retrieve_attr_types) | **GET** /attributes | Available attributes 
 *ContextInformationConsumptionApi* | [**retrieve_entity**](docs/ContextInformationConsumptionApi.md#retrieve_entity) | **GET** /entities/{entityId} | Entity retrieval by id 
-*ContextInformationConsumptionApi* | [**retrieve_subscription**](docs/ContextInformationConsumptionApi.md#retrieve_subscription) | **GET** /subscriptions/{subscriptionId} | Subscription retrieval by id 
-*ContextInformationConsumptionApi* | [**retrieve_type_info**](docs/ContextInformationConsumptionApi.md#retrieve_type_info) | **GET** /types/{type} | Details about available entity type 
-*ContextInformationConsumptionApi* | [**retrieve_types**](docs/ContextInformationConsumptionApi.md#retrieve_types) | **GET** /types | Retrieve available entity types 
-*ContextInformationProvisionApi* | [**append_attrs**](docs/ContextInformationProvisionApi.md#append_attrs) | **POST** /entities/{entityId}/attrs | Append attributes to Entity 
-*ContextInformationProvisionApi* | [**create_batch**](docs/ContextInformationProvisionApi.md#create_batch) | **POST** /entityOperations/create | Batch Entity creation 
+*ContextInformationConsumptionApi* | [**retrieve_entity_type_info**](docs/ContextInformationConsumptionApi.md#retrieve_entity_type_info) | **GET** /types/{type} | Details about available entity type 
+*ContextInformationConsumptionApi* | [**retrieve_entity_types**](docs/ContextInformationConsumptionApi.md#retrieve_entity_types) | **GET** /types | Retrieve available entity types  
+*ContextInformationProvisionApi* | [**append_attrs**](docs/ContextInformationProvisionApi.md#append_attrs) | **POST** /entities/{entityId}/attrs | Append Attributes to Entity 
+*ContextInformationProvisionApi* | [**create_batch**](docs/ContextInformationProvisionApi.md#create_batch) | **POST** /entityOperations/create | Batch Entity Creation 
 *ContextInformationProvisionApi* | [**create_entity**](docs/ContextInformationProvisionApi.md#create_entity) | **POST** /entities | Entity creation 
 *ContextInformationProvisionApi* | [**delete_attrs**](docs/ContextInformationProvisionApi.md#delete_attrs) | **DELETE** /entities/{entityId}/attrs/{attrId} | Attribute delete 
-*ContextInformationProvisionApi* | [**delete_batch**](docs/ContextInformationProvisionApi.md#delete_batch) | **POST** /entityOperations/delete | Batch Entity delete 
+*ContextInformationProvisionApi* | [**delete_batch**](docs/ContextInformationProvisionApi.md#delete_batch) | **POST** /entityOperations/delete | Batch Entity Delete 
 *ContextInformationProvisionApi* | [**delete_entity**](docs/ContextInformationProvisionApi.md#delete_entity) | **DELETE** /entities/{entityId} | Entity deletion by id 
-*ContextInformationProvisionApi* | [**merge_batch**](docs/ContextInformationProvisionApi.md#merge_batch) | **POST** /entityOperations/merge | Batch Entity merge 
+*ContextInformationProvisionApi* | [**merge_batch**](docs/ContextInformationProvisionApi.md#merge_batch) | **POST** /entityOperations/merge | Batch Entity Merge 
 *ContextInformationProvisionApi* | [**merge_entity**](docs/ContextInformationProvisionApi.md#merge_entity) | **PATCH** /entities/{entityId} | Entity merge by id 
 *ContextInformationProvisionApi* | [**replace_attrs**](docs/ContextInformationProvisionApi.md#replace_attrs) | **PUT** /entities/{entityId}/attrs/{attrId} | Attribute replace 
 *ContextInformationProvisionApi* | [**replace_entity**](docs/ContextInformationProvisionApi.md#replace_entity) | **PUT** /entities/{entityId} | Entity replacement by id 
-*ContextInformationProvisionApi* | [**update_attrs**](docs/ContextInformationProvisionApi.md#update_attrs) | **PATCH** /entities/{entityId}/attrs/{attrId} | Partial Attribute update 
-*ContextInformationProvisionApi* | [**update_batch**](docs/ContextInformationProvisionApi.md#update_batch) | **POST** /entityOperations/update | Batch Entity update 
-*ContextInformationProvisionApi* | [**update_entity**](docs/ContextInformationProvisionApi.md#update_entity) | **PATCH** /entities/{entityId}/attrs | Update attributes of an Entity 
-*ContextInformationProvisionApi* | [**upsert_batch**](docs/ContextInformationProvisionApi.md#upsert_batch) | **POST** /entityOperations/upsert | Batch Entity create or update (upsert) 
+*ContextInformationProvisionApi* | [**update_attrs**](docs/ContextInformationProvisionApi.md#update_attrs) | **PATCH** /entities/{entityId}/attrs/{attrId} | Partial Attribute Update 
+*ContextInformationProvisionApi* | [**update_batch**](docs/ContextInformationProvisionApi.md#update_batch) | **POST** /entityOperations/update | Batch Entity Update 
+*ContextInformationProvisionApi* | [**update_entity**](docs/ContextInformationProvisionApi.md#update_entity) | **PATCH** /entities/{entityId}/attrs | Update Attributes of an Entity 
+*ContextInformationProvisionApi* | [**upsert_batch**](docs/ContextInformationProvisionApi.md#upsert_batch) | **POST** /entityOperations/upsert | Batch Entity Creation or Update (Upsert) 
 *ContextInformationSubscriptionApi* | [**create_subscription**](docs/ContextInformationSubscriptionApi.md#create_subscription) | **POST** /subscriptions | Create Subscription 
 *ContextInformationSubscriptionApi* | [**delete_subscription**](docs/ContextInformationSubscriptionApi.md#delete_subscription) | **DELETE** /subscriptions/{subscriptionId} | Subscription deletion by id 
+*ContextInformationSubscriptionApi* | [**query_subscription**](docs/ContextInformationSubscriptionApi.md#query_subscription) | **GET** /subscriptions | Retrieve list of Subscriptions 
+*ContextInformationSubscriptionApi* | [**retrieve_subscription**](docs/ContextInformationSubscriptionApi.md#retrieve_subscription) | **GET** /subscriptions/{subscriptionId} | Subscription retrieval by id 
 *ContextInformationSubscriptionApi* | [**update_subscription**](docs/ContextInformationSubscriptionApi.md#update_subscription) | **PATCH** /subscriptions/{subscriptionId} | Subscription update by id 
 *ContextSourceDiscoveryApi* | [**query_csr**](docs/ContextSourceDiscoveryApi.md#query_csr) | **GET** /csourceRegistrations | Discover Csource registrations 
 *ContextSourceDiscoveryApi* | [**retrieve_csr**](docs/ContextSourceDiscoveryApi.md#retrieve_csr) | **GET** /csourceRegistrations/{registrationId} | Csource registration retrieval by id 
 *ContextSourceRegistrationApi* | [**create_csr**](docs/ContextSourceRegistrationApi.md#create_csr) | **POST** /csourceRegistrations | Csource registration creation 
 *ContextSourceRegistrationApi* | [**delete_csr**](docs/ContextSourceRegistrationApi.md#delete_csr) | **DELETE** /csourceRegistrations/{registrationId} | Csource registration deletion by id 
-*ContextSourceRegistrationApi* | [**delete_csr_subscription**](docs/ContextSourceRegistrationApi.md#delete_csr_subscription) | **DELETE** /csourceSubscriptions/{subscriptionId} | Csource registration subscription deletion by id 
 *ContextSourceRegistrationApi* | [**update_csr**](docs/ContextSourceRegistrationApi.md#update_csr) | **PATCH** /csourceRegistrations/{registrationId} | Csource registration update by id 
 *ContextSourceRegistrationSubscriptionApi* | [**create_csr_subscription**](docs/ContextSourceRegistrationSubscriptionApi.md#create_csr_subscription) | **POST** /csourceSubscriptions | Create subscription to Csource registration 
+*ContextSourceRegistrationSubscriptionApi* | [**delete_csr_subscription**](docs/ContextSourceRegistrationSubscriptionApi.md#delete_csr_subscription) | **DELETE** /csourceSubscriptions/{subscriptionId} | Csource registration subscription deletion by id 
 *ContextSourceRegistrationSubscriptionApi* | [**query_csr_subscription**](docs/ContextSourceRegistrationSubscriptionApi.md#query_csr_subscription) | **GET** /csourceSubscriptions | Retrieval of list of subscriptions to Csource registrations 
-*ContextSourceRegistrationSubscriptionApi* | [**retrieve_csr_subscription**](docs/ContextSourceRegistrationSubscriptionApi.md#retrieve_csr_subscription) | **GET** /csourceSubscriptions/{subscriptionId} | Retrieval of subscription to Csource registration by id 
+*ContextSourceRegistrationSubscriptionApi* | [**retrieve_csr_subscription**](docs/ContextSourceRegistrationSubscriptionApi.md#retrieve_csr_subscription) | **GET** /csourceSubscriptions/{subscriptionId} | Csource registration subscription update by id 
 *ContextSourceRegistrationSubscriptionApi* | [**update_csr_subscription**](docs/ContextSourceRegistrationSubscriptionApi.md#update_csr_subscription) | **PATCH** /csourceSubscriptions/{subscriptionId} | Csource registration subscription update by id 
 *JSONLDContextAPIApi* | [**create_context**](docs/JSONLDContextAPIApi.md#create_context) | **POST** /jsonldContexts | Add a user @context to the internal cache 
 *JSONLDContextAPIApi* | [**delete_context**](docs/JSONLDContextAPIApi.md#delete_context) | **DELETE** /jsonldContexts/{contextId} | Delete one specific @context from internal cache, possibly re-inserting a freshly downloaded copy of it 
@@ -154,10 +157,9 @@ Class | Method | HTTP request | Description
  - [AttributeList](docs/AttributeList.md)
  - [BatchEntityError](docs/BatchEntityError.md)
  - [BatchOperationResult](docs/BatchOperationResult.md)
- - [CreateBatch201Response](docs/CreateBatch201Response.md)
- - [CreateBatchRequest](docs/CreateBatchRequest.md)
  - [CreateCSRRequest](docs/CreateCSRRequest.md)
  - [CreateCSRRequest1](docs/CreateCSRRequest1.md)
+ - [CreateContextRequest](docs/CreateContextRequest.md)
  - [CreateSubscriptionRequest](docs/CreateSubscriptionRequest.md)
  - [CreateSubscriptionRequest1](docs/CreateSubscriptionRequest1.md)
  - [CsourceNotification](docs/CsourceNotification.md)
@@ -180,8 +182,8 @@ Class | Method | HTTP request | Description
  - [FeatureCollection](docs/FeatureCollection.md)
  - [FeatureProperties](docs/FeatureProperties.md)
  - [FeaturePropertiesType](docs/FeaturePropertiesType.md)
- - [FeaturePropertiesValue](docs/FeaturePropertiesValue.md)
  - [GeoProperty](docs/GeoProperty.md)
+ - [GeoPropertyValue](docs/GeoPropertyValue.md)
  - [GeoQuery](docs/GeoQuery.md)
  - [GeoQueryCoordinates](docs/GeoQueryCoordinates.md)
  - [Geometry](docs/Geometry.md)
@@ -195,11 +197,9 @@ Class | Method | HTTP request | Description
  - [KeyValuePair](docs/KeyValuePair.md)
  - [LanguageProperty](docs/LanguageProperty.md)
  - [LdContext](docs/LdContext.md)
+ - [LdContextMetadataInner](docs/LdContextMetadataInner.md)
  - [LdContextOneOfInner](docs/LdContextOneOfInner.md)
  - [ListContexts200Response](docs/ListContexts200Response.md)
- - [ListContexts200Response1](docs/ListContexts200Response1.md)
- - [ListContexts200Response1OneOfInner](docs/ListContexts200Response1OneOfInner.md)
- - [ListContexts200Response1OneOfInner1](docs/ListContexts200Response1OneOfInner1.md)
  - [ModelProperty](docs/ModelProperty.md)
  - [NotUpdatedDetails](docs/NotUpdatedDetails.md)
  - [Notification](docs/Notification.md)
@@ -233,11 +233,17 @@ Class | Method | HTTP request | Description
  - [ReplaceAttrsRequest](docs/ReplaceAttrsRequest.md)
  - [ReplaceAttrsRequest1](docs/ReplaceAttrsRequest1.md)
  - [ReplaceEntityRequest](docs/ReplaceEntityRequest.md)
- - [RetrieveAttrInfo200Response](docs/RetrieveAttrInfo200Response.md)
- - [RetrieveAttributes200Response](docs/RetrieveAttributes200Response.md)
+ - [RetrieveAttrTypes200Response](docs/RetrieveAttrTypes200Response.md)
+ - [RetrieveAttrTypes200Response1](docs/RetrieveAttrTypes200Response1.md)
+ - [RetrieveAttrTypes200Response1OneOf](docs/RetrieveAttrTypes200Response1OneOf.md)
+ - [RetrieveAttrTypes200Response1OneOf1Inner](docs/RetrieveAttrTypes200Response1OneOf1Inner.md)
  - [RetrieveContext200Response](docs/RetrieveContext200Response.md)
- - [RetrieveTypeInfo200Response](docs/RetrieveTypeInfo200Response.md)
- - [RetrieveTypes200Response](docs/RetrieveTypes200Response.md)
+ - [RetrieveContext200ResponseOneOf](docs/RetrieveContext200ResponseOneOf.md)
+ - [RetrieveEntityTypeInfo200Response](docs/RetrieveEntityTypeInfo200Response.md)
+ - [RetrieveEntityTypes200Response](docs/RetrieveEntityTypes200Response.md)
+ - [RetrieveEntityTypes200Response1](docs/RetrieveEntityTypes200Response1.md)
+ - [RetrieveEntityTypes200Response1OneOf](docs/RetrieveEntityTypes200Response1OneOf.md)
+ - [RetrieveEntityTypes200Response1OneOf1Inner](docs/RetrieveEntityTypes200Response1OneOf1Inner.md)
  - [Subscription](docs/Subscription.md)
  - [SubscriptionCommon](docs/SubscriptionCommon.md)
  - [SubscriptionOnChange](docs/SubscriptionOnChange.md)
